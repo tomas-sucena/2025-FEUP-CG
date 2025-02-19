@@ -1,6 +1,6 @@
 import { CGFscene, CGFcamera, CGFaxis } from "../lib/CGF.js";
 import { MyDiamond } from "./MyDiamond.js";
-
+import { Triangle } from "./MyTriangle.js"
 /**
  * MyScene
  * @constructor
@@ -92,6 +92,7 @@ export class MyScene extends CGFscene {
     // ---- BEGIN Primitive drawing section
 
     this.diamond.display();
+    this.triangle.display()
 
     // ---- END Primitive drawing section
   }
