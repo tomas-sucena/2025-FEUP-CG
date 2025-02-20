@@ -1,7 +1,10 @@
 import { CGFscene, CGFcamera, CGFaxis } from "../lib/CGF.js";
-import { MyDiamond } from "./MyDiamond.js";
-import { MyTriangleSmall } from "./MyTriangleSmall.js"
+
+// objects
+import { MyDiamond } from "./objects/MyDiamond.js";
+import { MyTriangle } from "./objects/MyTriangle.js";
 import { MyParallelogram } from "./objects/MyParallelogram.js";
+import { MyTriangleSmall } from "./objects//MyTriangleSmall.js"
 
 /**
  * MyScene
@@ -28,8 +31,9 @@ export class MyScene extends CGFscene {
     //Initialize scene objects
     this.axis = new CGFaxis(this);
     this.diamond = new MyDiamond(this);
-    this.trianglesmall = new MyTriangleSmall(this);
+    this.triangle = new MyTriangle(this);
     this.parallelogram = new MyParallelogram(this);
+    this.triangleSmall = new MyTriangleSmall(this);
 
     //Objects connected to MyInterface
     this.displayAxis = true;
@@ -96,8 +100,9 @@ export class MyScene extends CGFscene {
     // ---- BEGIN Primitive drawing section
 
     // this.diamond.display();
-    this.trianglesmall.display();
-    this.parallelogram.display();
+    // this.triangle.display();
+    // this.parallelogram.display();
+    this.triangleSmall.display();
 
     // ---- END Primitive drawing section
   }
