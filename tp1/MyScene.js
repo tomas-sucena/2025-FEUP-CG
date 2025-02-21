@@ -3,6 +3,7 @@ import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 // objects
 import { MyDiamond } from './objects/MyDiamond.js';
 import { MyParallelogram } from './objects/MyParallelogram.js';
+import { MyTriangleBig } from './objects/MyTriangleBig.js';
 import { MyTriangleSmall } from './objects/MyTriangleSmall.js';
 
 /**
@@ -35,13 +36,15 @@ export class MyScene extends CGFscene {
         new MyDiamond(this),       // 0
         new MyParallelogram(this), // 1
         new MyTriangleSmall(this), // 2
+        new MyTriangleBig(this),   // 3
     ];
 
     this.objectIDs = {
         "Diamond": 0,
         //"Triangle": 1
         "Parallelogram": 1,
-        "Small triangle": 2, 
+        "Small triangle": 2,
+        "Big triangle": 3,
     };
 
     // variables connected to MyInterface

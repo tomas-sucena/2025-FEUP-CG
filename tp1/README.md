@@ -9,4 +9,10 @@
 - In exercise 1 we observed X
 - In exercise 2 we had difficulties in Y
 
-![Screenshot 1](screenshots/cg-t0xgxx-tp1-n.png)
+| ![Screenshot 2](screenshots/cg-t04g06-tp1-1.png) | 
+|:--:| 
+| **Figure 1:** Small triangle |
+
+| ![Screenshot 2](screenshots/cg-t04g06-tp1-2.png) | 
+|:--:| 
+| **Figure 2:** Big triangle |

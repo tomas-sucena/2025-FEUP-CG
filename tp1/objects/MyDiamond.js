@@ -21,7 +21,10 @@ export class MyDiamond extends CGFobject {
 
 		//Counter-clockwise reference of vertices
 		this.indices = [
+			// front
 			0, 1, 2,
+
+			// back
 			1, 3, 2,
 		];
 

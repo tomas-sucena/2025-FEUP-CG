@@ -25,7 +25,7 @@ export class MyInterface extends CGFinterface {
 
         // radio buttons in GUI
         this.gui.add(this.scene, 'selectedObject', this.scene.objectIDs)
-            .name('Objects');
+            .name('Object');
 
         return true;
     }
