@@ -24,7 +24,7 @@ export class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'scaleFactor', 0.1, 5).name('Scale Factor');
 
         // radio buttons in GUI
-        this.gui.add(this.scene, 'selectedObject', this.scene.objectIDs)
+        this.gui.add(this.scene, 'selectedObject', Object.keys(this.scene.objects))
             .name('Object');
 
         return true;

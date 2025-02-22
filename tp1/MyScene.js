@@ -3,6 +3,7 @@ import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 // objects
 import { MyDiamond } from './objects/MyDiamond.js';
 import { MyParallelogram } from './objects/MyParallelogram.js';
+// import { MyTriangle } from './objects/MyTriangle.js';
 import { MyTriangleBig } from './objects/MyTriangleBig.js';
 import { MyTriangleSmall } from './objects/MyTriangleSmall.js';
 
@@ -31,26 +32,18 @@ export class MyScene extends CGFscene {
 
     //Initialize scene objects
     this.axis = new CGFaxis(this);
-
-    this.objects = [
-        new MyDiamond(this),       // 0
-        new MyParallelogram(this), // 1
-        new MyTriangleSmall(this), // 2
-        new MyTriangleBig(this),   // 3
-    ];
-
-    this.objectIDs = {
-        "Diamond": 0,
-        //"Triangle": 1
-        "Parallelogram": 1,
-        "Small triangle": 2,
-        "Big triangle": 3,
+    this.objects = {
+        'Diamond': new MyDiamond(this),
+        //'Triangle': new MyTriangle(this),
+        'Parallelogram': new MyParallelogram(this),
+        'Small triangle': new MyTriangleSmall(this),
+        'Big triangle': new MyTriangleBig(this),
     };
 
     // variables connected to MyInterface
     this.displayAxis = true;
     this.scaleFactor = 1;
-    this.selectedObject = 0;
+    this.selectedObject = 'Diamond';
   }
 
   initLights() {
