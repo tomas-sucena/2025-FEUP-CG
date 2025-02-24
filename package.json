@@ -1,0 +1,9 @@
+{
+  "name": "cg-2025-t04-g06",
+  "devDependencies": {
+    "live-server": "^1.2.2"
+  },
+  "scripts": {
+    "tp1": "npx live-server --open=tp1/"
+  }
+}

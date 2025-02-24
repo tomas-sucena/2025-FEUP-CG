@@ -1,10 +1,10 @@
 # CG 2024/2025
 
-## Group T0xG0y
-| Name             | Number    | E-Mail             |
-| ---------------- | --------- | ------------------ |
-| John Doe         | 201901010 | ...                |
-| Jane Doe         | 201901011 | ...                |
+## Group T04G06
+| Name               | Number    | E-Mail             |
+| ----------------   | --------- | ------------------ |
+| Ana Rita Pereira   | 202108798 | up202108798@up.pt  |
+| Tomás Sucena Lopes | 202108701 | up202108701@up.pt  |
 
 ----
 
