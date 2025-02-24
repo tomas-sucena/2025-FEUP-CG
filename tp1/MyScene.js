@@ -1,6 +1,5 @@
 import { CGFscene, CGFcamera, CGFaxis } from "../lib/CGF.js";
-import { MyDiamond } from "./MyDiamond.js";
-import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
+
 
 // objects
 import { MyDiamond } from './objects/MyDiamond.js';
