@@ -6,6 +6,7 @@ import { MyParallelogram } from './objects/MyParallelogram.js';
 import { MyTriangle } from './objects/MyTriangle.js';
 import { MyTriangleBig } from './objects/MyTriangleBig.js';
 import { MyTriangleSmall } from './objects/MyTriangleSmall.js';
+import { MyUnitCube } from './objects/MyUnitCube.js';
 
 /**
  * MyScene
@@ -38,6 +39,7 @@ export class MyScene extends CGFscene {
         'Parallelogram': new MyParallelogram(this),
         'Small triangle': new MyTriangleSmall(this),
         'Big triangle': new MyTriangleBig(this),
+        'Cube': new MyUnitCube(this),
     };
 
     // variables connected to MyInterface
