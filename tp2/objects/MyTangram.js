@@ -4,6 +4,7 @@ import { MyDiamond } from './MyDiamond.js';
 import { MyParallelogram } from './MyParallelogram.js';
 import { MyTriangle } from './MyTriangle.js';
 import { MyTriangleBig } from './MyTriangleBig.js';
+import { MyTriangleSmall } from './MyTriangleSmall.js';
 
 /**
  * MyDiamond
@@ -19,6 +20,7 @@ export class MyTangram extends CGFobject {
         this.parallelogram = new MyParallelogram(scene);
         this.triangle = new MyTriangle(scene);
         this.bigTriangle = new MyTriangleBig(scene);
+        this.smallTriangle = new MyTriangleSmall(scene);
     }
 
     display() {
@@ -62,6 +64,25 @@ export class MyTangram extends CGFobject {
         this.scene.translate(0, -2, 0);
         this.scene.rotate(-Math.PI / 2, 0, 0, 1);
         this.bigTriangle.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(2 - Math.sqrt(2), -2 - Math.sqrt(2), 0);
+        this.scene.rotate(-3 * Math.PI / 4, 0, 0, 1);
+        this.bigTriangle.display();
+        this.scene.popMatrix();
+
+        // display the small triangles
+        this.scene.pushMatrix();
+        this.scene.translate(0, -1, 0);
+        this.scene.rotate(Math.PI / 2, 0, 0, 1);
+        this.smallTriangle.display();
+        this.scene.popMatrix();
+
+        this.scene.pushMatrix();
+        this.scene.translate(-1, -2, 0);
+        this.scene.rotate(-Math.PI / 2, 0, 0, 1);
+        this.smallTriangle.display();
         this.scene.popMatrix();
     }
 }
