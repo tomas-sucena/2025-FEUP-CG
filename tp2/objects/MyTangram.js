@@ -1,6 +1,9 @@
 import { CGFobject } from '../../lib/CGF.js';
 
 import { MyDiamond } from './MyDiamond.js';
+import { MyParallelogram } from './MyParallelogram.js';
+import { MyTriangle } from './MyTriangle.js';
+import { MyTriangleBig } from './MyTriangleBig.js';
 
 /**
  * MyDiamond
@@ -13,6 +16,9 @@ export class MyTangram extends CGFobject {
         
         // objects
         this.diamond = new MyDiamond(scene);
+        this.parallelogram = new MyParallelogram(scene);
+        this.triangle = new MyTriangle(scene);
+        this.bigTriangle = new MyTriangleBig(scene);
     }
 
     display() {
@@ -35,6 +41,27 @@ export class MyTangram extends CGFobject {
         this.scene.multMatrix(rotationMatrix); // rotate it 45 degrees
         this.scene.multMatrix(translationMatrix); // move it 1 unit in the y-axis
         this.diamond.display();
+        this.scene.popMatrix();
+
+        // display the parallelogram
+        this.scene.pushMatrix();
+        this.scene.translate(0, Math.sqrt(2), 0);
+        this.scene.rotate(Math.PI / 2, 0, 0, 1);
+        this.parallelogram.display();
+        this.scene.popMatrix();
+
+        // display the triangle
+        this.scene.pushMatrix();
+        this.scene.translate(1, 1 + Math.sqrt(2), 0);
+        this.scene.scale(-1, 1, 1);
+        this.triangle.display();
+        this.scene.popMatrix();
+
+        // display the big triangles
+        this.scene.pushMatrix();
+        this.scene.translate(0, -2, 0);
+        this.scene.rotate(-Math.PI / 2, 0, 0, 1);
+        this.bigTriangle.display();
         this.scene.popMatrix();
     }
 }
