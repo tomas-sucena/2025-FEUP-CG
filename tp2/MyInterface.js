@@ -18,7 +18,7 @@ export class MyInterface extends CGFinterface {
         this.gui = new dat.GUI();
 
         //Checkbox element in GUI
-        this.gui.add(this.scene, 'displayAxis').name('Display Axis');
+        this.gui.add(this.scene, 'displayAxis').name('Axis');
 
         //Slider element in GUI
         this.gui.add(this.scene, 'scaleFactor', 0.1, 5).name('Scale Factor');
