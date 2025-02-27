@@ -14,7 +14,7 @@ import { MyTriangleSmall } from './MyTriangleSmall.js';
 export class MyTangram extends CGFobject {
     constructor(scene) {
         super(scene);
-        
+
         // objects
         this.diamond = new MyDiamond(scene);
         this.parallelogram = new MyParallelogram(scene);
@@ -69,7 +69,7 @@ export class MyTangram extends CGFobject {
 
         this.scene.pushMatrix();
         this.scene.translate(2 - Math.sqrt(2), -2 - Math.sqrt(2), 0);
-        this.scene.rotate(-3 * Math.PI / 4, 0, 0, 1);
+        this.scene.rotate((-3 * Math.PI) / 4, 0, 0, 1);
         this.bigTriangle.display();
         this.scene.popMatrix();
 
@@ -87,4 +87,3 @@ export class MyTangram extends CGFobject {
         this.scene.popMatrix();
     }
 }
-

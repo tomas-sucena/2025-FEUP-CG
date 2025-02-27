@@ -1,4 +1,4 @@
-import { CGFobject, CGFscene } from "../../lib/CGF.js";
+import { CGFobject, CGFscene } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
     #transformationMatrix; /** the transformation matrix */
@@ -6,7 +6,7 @@ export class MyObject extends CGFobject {
         1, 0, 0, 0,
         0, 1, 0, 0,
         0, 0, 1, 0,
-        0, 0, 0, 1,
+        0, 0, 0, 1
     ];
 
     /**
@@ -29,7 +29,9 @@ export class MyObject extends CGFobject {
         for (let i = 0; i < 4; ++i) {
             for (let j = 0; j < 4; ++j) {
                 for (let k = 0; k < 4; ++k) {
-                    result[i * 4 + k] += this.#transformationMatrix[i * 4 + j] * matrix[j * 4 + k];
+                    result[i * 4 + k] +=
+                        this.#transformationMatrix[i * 4 + j] *
+                        matrix[j * 4 + k];
                 }
             }
         }
@@ -45,7 +47,7 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     translate(Tx, Ty, Tz) {
-        // the transposed translation matrix
+        // the (transposed) translation matrix
         const translationMatrix = [
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -65,7 +67,7 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     scale(Sx, Sy, Sz) {
-        // the transposed translation matrix
+        // the (transposed) scaling matrix
         const scalingMatrix = [
             Sx, 0, 0, 0,
             0, Sy, 0, 0,

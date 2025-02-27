@@ -10,7 +10,7 @@ export class MyTriangleBig extends CGFobject {
         super(scene);
         this.initBuffers();
     }
-    
+
     initBuffers() {
         this.vertices = [
             -2, 0, 0,
