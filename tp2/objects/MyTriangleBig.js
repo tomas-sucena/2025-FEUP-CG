@@ -1,16 +1,16 @@
-import {CGFobject} from '../../lib/CGF.js';
+import { MyObject } from './MyObject.js';
 
 /**
  * MyTriangleBig
  * @constructor
  * @param scene - Reference to MyScene object
  */
-export class MyTriangleBig extends CGFobject {
+export class MyTriangleBig extends MyObject {
     constructor(scene) {
         super(scene);
         this.initBuffers();
     }
-    
+
     initBuffers() {
         this.vertices = [
             -2, 0, 0,

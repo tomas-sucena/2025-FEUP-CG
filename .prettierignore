@@ -1,0 +1,9 @@
+# WebCGF source code
+lib/
+
+# Node.js files
+package.json
+package-lock.json
+
+# all HTML files
+**/*.html

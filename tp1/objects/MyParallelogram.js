@@ -1,4 +1,4 @@
-import {CGFobject} from '../../lib/CGF.js';
+import { CGFobject } from '../../lib/CGF.js';
 
 /**
  * MyParallelogram
@@ -10,7 +10,7 @@ export class MyParallelogram extends CGFobject {
         super(scene);
         this.initBuffers();
     }
-    
+
     initBuffers() {
         this.vertices = [
             0, 0, 0, // 0
@@ -37,4 +37,3 @@ export class MyParallelogram extends CGFobject {
         this.initGLBuffers();
     }
 }
-
