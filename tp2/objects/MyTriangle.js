@@ -1,4 +1,5 @@
-import {CGFobject} from '../../lib/CGF.js';
+import { CGFobject } from '../../lib/CGF.js';
+
 /**
  * MyTriangle
  * @constructor
@@ -19,7 +20,10 @@ export class MyTriangle extends CGFobject {
 
         //Counter-clockwise reference of vertices
         this.indices = [
+            // front
             0, 1, 2,
+
+            // back
             2, 1, 0,
         ];
 
