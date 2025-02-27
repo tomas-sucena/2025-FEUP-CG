@@ -1,4 +1,4 @@
-import { CGFobject } from '../../lib/CGF.js';
+import { MyObject } from './MyObject.js';
 
 import { MyDiamond } from './MyDiamond.js';
 import { MyParallelogram } from './MyParallelogram.js';
@@ -7,11 +7,11 @@ import { MyTriangleBig } from './MyTriangleBig.js';
 import { MyTriangleSmall } from './MyTriangleSmall.js';
 
 /**
- * MyDiamond
+ * MyTangram
  * @constructor
  * @param scene - Reference to MyScene object
  */
-export class MyTangram extends CGFobject {
+export class MyTangram extends MyObject {
     constructor(scene) {
         super(scene);
 
@@ -46,44 +46,34 @@ export class MyTangram extends CGFobject {
         this.scene.popMatrix();
 
         // display the parallelogram
-        this.scene.pushMatrix();
-        this.scene.translate(0, Math.sqrt(2), 0);
-        this.scene.scale(-1, 1, 1);
-        this.scene.rotate(Math.PI / 4, 0, 0, 1);
-        this.parallelogram.display();
-        this.scene.popMatrix();
+        this.parallelogram
+            .rotate(45, 0, 0, 1)
+            .scale(-1, 1, 1)
+            .translate(0, Math.sqrt(2), 0)
+            .display();
 
         // display the triangle
-        this.scene.pushMatrix();
-        this.scene.translate(1, 1 + Math.sqrt(2), 0);
-        this.scene.scale(-1, 1, 1);
-        this.triangle.display();
-        this.scene.popMatrix();
+        this.triangle
+            .scale(-1, 1, 1)
+            .translate(1, 1 + Math.sqrt(2), 0)
+            .display();
 
         // display the big triangles
-        this.scene.pushMatrix();
-        this.scene.translate(0, -2, 0);
-        this.scene.rotate(-Math.PI / 2, 0, 0, 1);
-        this.bigTriangle.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(2 - Math.sqrt(2), -2 - Math.sqrt(2), 0);
-        this.scene.rotate((-3 * Math.PI) / 4, 0, 0, 1);
-        this.bigTriangle.display();
-        this.scene.popMatrix();
+        this.bigTriangle
+            .rotate(-90, 0, 0, 1)
+            .translate(0, -2, 0)
+            .display()
+            .rotate(-135, 0, 0, 1)
+            .translate(2 - Math.sqrt(2), -2 - Math.sqrt(2), 0)
+            .display();
 
         // display the small triangles
-        this.scene.pushMatrix();
-        this.scene.translate(0, -1, 0);
-        this.scene.rotate(Math.PI / 2, 0, 0, 1);
-        this.smallTriangle.display();
-        this.scene.popMatrix();
-
-        this.scene.pushMatrix();
-        this.scene.translate(-1, -2, 0);
-        this.scene.rotate(-Math.PI / 2, 0, 0, 1);
-        this.smallTriangle.display();
-        this.scene.popMatrix();
+        this.smallTriangle
+            .rotate(90, 0, 0, 1)
+            .translate(0, -1, 0)
+            .display()
+            .rotate(-90, 0, 0, 1)
+            .translate(-1, -2, 0)
+            .display();
     }
 }

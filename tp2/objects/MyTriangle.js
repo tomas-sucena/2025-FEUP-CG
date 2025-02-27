@@ -1,11 +1,11 @@
-import { CGFobject } from '../../lib/CGF.js';
+import { MyObject } from './MyObject.js';
 
 /**
  * MyTriangle
  * @constructor
  * @param scene - Reference to MyScene object
  */
-export class MyTriangle extends CGFobject {
+export class MyTriangle extends MyObject {
     constructor(scene) {
         super(scene);
         this.initBuffers();

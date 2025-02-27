@@ -1,11 +1,11 @@
-import { CGFobject } from '../../lib/CGF.js';
+import { MyObject } from './MyObject.js';
 
 /**
  * MyDiamond
  * @constructor
  * @param scene - Reference to MyScene object
  */
-export class MyDiamond extends CGFobject {
+export class MyDiamond extends MyObject {
     constructor(scene) {
         super(scene);
         this.initBuffers();
@@ -15,8 +15,8 @@ export class MyDiamond extends CGFobject {
         this.vertices = [
             -1, 0, 0, // 0
             0, -1, 0, // 1
-            0, 1, 0, // 2
-            1, 0, 0, // 3
+            0, 1, 0,  // 2
+            1, 0, 0,  // 3
         ];
 
         //Counter-clockwise reference of vertices

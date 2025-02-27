@@ -1,11 +1,11 @@
-import { CGFobject } from '../../lib/CGF.js';
+import { MyObject } from './MyObject.js';
 
 /**
  * MyParallelogram
  * @constructor
  * @param scene - Reference to MyScene object
  */
-export class MyParallelogram extends CGFobject {
+export class MyParallelogram extends MyObject {
     constructor(scene) {
         super(scene);
         this.initBuffers();

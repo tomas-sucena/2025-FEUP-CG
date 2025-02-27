@@ -80,6 +80,37 @@ export class MyObject extends CGFobject {
     }
 
     /**
+     * Rotates the object by updating its transformation matrix.
+     * @param { number } ang the angle by which the object will be rotated
+     * @param { number } Rx the x-coordinate of the rotation axis
+     * @param { number } Ry the y-coordinate of the rotation axis
+     * @param { number } Rz the z-coordinate of the rotation axis
+     * @returns a reference to the object
+     */
+    rotate(ang, Rx, Ry, Rz) {
+        const rad = ang * Math.PI / 180; // the angle in radians
+
+        // variables to speed up computations
+        const sin = Math.sin(rad),
+            cos = Math.cos(rad),
+            cos_ = 1 - cos;
+        const xy = Rx * Ry,
+            xz = Rx * Rz,
+            yz = Ry * Rz;
+
+        // the (transposed) rotation matrix
+        const rotationMatrix = [
+            Rx * Rx * cos_ + cos, xy * cos_ + Rz * sin, xz * cos_ - Ry * sin, 0,
+            xy * cos_ - Rz * sin, Ry * Ry * cos_ + cos, yz * cos_ + Rx * sin, 0,
+            xz * cos_ + Ry * sin, yz * cos_ - Rx * sin, Rz * Rz * cos_ + cos, 0,
+            0, 0, 0, 1,
+        ];
+
+        this.#applyTransformation(rotationMatrix);
+        return this;
+    }
+
+    /**
      * Displays the object.
      * @returns a reference to the object
      */
