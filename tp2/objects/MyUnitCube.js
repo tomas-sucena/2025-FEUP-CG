@@ -25,18 +25,6 @@ export class MyUnitCube extends CGFobject {
             -0.5, 0.5, -0.5,  // 6
             0.5, 0.5, -0.5,   // 7
 
-            // right square
-            0.5, -0.5, 0.5,   // 8
-            0.5, -0.5, -0.5,  // 9
-            0.5, 0.5, 0.5,    // 10
-            0.5, 0.5, -0.5,   // 11
-
-            // left square
-            -0.5, -0.5, -0.5,   // 12
-            -0.5, -0.5, 0.5,  // 13
-            -0.5, 0.5, -0.5,    // 14
-           - 0.5, 0.5, 0.5,   // 15
-
         ];
 
         //Counter-clockwise reference of vertices
@@ -44,26 +32,29 @@ export class MyUnitCube extends CGFobject {
             // front square
             0, 1, 2,
             1, 3, 2,
-            0, 2, 1,
-            2, 3, 1,
 
             // back square
-            4, 5, 6,
-            5, 7, 6,
             4, 6, 5,
             5, 6, 7,
 
             // right square
-            8, 9, 10,
-            9, 11, 10,
-            8, 10, 9,
-            9, 10, 11,
+            1, 5, 3,
+            5, 7, 3,
+            // 1, 3, 5,
+            // 5, 3, 7,
 
             // left square
-            12, 13, 14,
-            13, 15, 14,
-            12, 14, 13,
-            13, 14, 15,
+            4, 0, 6,
+            0, 2, 6,
+
+
+            // top square
+            2, 3, 6,
+            3, 7, 6,
+
+            // bottom square
+            0, 4, 1,
+            1, 4, 5
 
         ];
 
