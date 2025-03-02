@@ -100,8 +100,19 @@ export class MyScene extends CGFscene {
         this.multMatrix(sca);
 
         // ---- BEGIN Primitive drawing section
-        if (this.displayTangram) this.tangram.display();
-        if (this.displayCube) this.cube.display();
+
+        this.translate(5, -0.5, 5);
+        this.rotate(3*Math.PI/2, 1, 0, 0);
+        if (this.displayTangram){
+          this.tangram
+          .display();
+        }
+
+        if (this.displayCube){
+          this.cube
+          .scale(10,10,1)
+          .display();
+        }
 
 
         // ---- END Primitive drawing section
