@@ -11,3 +11,9 @@ In this practical assignment, we learned how to apply geometric transformations 
 | ![Figure 1](screenshots/cg-t04g06-tp2-1.png) |
 | :------------------------------------------: |
 |           **Figure 1:** A tangram            |
+
+- In exercise 2, we created our first 3D object: a [cube](objects/MyUnitCube.js). To do so, we defined its **vertices** and **indices**, just like we did to model the shapes from the previous assignment. This approach for modelling 3D objects turned out to be a bit harder than we anticipated, but it was still pretty doable. Then, we utilized geometric transformations to repurpose the cube as a base for the tangram, as shown in Figure 2.
+
+| ![Figure 2](screenshots/cg-t04g06-tp2-2.png) |
+| :------------------------------------------: |
+|     **Figure 2:** A tangram with a base      |

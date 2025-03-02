@@ -110,8 +110,7 @@ export class MyScene extends CGFscene {
         if (this.displayCube) {
             this.setDiffuse(1, 1, 1, 0); // color the cube white
             this.cube
-                .scale(10, 10, 1)
-                .rotate(3 * Math.PI / 2, 1, 0, 0)
+                .scale(10, 1, 10)
                 .translate(5, -0.5, 5)
                 .display();
         }
