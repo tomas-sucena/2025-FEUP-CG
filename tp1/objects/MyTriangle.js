@@ -1,4 +1,5 @@
-import {CGFobject} from '../../lib/CGF.js';
+import { CGFobject } from '../../lib/CGF.js';
+
 /**
  * MyTriangle
  * @constructor
@@ -9,7 +10,7 @@ export class MyTriangle extends CGFobject {
         super(scene);
         this.initBuffers();
     }
-    
+
     initBuffers() {
         this.vertices = [
             -1, -1, 0,
@@ -33,4 +34,3 @@ export class MyTriangle extends CGFobject {
         this.initGLBuffers();
     }
 }
-
