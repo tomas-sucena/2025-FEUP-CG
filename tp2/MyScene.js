@@ -1,6 +1,7 @@
 import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 
 // objects
+import { MyUnitCube } from './objects/MyUnitCube.js';
 import { MyTangram } from './objects/MyTangram.js';
 
 /**
@@ -20,7 +21,6 @@ export class MyScene extends CGFscene {
 
         //Background color
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
-
         this.gl.clearDepth(100.0);
         this.gl.enable(this.gl.DEPTH_TEST);
         this.gl.enable(this.gl.CULL_FACE);
