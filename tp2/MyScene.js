@@ -100,20 +100,21 @@ export class MyScene extends CGFscene {
         this.multMatrix(sca);
 
         // ---- BEGIN Primitive drawing section
-
-        this.translate(5, -0.5, 5);
-        this.rotate(3*Math.PI/2, 1, 0, 0);
-        if (this.displayTangram){
-          this.tangram
-          .display();
+        if (this.displayTangram) {
+            this.tangram
+                .rotate(3 * Math.PI / 2, 1, 0, 0)
+                .translate(4.5, 0.5, 4.7)
+                .display();
         }
 
-        if (this.displayCube){
-          this.cube
-          .scale(10,10,1)
-          .display();
+        if (this.displayCube) {
+            this.setDiffuse(1, 1, 1, 0); // color the cube white
+            this.cube
+                .scale(10, 10, 1)
+                .rotate(3 * Math.PI / 2, 1, 0, 0)
+                .translate(5, -0.5, 5)
+                .display();
         }
-
 
         // ---- END Primitive drawing section
     }

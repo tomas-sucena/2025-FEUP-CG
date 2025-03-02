@@ -2,12 +2,6 @@ import { CGFobject, CGFscene } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
     #transformationMatrix; /** the transformation matrix */
-    #identityMatrix = [
-        1, 0, 0, 0,
-        0, 1, 0, 0,
-        0, 0, 1, 0,
-        0, 0, 0, 1
-    ];
 
     /**
      * Initializes the object.
@@ -15,17 +9,23 @@ export class MyObject extends CGFobject {
      */
     constructor(scene) {
         super(scene);
-        this.#transformationMatrix = [...this.#identityMatrix];
+        this.#transformationMatrix = null;
     }
 
     /**
      * Updates the transformation matrix by concatenating a new geometric transformation.
      * @param { Array } matrix a geometric transformation matrix
      */
-    #applyTransformation(matrix) {
-        const result = new Array(16).fill(0);
+    #addTransformation(matrix) {
+        // verify if the transformation matrix has not been defined
+        if (this.#transformationMatrix === null) {
+            this.#transformationMatrix = matrix;
+            return;
+        }
 
         // multiply the matrices (line by line)
+        const result = new Array(16).fill(0);
+
         for (let i = 0; i < 4; ++i) {
             for (let j = 0; j < 4; ++j) {
                 for (let k = 0; k < 4; ++k) {
@@ -55,7 +55,7 @@ export class MyObject extends CGFobject {
             Tx, Ty, Tz, 1,
         ];
 
-        this.#applyTransformation(translationMatrix);
+        this.#addTransformation(translationMatrix);
         return this;
     }
 
@@ -75,7 +75,7 @@ export class MyObject extends CGFobject {
             0, 0, 0, 1,
         ];
 
-        this.#applyTransformation(scalingMatrix);
+        this.#addTransformation(scalingMatrix);
         return this;
     }
 
@@ -88,11 +88,9 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     rotate(ang, Rx, Ry, Rz) {
-        const rad = ang * Math.PI / 180; // the angle in radians
-
         // variables to speed up computations
-        const sin = Math.sin(rad),
-            cos = Math.cos(rad),
+        const sin = Math.sin(ang),
+            cos = Math.cos(ang),
             cos_ = 1 - cos;
         const xy = Rx * Ry,
             xz = Rx * Rz,
@@ -106,8 +104,15 @@ export class MyObject extends CGFobject {
             0, 0, 0, 1,
         ];
 
-        this.#applyTransformation(rotationMatrix);
+        this.#addTransformation(rotationMatrix);
         return this;
+    }
+
+    /**
+     * Displays the geometry of the object.
+     */
+    render() {
+        super.display();
     }
 
     /**
@@ -115,14 +120,18 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     display() {
-        // apply the geometric transformations
         this.scene.pushMatrix();
-        this.scene.multMatrix(this.#transformationMatrix);
-        super.display();
-        this.scene.popMatrix();
 
-        // clear the transformation matrix
-        this.#transformationMatrix = [...this.#identityMatrix];
+        // apply the geometric transformations, if any
+        if (this.#transformationMatrix) {
+            this.scene.multMatrix(this.#transformationMatrix);
+            this.#transformationMatrix = null; // clear the transformation matrix
+        }
+
+        // display the geometry of the object
+        this.render();
+
+        this.scene.popMatrix();
         return this;
     }
 }

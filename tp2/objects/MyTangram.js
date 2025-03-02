@@ -23,7 +23,7 @@ export class MyTangram extends MyObject {
         this.smallTriangle = new MyTriangleSmall(scene);
     }
 
-    display() {
+    render() {
         // display the diamond
         const rotationMatrix = [
             Math.cos(Math.PI / 4), Math.sin(Math.PI / 4), 0, 0,
@@ -47,7 +47,7 @@ export class MyTangram extends MyObject {
 
         // display the parallelogram
         this.parallelogram
-            .rotate(45, 0, 0, 1)
+            .rotate(Math.PI / 4, 0, 0, 1)
             .scale(-1, 1, 1)
             .translate(0, Math.sqrt(2), 0)
             .display();
@@ -60,19 +60,19 @@ export class MyTangram extends MyObject {
 
         // display the big triangles
         this.bigTriangle
-            .rotate(-90, 0, 0, 1)
+            .rotate(-Math.PI / 2, 0, 0, 1)
             .translate(0, -2, 0)
             .display()
-            .rotate(-135, 0, 0, 1)
+            .rotate(-3 * Math.PI / 4, 0, 0, 1)
             .translate(2 - Math.sqrt(2), -2 - Math.sqrt(2), 0)
             .display();
 
         // display the small triangles
         this.smallTriangle
-            .rotate(90, 0, 0, 1)
+            .rotate(Math.PI / 2, 0, 0, 1)
             .translate(0, -1, 0)
             .display()
-            .rotate(-90, 0, 0, 1)
+            .rotate(-Math.PI / 2, 0, 0, 1)
             .translate(-1, -2, 0)
             .display();
     }
