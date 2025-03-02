@@ -1,11 +1,11 @@
-import {CGFobject} from '../../lib/CGF.js';
+import { MyObject } from './MyObject.js';
 
 /**
  * MyUnitCube
  * @constructor
  * @param scene - Reference to MyScene object
  */
-export class MyUnitCube extends CGFobject {
+export class MyUnitCube extends MyObject {
     constructor(scene) {
         super(scene);
         this.initBuffers();
@@ -40,8 +40,6 @@ export class MyUnitCube extends CGFobject {
             // right square
             1, 5, 3,
             5, 7, 3,
-            // 1, 3, 5,
-            // 5, 3, 7,
 
             // left square
             4, 0, 6,
