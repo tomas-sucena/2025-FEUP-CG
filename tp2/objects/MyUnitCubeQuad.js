@@ -10,7 +10,7 @@ export class MyUnitCubeQuad extends MyObject {
     constructor(scene) {
         super(scene);
 
-        this.quad = new MyQuad();
+        this.quad = new MyQuad(scene);
     }
 
     render() {
@@ -21,6 +21,7 @@ export class MyUnitCubeQuad extends MyObject {
 
         // back square
         this.quad
+            .rotate(Math.PI, 0, 1, 0)
             .translate(0, 0, -0.5)
             .display()        
 
@@ -38,13 +39,13 @@ export class MyUnitCubeQuad extends MyObject {
 
         // top square
         this.quad
-            .rotate(Math.PI/2, 1, 0, 0)
+            .rotate(-Math.PI/2, 1, 0, 0)
             .translate(0, 0.5, 0)
             .display()    
 
         // bottom square
         this.quad
-            .rotate(-Math.PI/2, 1, 0, 0)
+            .rotate(Math.PI/2, 1, 0, 0)
             .translate(0, -0.5, 0)
             .display()   
             
