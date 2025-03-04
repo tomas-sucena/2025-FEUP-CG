@@ -10,7 +10,7 @@ export class MyUnitCube extends MyObject {
         super(scene);
         this.initBuffers();
     }
-    
+
     initBuffers() {
         this.vertices = [
             // front square
@@ -53,7 +53,6 @@ export class MyUnitCube extends MyObject {
             // bottom square
             0, 4, 1,
             1, 4, 5
-
         ];
 
         //The defined indices (and corresponding vertices)
@@ -63,4 +62,3 @@ export class MyUnitCube extends MyObject {
         this.initGLBuffers();
     }
 }
-

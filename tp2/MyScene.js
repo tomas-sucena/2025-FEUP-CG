@@ -4,7 +4,6 @@ import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 import { MyUnitCubeQuad } from './objects/MyUnitCubeQuad.js';
 import { MyTangram } from './objects/MyTangram.js';
 
-
 /**
  * MyScene
  * @constructor
@@ -100,11 +99,10 @@ export class MyScene extends CGFscene {
 
         this.multMatrix(sca);
 
-
         // ---- BEGIN Primitive drawing section
         if (this.displayTangram) {
             this.tangram
-                .rotate(3 * Math.PI / 2, 1, 0, 0)
+                .rotate((3 * Math.PI) / 2, 1, 0, 0)
                 .translate(4.5, 0.5, 4.7)
                 .display();
         }

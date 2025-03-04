@@ -18,8 +18,7 @@ In this practical assignment, we learned how to apply geometric transformations 
 | :------------------------------------------: |
 |     **Figure 2:** A tangram with a base      |
 
-- For exercise 3, we created a new square object - [MyQuad](objects/MyQuad.js) - to recreate the cube with geometric transformations. Creating the square was pretty straightforward, and applying the geometric transformations was much simpler than creating the vertices for the cube in the previous exercise.
-We then replaced previous exercise's cube with the new cube in the main scene, making it the new base for the tangram, as shown in figure 3.
+- For exercise 3, we recreated the cube, but this time, instead of defining its geometry, we modelled it by applying geometric transformations to a [square](objects/MyQuad.js). Creating the square was pretty straightforward and using geometric transformations was much simpler than manually defining the geometry. We then replaced the cube from the previous exercise with the new cube in the main scene, making it the new base for the tangram, as shown in Figure 3.
 
 | ![Figure 3](screenshots/cg-t04g06-tp2-3.png) |
 | :------------------------------------------: |

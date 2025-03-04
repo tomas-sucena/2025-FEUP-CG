@@ -24,7 +24,6 @@ export class MyQuad extends MyObject {
             // front
             0, 1, 2,
             1, 3, 2,
-
         ];
 
         //The defined indices (and corresponding vertices)

@@ -63,7 +63,7 @@ export class MyTangram extends MyObject {
             .rotate(-Math.PI / 2, 0, 0, 1)
             .translate(0, -2, 0)
             .display()
-            .rotate(-3 * Math.PI / 4, 0, 0, 1)
+            .rotate((-3 * Math.PI) / 4, 0, 0, 1)
             .translate(2 - Math.sqrt(2), -2 - Math.sqrt(2), 0)
             .display();
 
