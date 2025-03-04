@@ -17,15 +17,16 @@ export class MyInterface extends CGFinterface {
         // https://github.com/dataarts/dat.gui/blob/master/API.md
         this.gui = new dat.GUI();
 
-        //Checkbox element in GUI
+        // checkbox element in GUI
         this.gui.add(this.scene, 'displayAxis').name('Axis');
 
-        //Slider element in GUI
+        // slider element in GUI
         this.gui.add(this.scene, 'scaleFactor', 0.1, 5).name('Scale Factor');
 
-        // radio buttons in GUI
         this.gui.add(this.scene, 'displayTangram').name('Tangram');
-        this.gui.add(this.scene, 'displayCube').name('Cube');
+        this.gui
+            .add(this.scene, 'selectedBase', Object.keys(this.scene.bases))
+            .name('Base');
 
         return true;
     }
