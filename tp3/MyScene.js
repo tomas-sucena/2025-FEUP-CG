@@ -94,9 +94,7 @@ export class MyScene extends CGFscene {
         this.customMaterial.setAmbient(...this.hexToRgbA(this.customMaterialValues['Ambient']));
         this.customMaterial.setDiffuse(...this.hexToRgbA(this.customMaterialValues['Diffuse']));
         this.customMaterial.setSpecular(...this.hexToRgbA(this.customMaterialValues['Specular']));
-
         this.customMaterial.setShininess(this.customMaterialValues['Shininess']);
-
     };
 
     updateObjectComplexity(){
@@ -127,7 +125,6 @@ export class MyScene extends CGFscene {
 
         // Custom material (can be changed in the interface)
         // initially midrange values on ambient, diffuse and specular, on R, G and B respectively
-
         this.customMaterialValues = {
             'Ambient': '#0000ff',
             'Diffuse': '#ff0000',

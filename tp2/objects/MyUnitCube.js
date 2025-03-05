@@ -24,7 +24,6 @@ export class MyUnitCube extends MyObject {
             0.5, -0.5, -0.5,  // 5
             -0.5, 0.5, -0.5,  // 6
             0.5, 0.5, -0.5,   // 7
-
         ];
 
         //Counter-clockwise reference of vertices

@@ -11,7 +11,7 @@ export class MyUnitCube extends MyObject {
         this.initBuffers();
     }
 
-    initBuffers() {
+    initBuffers() {        
         this.vertices = [
             // front square
             -0.5, -0.5, 0.5, // 0
@@ -24,9 +24,8 @@ export class MyUnitCube extends MyObject {
             0.5, -0.5, -0.5,  // 5
             -0.5, 0.5, -0.5,  // 6
             0.5, 0.5, -0.5,   // 7
-
         ];
-
+        
         //Counter-clockwise reference of vertices
         this.indices = [
             // front square
@@ -44,7 +43,6 @@ export class MyUnitCube extends MyObject {
             // left square
             4, 0, 6,
             0, 2, 6,
-
 
             // top square
             2, 3, 6,
