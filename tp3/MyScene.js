@@ -1,7 +1,10 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance } from "../lib/CGF.js";
+
 import { MyPyramid } from "./objects/MyPyramid.js";
 import { MyCone } from "./objects/MyCone.js";
 import { MyPlane } from "./objects/MyPlane.js";
+import { MyTangram } from "./objects/MyTangram.js";
+import { MyUnitCube } from "./objects/MyUnitCube.js";
 
 /**
 * MyScene
@@ -27,20 +30,19 @@ export class MyScene extends CGFscene {
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
-        this.plane = new MyPlane(this, 5);
-        this.cone = new MyCone(this, 3, 1);
-        this.pyramid = new MyPyramid(this, 3, 1);
-        
-        this.objects = [this.plane, this.pyramid, this.cone];
-
-        // Labels and ID's for object selection on MyInterface
-        this.objectIDs = { 'Plane': 0 , 'Pyramid': 1, 'Cone': 2};
+        this.objects = {
+            'Cone': new MyCone(this, 3, 1),
+            'Cube': new MyUnitCube(this),
+            'Plane': new MyPlane(this, 5),
+            'Pyramid': new MyPyramid(this, 3, 1),
+            'Tangram': new MyTangram(this),
+        };
 
         //Other variables connected to MyInterface
-        this.selectedObject = 0;
-        this.selectedMaterial = 0;
         this.displayAxis = true;
         this.displayNormals = false;
+        this.selectedObject = 'Plane';
+        this.selectedMaterial = 0;
         this.objectComplexity = 0.5;
         this.scaleFactor = 2.0;
 
@@ -100,7 +102,6 @@ export class MyScene extends CGFscene {
     updateObjectComplexity(){
         this.objects[this.selectedObject].updateBuffers(this.objectComplexity);
     }
-
 
     initMaterials() {
         // Red Ambient (no diffuse, no specular)

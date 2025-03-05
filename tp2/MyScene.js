@@ -1,9 +1,9 @@
 import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 
 // objects
+import { MyTangram } from './objects/MyTangram.js';
 import { MyUnitCube } from './objects/MyUnitCube.js';
 import { MyUnitCubeQuad } from './objects/MyUnitCubeQuad.js';
-import { MyTangram } from './objects/MyTangram.js';
 
 /**
  * MyScene
