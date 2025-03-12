@@ -24,6 +24,30 @@ export class MyUnitCube extends MyObject {
             0.5, -0.5, -0.5,  // 5
             -0.5, 0.5, -0.5,  // 6
             0.5, 0.5, -0.5,   // 7
+
+            // right square
+            0.5, -0.5, 0.5,   // 8
+            0.5, -0.5, -0.5,  // 9
+            0.5, 0.5, 0.5,    // 10
+            0.5, 0.5, -0.5,   // 11
+
+            // left square
+            -0.5, -0.5, -0.5,  // 12
+            -0.5, -0.5, 0.5,   // 13
+            -0.5, 0.5, -0.5,   // 14
+            -0.5, 0.5, 0.5,    // 15
+
+            // top square
+            -0.5, 0.5, 0.5,    // 16
+            0.5, 0.5, 0.5,     // 17
+            -0.5, 0.5, -0.5,   // 18
+            0.5, 0.5, -0.5,    // 19
+
+            // bottom square
+            -0.5, -0.5, 0.5,    // 16
+            0.5, -0.5, 0.5,     // 17
+            -0.5, -0.5, -0.5,   // 18
+            0.5, -0.5, -0.5,    // 19
         ];
         
         //Counter-clockwise reference of vertices
@@ -51,6 +75,26 @@ export class MyUnitCube extends MyObject {
             // bottom square
             0, 4, 1,
             1, 4, 5
+        ];
+
+        this.normals = [
+            // front square
+            ...Array(4).fill([0, 0, 1]).flat(),
+
+            // back square
+            ...Array(4).fill([0, 0, -1]).flat(),
+
+            // right square
+            ...Array(4).fill([1, 0, 0]).flat(),
+
+            // left square
+            ...Array(4).fill([-1, 0, 0]).flat(),
+
+            // top square
+            ...Array(4).fill([0, 1, 0]).flat(),
+
+            // bottom square
+            ...Array(4).fill([0, -1, 0]).flat(),
         ];
 
         //The defined indices (and corresponding vertices)
