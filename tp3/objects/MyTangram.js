@@ -1,3 +1,4 @@
+import { CGFappearance } from '../../lib/CGF.js';
 import { MyObject } from './MyObject.js';
 
 import { MyDiamond } from './MyDiamond.js';
@@ -38,6 +39,13 @@ export class MyTangram extends MyObject {
             0, 0, 1, 0,
             0, 1, 0, 1,
         ];
+
+        const greenMaterial = new CGFappearance(this.scene);
+        greenMaterial.setAmbient(0, 1, 0, 1);
+        greenMaterial.setSpecular(0, 1, 0, 1);
+        greenMaterial.setDiffuse(0, 1, 0, 1);
+        greenMaterial.setShininess(10.0);
+        greenMaterial.apply();
 
         this.scene.pushMatrix();
         this.scene.multMatrix(rotationMatrix); // rotate it 45 degrees
