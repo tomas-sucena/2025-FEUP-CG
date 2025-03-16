@@ -7,7 +7,7 @@ import { MyObject } from '../MyObject.js';
  * @param slices - number of divisions around the Z axis
  * @param stacks - number of divisions along the Z axis
 */
-export class MyPrism extends MyObject {
+export class MyCylinder extends MyObject {
     constructor(scene, slices, stacks) {
         super(scene);
 
@@ -49,20 +49,11 @@ export class MyPrism extends MyObject {
                 );
 
                 // define the normals
-                const normal = [
-                    (ca + caa) / 2,
-                    (sa + saa) / 2,
-                    0,
-                ];
-
-                const nsize = Math.hypot(...normal);
-                normal.forEach(val => val / nsize); // normalization
-                
                 this.normals.push(
-                    ...normal,
-                    ...normal,
-                    ...normal,
-                    ...normal,
+                    ca, sa, 0,
+                    caa, saa, 0,
+                    ca, sa, 0,
+                    caa, saa, 0,
                 );
             }
         }

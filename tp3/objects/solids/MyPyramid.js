@@ -1,4 +1,4 @@
-import {CGFobject} from '../../../lib/CGF.js';
+import { MyObject } from '../MyObject.js';
 
 /**
 * MyPyramid
@@ -7,7 +7,7 @@ import {CGFobject} from '../../../lib/CGF.js';
  * @param slices - number of divisions around the Y axis
  * @param stacks - number of divisions along the Y axis
 */
-export class MyPyramid extends CGFobject {
+export class MyPyramid extends MyObject {
     constructor(scene, slices, stacks) {
         super(scene);
         this.slices = slices;

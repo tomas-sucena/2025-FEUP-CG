@@ -1,6 +1,7 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance } from "../lib/CGF.js";
 
 import { MyCone } from "./objects/solids/MyCone.js";
+import { MyCylinder } from "./objects/solids/MyCylinder.js";
 import { MyPlane } from "./objects/shapes/MyPlane.js";
 import { MyPyramid } from "./objects/solids/MyPyramid.js";
 import { MyTangram } from "./objects/MyTangram.js";
@@ -34,6 +35,7 @@ export class MyScene extends CGFscene {
         this.objects = {
             'Cone': new MyCone(this, 3, 1),
             'Cube': new MyUnitCube(this),
+            'Cylinder': new MyCylinder(this, 5, 5),
             'Plane': new MyPlane(this, 5),
             'Prism': new MyPrism(this, 5, 5),
             'Pyramid': new MyPyramid(this, 3, 1),
