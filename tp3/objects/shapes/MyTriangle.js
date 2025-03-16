@@ -26,6 +26,10 @@ export class MyTriangle extends MyObject {
             // back
             2, 1, 0,
         ];
+        
+        this.normals = Array(this.vertices.length)
+            .fill([0, 0, 1])
+            .flat();
 
         //The defined indices (and corresponding vertices)
         //will be read in groups of three to draw triangles
