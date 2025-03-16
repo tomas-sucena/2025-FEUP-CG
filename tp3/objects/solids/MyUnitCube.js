@@ -1,4 +1,4 @@
-import { MyObject } from './MyObject.js';
+import { MyObject } from '../MyObject.js';
 
 /**
  * MyUnitCube

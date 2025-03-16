@@ -1,11 +1,11 @@
-import { MyObject } from './MyObject.js';
+import { MyObject } from '../MyObject.js';
 
 /**
- * MyParallelogram
+ * MyDiamond
  * @constructor
  * @param scene - Reference to MyScene object
  */
-export class MyParallelogram extends MyObject {
+export class MyDiamond extends MyObject {
     constructor(scene) {
         super(scene);
         this.initBuffers();
@@ -13,21 +13,21 @@ export class MyParallelogram extends MyObject {
 
     initBuffers() {
         this.vertices = [
-            0, 0, 0, // 0
-            2, 0, 0, // 1
-            3, 1, 0, // 2
-            1, 1, 0, // 3
+            -1, 0, 0, // 0
+            0, -1, 0, // 1
+            0, 1, 0,  // 2
+            1, 0, 0,  // 3
         ];
 
         //Counter-clockwise reference of vertices
         this.indices = [
             // front
-            0, 1, 3,
-            1, 2, 3,
+            0, 1, 2,
+            1, 3, 2,
 
             // back
-            3, 1, 0,
-            3, 2, 1,
+            2, 1, 0,
+            2, 3, 1,
         ];
 
         //The defined indices (and corresponding vertices)

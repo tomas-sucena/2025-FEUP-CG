@@ -1,11 +1,11 @@
-import { MyObject } from './MyObject.js';
+import { MyObject } from '../MyObject.js';
 
 /**
- * MyDiamond
+ * MyTriangle
  * @constructor
  * @param scene - Reference to MyScene object
  */
-export class MyDiamond extends MyObject {
+export class MyTriangle extends MyObject {
     constructor(scene) {
         super(scene);
         this.initBuffers();
@@ -13,21 +13,18 @@ export class MyDiamond extends MyObject {
 
     initBuffers() {
         this.vertices = [
-            -1, 0, 0, // 0
-            0, -1, 0, // 1
-            0, 1, 0,  // 2
-            1, 0, 0,  // 3
+            -1, -1, 0,
+            1, -1, 0,
+            -1, 1, 0,
         ];
 
         //Counter-clockwise reference of vertices
         this.indices = [
             // front
             0, 1, 2,
-            1, 3, 2,
 
             // back
             2, 1, 0,
-            2, 3, 1,
         ];
 
         //The defined indices (and corresponding vertices)

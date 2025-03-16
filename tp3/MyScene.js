@@ -1,10 +1,11 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance } from "../lib/CGF.js";
 
-import { MyPyramid } from "./objects/MyPyramid.js";
-import { MyCone } from "./objects/MyCone.js";
-import { MyPlane } from "./objects/MyPlane.js";
+import { MyCone } from "./objects/solids/MyCone.js";
+import { MyPlane } from "./objects/shapes/MyPlane.js";
+import { MyPyramid } from "./objects/solids/MyPyramid.js";
 import { MyTangram } from "./objects/MyTangram.js";
-import { MyUnitCube } from "./objects/MyUnitCube.js";
+import { MyPrism } from "./objects/solids/MyPrism.js";
+import { MyUnitCube } from "./objects/solids/MyUnitCube.js";
 
 /**
 * MyScene
@@ -34,6 +35,7 @@ export class MyScene extends CGFscene {
             'Cone': new MyCone(this, 3, 1),
             'Cube': new MyUnitCube(this),
             'Plane': new MyPlane(this, 5),
+            'Prism': new MyPrism(this, 5, 5),
             'Pyramid': new MyPyramid(this, 3, 1),
             'Tangram': new MyTangram(this),
         };
@@ -97,7 +99,7 @@ export class MyScene extends CGFscene {
         this.customMaterial.setShininess(this.customMaterialValues['Shininess']);
     };
 
-    updateObjectComplexity(){
+    updateObjectComplexity() {
         this.objects[this.selectedObject].updateBuffers(this.objectComplexity);
     }
 

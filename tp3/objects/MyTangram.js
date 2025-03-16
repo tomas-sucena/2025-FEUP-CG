@@ -1,11 +1,11 @@
 import { CGFappearance } from '../../lib/CGF.js';
 import { MyObject } from './MyObject.js';
 
-import { MyDiamond } from './MyDiamond.js';
-import { MyParallelogram } from './MyParallelogram.js';
-import { MyTriangle } from './MyTriangle.js';
-import { MyTriangleBig } from './MyTriangleBig.js';
-import { MyTriangleSmall } from './MyTriangleSmall.js';
+import { MyDiamond } from './shapes/MyDiamond.js';
+import { MyParallelogram } from './shapes/MyParallelogram.js';
+import { MyTriangle } from './shapes/MyTriangle.js';
+import { MyTriangleBig } from './shapes/MyTriangleBig.js';
+import { MyTriangleSmall } from './shapes/MyTriangleSmall.js';
 
 /**
  * MyTangram
@@ -91,7 +91,6 @@ export class MyTangram extends MyObject {
         this.greenMaterial.apply();
         this.diamond.display();
         this.scene.popMatrix();
-
 
         // display the parallelogram
         this.yellowMaterial.apply();
