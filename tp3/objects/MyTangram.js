@@ -26,7 +26,6 @@ export class MyTangram extends MyObject {
     }
 
     initMaterials() {
-
         this.greenMaterial = new CGFappearance(this.scene);
         this.greenMaterial.setAmbient(0, 1, 0, 1);
         this.greenMaterial.setSpecular(0, 1, 0, 1);
@@ -34,15 +33,15 @@ export class MyTangram extends MyObject {
         this.greenMaterial.setShininess(10.0);
 
         this.blueMaterial = new CGFappearance(this.scene);
-        this.blueMaterial.setAmbient(0, 0, 0.6, 1);
-        this.blueMaterial.setSpecular(0, 0, 0.6, 1);
-        this.blueMaterial.setDiffuse(0, 0, 0.6, 1);
+        this.blueMaterial.setAmbient(0, 0.5, 1, 1);
+        this.blueMaterial.setSpecular(0, 0.5, 1, 1);
+        this.blueMaterial.setDiffuse(0, 0.5, 1, 1);
         this.blueMaterial.setShininess(10.0);
 
         this.redMaterial = new CGFappearance(this.scene);
-        this.redMaterial.setAmbient(1, 0, 0, 1);
-        this.redMaterial.setSpecular(1, 0, 0, 1);
-        this.redMaterial.setDiffuse(1, 0, 0, 1);
+        this.redMaterial.setAmbient(1, 27 / 255, 27 / 255, 1);
+        this.redMaterial.setSpecular(1, 27 / 255, 27 / 255, 1);
+        this.redMaterial.setDiffuse(1, 27 / 255, 27 / 255, 1);
         this.redMaterial.setShininess(10.0);
 
         this.orangeMaterial = new CGFappearance(this.scene);
@@ -58,18 +57,17 @@ export class MyTangram extends MyObject {
         this.yellowMaterial.setShininess(10.0);   
         
         this.purpleMaterial = new CGFappearance(this.scene);
-        this.purpleMaterial.setAmbient(0.6, 0, 1, 1);
-        this.purpleMaterial.setSpecular(0.6, 0, 1, 1);
-        this.purpleMaterial.setDiffuse(0.6, 0, 1, 1);
+        this.purpleMaterial.setAmbient(150 / 255, 80 / 255, 190 / 255, 1);
+        this.purpleMaterial.setSpecular(150 / 255, 80 / 255, 190 / 255, 1);
+        this.purpleMaterial.setDiffuse(150 / 255, 80 / 255, 190 / 255, 1);
         this.purpleMaterial.setShininess(10.0);   
 
         this.pinkMaterial = new CGFappearance(this.scene);
-        this.pinkMaterial.setAmbient(0.7, 0, 0.7, 1);
-        this.pinkMaterial.setSpecular(0.7, 0, 0.7, 1);
-        this.pinkMaterial.setDiffuse(0.7, 0, 0.7, 1);
+        this.pinkMaterial.setAmbient(1, 0.5, 207 / 255, 1);
+        this.pinkMaterial.setSpecular(1, 0.5, 207 / 255, 1);
+        this.pinkMaterial.setDiffuse(1, 0.5, 207 / 255, 1);
         this.pinkMaterial.setShininess(10.0);   
     }
-
 
     render() {
         // display the diamond
