@@ -45,10 +45,10 @@ export class MyScene extends CGFscene {
         //Other variables connected to MyInterface
         this.displayAxis = true;
         this.displayNormals = false;
-        this.selectedObject = 'Plane';
+        this.selectedObject = 'Tangram';
         this.selectedMaterial = 0;
         this.objectComplexity = 0.5;
-        this.scaleFactor = 2.0;
+        this.scaleFactor = 1.0;
 
     }
     initLights() {
