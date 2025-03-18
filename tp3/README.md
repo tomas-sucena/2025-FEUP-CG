@@ -15,3 +15,13 @@ In this practical assignment, we learned how to define an object's **normals**, 
 | ![Figure 2](screenshots/cg-t04g06-tp3-2.png) |
 | :------------------------------------------: |
 |           **Figure 2:** A tangram            |
+
+- In exercises 2 and 3, we created two new solids: a [prism](objects/solids/MyPrism.js) and a [cylinder](objects/solids/MyCylinder.js), respectively. Both of these feature a customizable number of **slices** (divisions around the Z-axis) and **stacks** (divisions along the Z-axis). Despite having identical geometries (i.e. vertices and indices), these objects look very different when illuminated because their normals are distinct.
+
+| ![Figure 3](screenshots/cg-t04g06-tp3-3.png) |
+| :------------------------------------------: |
+|            **Figure 3:** A prism             |
+
+| ![Figure 4](screenshots/cg-t04g06-tp3-4.png) |
+| :------------------------------------------: |
+|           **Figure 4:** A cylinder           |
