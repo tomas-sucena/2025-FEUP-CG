@@ -45,7 +45,7 @@ export class MyScene extends CGFscene {
         //Other variables connected to MyInterface
         this.displayAxis = true;
         this.displayNormals = false;
-        this.selectedObject = 'Prism';
+        this.selectedObject = 'Cylinder';
         this.selectedMaterial = 0;
         this.objectComplexity = 0.5;
         this.scaleFactor = 1.0;
