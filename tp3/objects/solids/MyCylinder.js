@@ -67,12 +67,10 @@ export class MyCylinder extends MyObject {
      * @param {integer} complexity - changes number of slices
      */
     updateBuffers(complexity) {
-        this.slices = 3 + Math.round(17 * complexity); //complexity varies 0-1, so slices varies 3-20
+        this.slices = Math.max(3, Math.round(16 * complexity));
         
         // reinitialize buffers
         this.initBuffers();
         this.initNormalVizBuffers();
     }
 }
-
-
