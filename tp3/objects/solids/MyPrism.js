@@ -21,13 +21,12 @@ export class MyPrism extends MyObject {
         this.indices = [];
         this.normals = [];
 
-        // define the slices
         const angOffset = (2 * Math.PI) / this.slices;
         const zOffset = 1 / this.stacks;
-        let index = 0;
 
-        for (let ang = 0; ang < 2 * Math.PI; ang += angOffset) {
-            // compute the vertex coordinates
+        // define the slices
+        for (let slice = 0; slice < this.slices; ++slice) {
+            const ang = slice * angOffset;
             const sa = Math.sin(ang);
             const ca = Math.cos(ang);
             const saa = Math.sin(ang + angOffset);
@@ -45,7 +44,17 @@ export class MyPrism extends MyObject {
             normal.forEach((val) => val / nSize); // normalization
 
             // define the stacks
-            for (let z = 0; z < 1; z += zOffset) {
+            for (let stack = 0; stack < this.stacks; ++stack) {
+                const z = stack * zOffset;
+                const index = this.vertices.length / 3;
+                
+                // define the indices
+                // prettier-ignore
+                this.indices.push(
+                    index, index + 1, index + 2,
+                    index + 1, index + 3, index + 2,
+                );
+
                 // define the vertices
                 // prettier-ignore
                 this.vertices.push(
@@ -54,15 +63,6 @@ export class MyPrism extends MyObject {
                     ca, sa, z + zOffset,
                     caa, saa, z + zOffset,
                 );
-
-                // define the indices
-                // prettier-ignore
-                this.indices.push(
-                    index, index + 1, index + 2,
-                    index + 1, index + 3, index + 2,
-                );
-
-                index += 4;
 
                 // define the normals
                 this.normals.push(...Array(4).fill(normal).flat());
