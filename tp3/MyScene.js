@@ -35,9 +35,9 @@ export class MyScene extends CGFscene {
         this.objects = {
             'Cone': new MyCone(this, 3, 1),
             'Cube': new MyUnitCube(this),
-            'Cylinder': new MyCylinder(this, 8, 5),
+            'Cylinder': new MyCylinder(this, 8, 20),
             'Plane': new MyPlane(this, 5),
-            'Prism': new MyPrism(this, 8, 5),
+            'Prism': new MyPrism(this, 8, 20),
             'Pyramid': new MyPyramid(this, 3, 1),
             'Tangram': new MyTangram(this),
         };
@@ -46,11 +46,11 @@ export class MyScene extends CGFscene {
         this.displayAxis = true;
         this.displayNormals = false;
         this.selectedObject = 'Cylinder';
-        this.selectedMaterial = 0;
+        this.selectedMaterial = 4;
         this.objectComplexity = 0.5;
         this.scaleFactor = 1.0;
-
     }
+
     initLights() {
         this.setGlobalAmbientLight(0.3, 0.3, 0.3, 1.0);
 

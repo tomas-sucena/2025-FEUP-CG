@@ -6,7 +6,7 @@ import { MyObject } from '../MyObject.js';
  * @param scene - Reference to MyScene object
  * @param slices - number of divisions around the Z axis
  * @param stacks - number of divisions along the Z axis
-*/
+ */
 export class MyPrism extends MyObject {
     constructor(scene, slices, stacks) {
         super(scene);
@@ -21,20 +21,42 @@ export class MyPrism extends MyObject {
         this.indices = [];
         this.normals = [];
 
-        // define the stacks
-        const angOffset = 2 * Math.PI / this.slices;
+        const angOffset = (2 * Math.PI) / this.slices;
         const zOffset = 1 / this.stacks;
 
-        for (let z = 0; z < 1; z += zOffset) {
-            // define the slices
-            for (let ang = 0; ang < 2 * Math.PI; ang += angOffset) {
-                const sa = Math.sin(ang);
-                const ca = Math.cos(ang);
-                const saa = Math.sin(ang + angOffset);
-                const caa = Math.cos(ang + angOffset);
+        // define the slices
+        for (let slice = 0; slice < this.slices; ++slice) {
+            const ang = slice * angOffset;
+            const sa = Math.sin(ang);
+            const ca = Math.cos(ang);
+            const saa = Math.sin(ang + angOffset);
+            const caa = Math.cos(ang + angOffset);
+
+            // compute the normal
+            // prettier-ignore
+            const normal = [
+                (ca + caa) / 2,
+                (sa + saa) / 2,
+                0,
+            ];
+
+            const nSize = Math.hypot(...normal);
+            normal.forEach((val) => val / nSize); // normalization
+
+            // define the stacks
+            for (let stack = 0; stack < this.stacks; ++stack) {
+                const z = stack * zOffset;
                 const index = this.vertices.length / 3;
+                
+                // define the indices
+                // prettier-ignore
+                this.indices.push(
+                    index, index + 1, index + 2,
+                    index + 1, index + 3, index + 2,
+                );
 
                 // define the vertices
+                // prettier-ignore
                 this.vertices.push(
                     ca, sa, z,
                     caa, saa, z,
@@ -42,28 +64,8 @@ export class MyPrism extends MyObject {
                     caa, saa, z + zOffset,
                 );
 
-                // define the indices
-                this.indices.push(
-                    index, index + 1, index + 2,
-                    index + 3, index + 2, index + 1,
-                );
-
                 // define the normals
-                const normal = [
-                    (ca + caa) / 2,
-                    (sa + saa) / 2,
-                    0,
-                ];
-
-                const nsize = Math.hypot(...normal);
-                normal.forEach(val => val / nsize); // normalization
-                
-                this.normals.push(
-                    ...normal,
-                    ...normal,
-                    ...normal,
-                    ...normal,
-                );
+                this.normals.push(...Array(4).fill(normal).flat());
             }
         }
 
@@ -76,12 +78,10 @@ export class MyPrism extends MyObject {
      * @param {integer} complexity - changes number of slices
      */
     updateBuffers(complexity) {
-        this.slices = 3 + Math.round(17 * complexity); //complexity varies 0-1, so slices varies 3-20
-        
+        this.slices = Math.max(3, Math.round(16 * complexity));
+
         // reinitialize buffers
         this.initBuffers();
         this.initNormalVizBuffers();
     }
 }
-
-
