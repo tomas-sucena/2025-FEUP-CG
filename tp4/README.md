@@ -10,4 +10,4 @@ In this practical assignment, we learned how to apply **textures** to our object
 
 | ![Figure 2](screenshots/cg-t04g06-tp4-1.png) |
 | :------------------------------------------: |
-|           **Figure 2:** A tangram            |
+|           **Figure 1:** A tangram            |
