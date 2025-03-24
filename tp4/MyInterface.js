@@ -16,11 +16,12 @@ export class MyInterface extends CGFinterface {
         // init GUI. For more information on the methods, check:
         // https://github.com/dataarts/dat.gui/blob/master/API.md
         this.gui = new dat.GUI();
-        
-        var obj = this;
 
         //Checkbox element in GUI
-        this.gui.add(this.scene, 'displayAxis').name('Display Axis');
+        this.gui.add(this.scene, 'displayAxis').name('Axis');
+
+        this.gui.add(this.scene, 'selectedObject', Object.keys(this.scene.objects))
+            .name('Object');
 
         //Dropdown for textures
         this.gui.add(this.scene, 'selectedTexture', this.scene.textureIds).name('Selected Texture').onChange(this.scene.updateAppliedTexture.bind(this.scene));
