@@ -41,12 +41,12 @@ export class MyTangram extends MyObject {
             0.25, 0.75,
             0.5, 0.5,
         ]);
-        
+
         // yellow parallelogram
         this.yellowParallelogram.material.setSpecular(1, 1, 0, 1);
         this.yellowParallelogram.material.setDiffuse(1, 1, 0, 1);
         this.yellowParallelogram.material.setAmbient(0.8, 0.8, 0.8, 1);
-        // prettier-ignore 
+        // prettier-ignore
         this.yellowParallelogram.setTexture(texture, [
             1, 1,
             0.5, 1,
@@ -112,6 +112,7 @@ export class MyTangram extends MyObject {
 
     render() {
         // display the diamond
+        // prettier-ignore
         const rotationMatrix = [
             Math.cos(Math.PI / 4), Math.sin(Math.PI / 4), 0, 0,
             -Math.sin(Math.PI / 4), Math.cos(Math.PI / 4), 0, 0,
@@ -119,6 +120,7 @@ export class MyTangram extends MyObject {
             0, 0, 0, 1,
         ];
 
+        // prettier-ignore
         const translationMatrix = [
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -149,7 +151,7 @@ export class MyTangram extends MyObject {
         this.bigOrangeTriangle
             .rotate(-Math.PI / 2, 0, 0, 1)
             .translate(0, -2, 0)
-            .display()
+            .display();
 
         this.bigBlueTriangle
             .rotate((-3 * Math.PI) / 4, 0, 0, 1)
@@ -160,7 +162,7 @@ export class MyTangram extends MyObject {
         this.smallPurpleTriangle
             .rotate(Math.PI / 2, 0, 0, 1)
             .translate(0, -1, 0)
-            .display()
+            .display();
 
         this.smallRedTriangle
             .rotate(-Math.PI / 2, 0, 0, 1)

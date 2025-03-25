@@ -12,6 +12,7 @@ export class MyTriangleSmall extends MyObject {
     }
 
     initBuffers() {
+        // prettier-ignore
         this.vertices = [
             -1, 0, 0,
             1, 0, 0,
@@ -19,6 +20,7 @@ export class MyTriangleSmall extends MyObject {
         ];
 
         //Counter-clockwise reference of vertices
+        // prettier-ignore
         this.indices = [
             // front
             0, 1, 2,
@@ -27,9 +29,7 @@ export class MyTriangleSmall extends MyObject {
             0, 2, 1,
         ];
 
-        this.normals = Array(this.vertices.length)
-            .fill([0, 0, 1])
-            .flat();
+        this.normals = Array(this.vertices.length).fill([0, 0, 1]).flat();
 
         //The defined indices (and corresponding vertices)
         //will be read in groups of three to draw triangles

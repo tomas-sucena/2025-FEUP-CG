@@ -11,7 +11,9 @@ export class MyUnitCubeQuad extends MyObject {
         super(scene);
 
         // objects
-        this.faces = Array(6).fill().map(_ => new MyQuad(scene));
+        this.faces = Array(6)
+            .fill()
+            .map((_) => new MyQuad(scene));
         this.initTextures(textures);
     }
 
@@ -20,13 +22,9 @@ export class MyUnitCubeQuad extends MyObject {
         this.faces[1].setTexture(textures[1]); // bottom
 
         // sides
-        if (textures.length === 3) {
-            const sideTexture = textures[2];
-            this.faces.slice(2, 6).forEach(face => face.setTexture(sideTexture));
-        }
-        else {
-            this.faces.slice(2, 6).forEach((face, index) => face.setTexture(textures[index + 2]));
-        }
+        this.faces
+            .slice(2, 6)
+            .forEach((face, index) => face.setTexture(textures[2 + (textures.length > 3) * index]));
     }
 
     render() {
@@ -55,7 +53,7 @@ export class MyUnitCubeQuad extends MyObject {
             .translate(-0.5, 0, 0);
 
         // display the faces
-        this.faces.forEach(face => {
+        this.faces.forEach((face) => {
             this.scene.gl.texParameteri(
                 this.scene.gl.TEXTURE_2D,
                 this.scene.gl.TEXTURE_MAG_FILTER,

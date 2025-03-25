@@ -7,36 +7,38 @@ import { MyObject } from '../MyObject.js';
  * @param {Array} coords - Array of texture coordinates (optional)
  */
 export class MyQuad extends MyObject {
-	constructor(scene, coords) {
-		super(scene);
-		this.initBuffers();
-		if (coords != undefined)
-			this.updateTexCoords(coords);
-	}
-	
-	initBuffers() {
-		this.vertices = [
+    constructor(scene, coords) {
+        super(scene);
+        this.initBuffers();
+        if (coords != undefined) this.updateTexCoords(coords);
+    }
+
+    initBuffers() {
+        // prettier-ignore
+        this.vertices = [
 			-0.5, -0.5, 0,	//0
 			0.5, -0.5, 0,	//1
 			-0.5, 0.5, 0,	//2
 			0.5, 0.5, 0		//3
 		];
 
-		//Counter-clockwise reference of vertices
-		this.indices = [
+        //Counter-clockwise reference of vertices
+        // prettier-ignore
+        this.indices = [
 			0, 1, 2,
 			1, 3, 2,
 		];
 
-		//Facing Z positive
-		this.normals = [
+        //Facing Z positive
+        // prettier-ignore
+        this.normals = [
 			0, 0, 1,
 			0, 0, 1,
 			0, 0, 1,
 			0, 0, 1,
 		];
-		
-		/*
+
+        /*
 		Texture coords (s,t)
 		+----------> s
         |
@@ -45,25 +47,25 @@ export class MyQuad extends MyObject {
 		v
         t
         */
-		this.texCoords = [
+        // prettier-ignore
+        this.texCoords = [
 			0, 1,
 			1, 1,
 			0, 0,
 			1, 0,
 		];
 
-		this.primitiveType = this.scene.gl.TRIANGLES;
-		this.initGLBuffers();
-	}
+        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.initGLBuffers();
+    }
 
-	/**
-	 * @method updateTexCoords
-	 * Updates the list of texture coordinates of the quad
-	 * @param {Array} coords - Array of texture coordinates
-	 */
-	updateTexCoords(coords) {
-		this.texCoords = [...coords];
-		this.updateTexCoordsGLBuffers();
-	}
+    /**
+     * @method updateTexCoords
+     * Updates the list of texture coordinates of the quad
+     * @param {Array} coords - Array of texture coordinates
+     */
+    updateTexCoords(coords) {
+        this.texCoords = [...coords];
+        this.updateTexCoordsGLBuffers();
+    }
 }
-

@@ -46,8 +46,7 @@ export class MyObject extends CGFobject {
             for (let j = 0; j < 4; ++j) {
                 for (let k = 0; k < 4; ++k) {
                     result[i * 4 + k] +=
-                        this.transformations[i * 4 + j] *
-                        matrix[j * 4 + k];
+                        this.transformations[i * 4 + j] * matrix[j * 4 + k];
                 }
             }
         }
@@ -64,6 +63,7 @@ export class MyObject extends CGFobject {
      */
     translate(Tx, Ty, Tz) {
         // the (transposed) translation matrix
+        // prettier-ignore
         const translationMatrix = [
             1, 0, 0, 0,
             0, 1, 0, 0,
@@ -84,6 +84,7 @@ export class MyObject extends CGFobject {
      */
     scale(Sx, Sy, Sz) {
         // the (transposed) scaling matrix
+        // prettier-ignore
         const scalingMatrix = [
             Sx, 0, 0, 0,
             0, Sy, 0, 0,
@@ -113,6 +114,7 @@ export class MyObject extends CGFobject {
             yz = Ry * Rz;
 
         // the (transposed) rotation matrix
+        // prettier-ignore
         const rotationMatrix = [
             Rx * Rx * cos_ + cos, xy * cos_ + Rz * sin, xz * cos_ - Ry * sin, 0,
             xy * cos_ - Rz * sin, Ry * Ry * cos_ + cos, yz * cos_ + Rx * sin, 0,
@@ -144,7 +146,7 @@ export class MyObject extends CGFobject {
     render() {
         super.display();
     }
-    
+
     /**
      * Displays the object.
      * @returns a reference to the object

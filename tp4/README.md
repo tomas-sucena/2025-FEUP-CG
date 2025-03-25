@@ -8,7 +8,7 @@ In this practical assignment, we learned how to apply **textures** to our object
 
 - In exercise 1, we were tasked with applying a texture to the [tangram](objects/MyTangram.js). To that end, we defined the texture coordinates for each of its objects and then binded the texture to their materials. Given each object had its designated area on the texture, defining the texture coordinates was a bit tricky but still very doable.
 
-| ![Figure 2](screenshots/cg-t04g06-tp4-1.png) |
+| ![Figure 1](screenshots/cg-t04g06-tp4-1.png) |
 | :------------------------------------------: |
 |  **Figure 1:** A tangram w/ textured shapes  |
 
