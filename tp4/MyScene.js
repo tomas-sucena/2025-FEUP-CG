@@ -1,7 +1,8 @@
 import { CGFscene, CGFcamera, CGFaxis, CGFappearance, CGFtexture } from "../lib/CGF.js";
 
-import { MyTangram } from "./objects/MyTangram.js";
 import { MyQuad } from "./objects/shapes/MyQuad.js";
+import { MyTangram } from "./objects/MyTangram.js";
+import { MyUnitCubeQuad } from "./objects/solids/MyUnitCubeQuad.js";
 
 /**
  * MyScene
@@ -31,10 +32,15 @@ export class MyScene extends CGFscene {
         this.objects = {
             'Quad': new MyQuad(this),
             'Tangram': new MyTangram(this),
+            'Cube': new MyUnitCubeQuad(this, [
+                'images/mineTop.png',
+                'images/mineBottom.png',
+                'images/mineSide.png',
+            ]),
         };
 
         //------ Applied Material
-        this.quadMaterial = new CGFappearance(this);
+        this.quadMaterial = this.objects['Quad'].material;
         this.quadMaterial.setAmbient(0.1, 0.1, 0.1, 1);
         this.quadMaterial.setDiffuse(0.9, 0.9, 0.9, 1);
         this.quadMaterial.setSpecular(0.1, 0.1, 0.1, 1);

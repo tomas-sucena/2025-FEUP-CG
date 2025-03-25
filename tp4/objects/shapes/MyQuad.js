@@ -1,11 +1,12 @@
-import {CGFobject} from '../../../lib/CGF.js';
+import { MyObject } from '../MyObject.js';
+
 /**
  * MyQuad
  * @constructor
  * @param {MyScene} scene - Reference to MyScene object
  * @param {Array} coords - Array of texture coordinates (optional)
  */
-export class MyQuad extends CGFobject {
+export class MyQuad extends MyObject {
 	constructor(scene, coords) {
 		super(scene);
 		this.initBuffers();
