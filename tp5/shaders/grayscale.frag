@@ -7,7 +7,6 @@ uniform sampler2D uSampler;
 
 void main() {
     // convert the color to grayscale
-
     vec4 color = texture2D(uSampler, vTextureCoord);
     vec4 colorGray = color;
 
@@ -17,4 +16,3 @@ void main() {
 
 	gl_FragColor = colorGray;
 }
-

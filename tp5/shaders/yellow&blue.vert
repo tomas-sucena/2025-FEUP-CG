@@ -12,6 +12,8 @@ uniform float timeFactor;
 varying vec4 vVertexPosition;
 
 void main() {
-	gl_Position = vVertexPosition = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
-	gl_Position.x += scaleFactor * sin(timeFactor); // offset the vertex in the X-axis
+	vVertexPosition = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    vVertexPosition.x += scaleFactor * sin(timeFactor); // offset the vertex in the X-axis
+    
+	gl_Position = vVertexPosition;
 }
