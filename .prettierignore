@@ -7,3 +7,7 @@ package-lock.json
 
 # all HTML files
 **/*.html
+
+# shader files
+**/*.vert
+**/*.frag
