@@ -76,7 +76,9 @@ export class MyScene extends CGFscene {
         this.texture2 = new CGFtexture(this, 'textures/FEUP.jpg');
 
         // apply the material to all objects
-        Object.values(this.objects).forEach((object) => object.material = material);
+        Object.values(this.objects).forEach(
+            (object) => (object.material = material),
+        );
 
         // shaders
         this.shaders = {
