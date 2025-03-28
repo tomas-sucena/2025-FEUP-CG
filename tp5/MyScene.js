@@ -32,9 +32,10 @@ export class MyScene extends CGFscene {
         // initial configuration of interface
         this.selectedObject = 'Plane';
         this.wireframe = false;
+        this.scaleFactor = 1.0;
         this.selectedShader = 'Water';
         this.showShaderCode = false;
-        this.scaleFactor = 5.0;
+        this.shaderSlider = 5.0;
     }
 
     init(application) {
@@ -157,12 +158,12 @@ export class MyScene extends CGFscene {
         });
         this.shaders['Yellow & Blue'].setUniformsValues({
             timeFactor: 0,
-            scaleFactor: this.scaleFactor,
+            slider: this.shaderSlider,
         });
         this.shaders['Water'].setUniformsValues({
             uSampler2: 1,
             timeFactor: 0,
-            scaleFactor: this.scaleFactor,
+            slider: this.shaderSlider,
         });
 
         // shader code panels references
@@ -215,8 +216,8 @@ export class MyScene extends CGFscene {
         this.vShaderDiv.innerHTML = `<xmp>${getStringFromUrl(this.shaders[v].vertexURL)}</xmp>`;
         this.fShaderDiv.innerHTML = `<xmp>${getStringFromUrl(this.shaders[v].fragmentURL)}</xmp>`;
 
-        // update scale factor
-        this.onScaleFactorChanged(this.scaleFactor);
+        // update shader slider
+        this.onShaderSliderChanged();
     }
 
     // called when a new object is selected
@@ -232,9 +233,9 @@ export class MyScene extends CGFscene {
     }
 
     // called when the scale factor changes on the interface
-    onScaleFactorChanged(v) {
+    onShaderSliderChanged() {
         this.shaders[this.selectedShader].setUniformsValues({
-            scaleFactor: this.scaleFactor,
+            slider: this.shaderSlider,
         });
     }
 
@@ -275,6 +276,9 @@ export class MyScene extends CGFscene {
             this.axis.display();
         }
 
+        this.pushMatrix();
+        this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
+
         // activate selected shader
         this.setActiveShader(this.shaders[this.selectedShader]);
 
@@ -282,20 +286,23 @@ export class MyScene extends CGFscene {
         this.texture2.bind(1);
 
         // display the object
-        const object = this.objects[this.selectedObject]
-            .rotate(-Math.PI / 2, 1, 0, 0);
+        const object = this.objects[this.selectedObject].rotate(
+            -Math.PI / 2,
+            1,
+            0,
+            0,
+        );
 
         if (this.selectedObject === 'Teapot') {
             // teapot (scaled and rotated to conform to our axis)
-            object
-                .scale(0.5, 0.5, 0.5)
-                .translate(0, -6, 0);
+            object.scale(0.5, 0.5, 0.5).translate(0, -6, 0);
         } else {
             // plane
             object.scale(25, 25, 25);
         }
 
         object.display();
+        this.popMatrix();
 
         // restore default shader (will be needed for drawing the axis in next frame)
         this.setActiveShader(this.defaultShader);

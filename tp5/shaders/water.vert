@@ -6,12 +6,12 @@ uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
 uniform sampler2D uSampler2;
 uniform float timeFactor;
-uniform float scaleFactor;
+uniform float slider;
 
 varying vec2 vTextureCoord;
 
 void main() {
-    vTextureCoord = aTextureCoord + 0.002 * vec2(1, 1) * timeFactor * scaleFactor;
+    vTextureCoord = aTextureCoord + 0.002 * vec2(1, 1) * timeFactor * slider;
 
     // sample the height map
     vec4 texSample = texture2D(uSampler2, vTextureCoord);
