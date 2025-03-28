@@ -59,7 +59,7 @@ export class MyScene extends CGFscene {
         this.displayAxis = true;
         this.objects = {
             'Teapot': new Teapot(this),
-            'Plane': new MyPlane(this),
+            'Plane': new MyPlane(this, 50),
         };
 
         // Materials and textures initialization
@@ -277,18 +277,17 @@ export class MyScene extends CGFscene {
 
         // activate selected shader
         this.setActiveShader(this.shaders[this.selectedShader]);
-        this.pushMatrix();
 
         // bind additional texture to texture unit 1
         this.texture2.bind(1);
 
         // display the object
-        const object = this.objects[this.selectedObject];
+        const object = this.objects[this.selectedObject]
+            .rotate(-Math.PI / 2, 1, 0, 0);
 
         if (this.selectedObject === 'Teapot') {
             // teapot (scaled and rotated to conform to our axis)
             object
-                .rotate(-Math.PI / 2, 1, 0, 0)
                 .scale(0.5, 0.5, 0.5)
                 .translate(0, -6, 0);
         } else {

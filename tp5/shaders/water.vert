@@ -11,12 +11,12 @@ uniform float scaleFactor;
 varying vec2 vTextureCoord;
 
 void main() {
-    vTextureCoord = aTextureCoord + 0.001 * vec2(1, 1) * timeFactor * scaleFactor;
+    vTextureCoord = aTextureCoord + 0.002 * vec2(1, 1) * timeFactor * scaleFactor;
 
     // sample the height map
     vec4 texSample = texture2D(uSampler2, vTextureCoord);
 
     // offset the vertex coordinates based on the height map
-    vec3 positionOffset = 0.05 * aVertexNormal * texSample.b;
+    vec3 positionOffset = 0.06 * aVertexNormal * texSample.b;
 	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition + positionOffset, 1.0);
 }
