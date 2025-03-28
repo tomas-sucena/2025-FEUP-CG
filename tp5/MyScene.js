@@ -144,7 +144,7 @@ export class MyScene extends CGFscene {
             'Water': new CGFshader(
                 this.gl,
                 'shaders/water.vert',
-                'shaders/water.frag',
+                'shaders/texture1.frag',
             ),
         };
 

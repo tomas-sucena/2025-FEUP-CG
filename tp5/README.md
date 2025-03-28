@@ -17,3 +17,9 @@ $$Gray = 0.299 \times R + 0.587 \times G + 0.114 \times B$$
 | ![Figure 2](screenshots/cg-t04g06-tp5-2.png) |
 | :------------------------------------------: |
 |       **Figure 2:** A grayscale teapot       |
+
+- In exercise 2, we created a new vertex shader - [water.vert](shaders/water.vert) - to simulate a water body. Put simply, the shader samples a section of a height map and then offsets the vertex positions along its normal by the corresponding value. The water movement is accomplished by repeatedly changing the height map section that is sampled, whereas the wave effect results from offsetting the vertices.
+
+| ![Figure 3](screenshots/cg-t04g06-tp5-3.png) |
+| :------------------------------------------: |
+|          **Figure 3:** A water body          |
