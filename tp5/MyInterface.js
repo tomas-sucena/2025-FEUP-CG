@@ -17,29 +17,38 @@ export class MyInterface extends CGFinterface {
         // https://github.com/dataarts/dat.gui/blob/master/API.md
         this.gui = new dat.GUI();
 
-        this.gui
+        this.gui.add(this.scene, 'displayAxis').name('Axis');
+        this.gui.add(this.scene, 'scaleFactor', 0.1, 10).name('Scale');
+
+        // object settings
+        const objectsFolder = this.gui.addFolder('Object');
+
+        objectsFolder
             .add(this.scene, 'selectedObject', Object.keys(this.scene.objects))
             .onChange(this.scene.onSelectedObjectChanged.bind(this.scene))
-            .name('Object');
+            .name('Selected');
 
-        this.gui
+        objectsFolder
             .add(this.scene, 'wireframe')
             .name('Wireframe')
             .onChange(this.scene.onWireframeChanged.bind(this.scene));
 
-        this.gui
-            .add(this.scene, 'scaleFactor', -50, 50)
-            .name('Scale')
-            .onChange(this.scene.onScaleFactorChanged.bind(this.scene));
+        // shader settings
+        const shadersFolder = this.gui.addFolder('Shader');
 
-        this.gui
+        shadersFolder
             .add(this.scene, 'selectedShader', Object.keys(this.scene.shaders))
-            .name('Shader')
+            .name('Selected')
             .onChange(this.scene.onSelectedShaderChanged.bind(this.scene));
 
-        this.gui
+        shadersFolder
+            .add(this.scene, 'shaderSlider', -50, 50)
+            .onChange(this.scene.onShaderSliderChanged.bind(this.scene))
+            .name('Slider');
+
+        shadersFolder
             .add(this.scene, 'showShaderCode')
-            .name('Show Shader Code')
+            .name('Code')
             .onChange(this.scene.onShaderCodeVizChanged.bind(this.scene));
 
         return true;

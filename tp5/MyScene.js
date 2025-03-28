@@ -30,12 +30,12 @@ export class MyScene extends CGFscene {
         this.texture = null;
 
         // initial configuration of interface
-        this.selectedObject = 'Teapot';
+        this.selectedObject = 'Plane';
         this.wireframe = false;
-        this.selectedShader = 'Flat Shading';
+        this.scaleFactor = 1.0;
+        this.selectedShader = 'Water';
         this.showShaderCode = false;
-
-        this.scaleFactor = 16.0;
+        this.shaderSlider = 5.0;
     }
 
     init(application) {
@@ -57,9 +57,10 @@ export class MyScene extends CGFscene {
         this.enableTextures(true);
 
         // Object interface variables
+        this.displayAxis = true;
         this.objects = {
             'Teapot': new Teapot(this),
-            'Plane': new MyPlane(this),
+            'Plane': new MyPlane(this, 50),
         };
 
         // Materials and textures initialization
@@ -68,17 +69,20 @@ export class MyScene extends CGFscene {
         material.setDiffuse(0.7, 0.7, 0.7, 1);
         material.setSpecular(0.0, 0.0, 0.0, 1);
         material.setShininess(120);
-
-        this.texture = new CGFtexture(this, 'textures/texture.jpg');
-        material.setTexture(this.texture);
         material.setTextureWrap('REPEAT', 'REPEAT');
-
-        this.texture2 = new CGFtexture(this, 'textures/FEUP.jpg');
 
         // apply the material to all objects
         Object.values(this.objects).forEach(
             (object) => (object.material = material),
         );
+
+        // textures
+        this.textures = [
+            new CGFtexture(this, 'images/texture.jpg'),
+            new CGFtexture(this, 'images/FEUP.jpg'),
+            new CGFtexture(this, 'images/waterTex.jpg'),
+            new CGFtexture(this, 'images/waterMap.jpg'),
+        ];
 
         // shaders
         this.shaders = {
@@ -137,6 +141,11 @@ export class MyScene extends CGFscene {
                 'shaders/texture1.vert',
                 'shaders/grayscale.frag',
             ),
+            'Water': new CGFshader(
+                this.gl,
+                'shaders/water.vert',
+                'shaders/texture1.frag',
+            ),
         };
 
         // additional texture will have to be bound to texture unit 1 later, when using the shader, with "this.texture2.bind(1);"
@@ -151,8 +160,13 @@ export class MyScene extends CGFscene {
             timeFactor: 0,
         });
         this.shaders['Yellow & Blue'].setUniformsValues({
-            scaleFactor: this.scaleFactor,
             timeFactor: 0,
+            slider: this.shaderSlider,
+        });
+        this.shaders['Water'].setUniformsValues({
+            uSampler2: 1,
+            timeFactor: 0,
+            slider: this.shaderSlider,
         });
 
         // shader code panels references
@@ -205,8 +219,8 @@ export class MyScene extends CGFscene {
         this.vShaderDiv.innerHTML = `<xmp>${getStringFromUrl(this.shaders[v].vertexURL)}</xmp>`;
         this.fShaderDiv.innerHTML = `<xmp>${getStringFromUrl(this.shaders[v].fragmentURL)}</xmp>`;
 
-        // update scale factor
-        this.onScaleFactorChanged(this.scaleFactor);
+        // update shader slider
+        this.onShaderSliderChanged();
     }
 
     // called when a new object is selected
@@ -222,17 +236,18 @@ export class MyScene extends CGFscene {
     }
 
     // called when the scale factor changes on the interface
-    onScaleFactorChanged(v) {
+    onShaderSliderChanged() {
         this.shaders[this.selectedShader].setUniformsValues({
-            scaleFactor: this.scaleFactor,
+            slider: this.shaderSlider,
         });
     }
 
     // called periodically (as per setUpdatePeriod() in init())
     update(t) {
         if (
-            this.selectedShader === 'Animation example' ||
-            this.selectedShader === 'Yellow & Blue'
+            ['Animation example', 'Yellow & Blue', 'Water'].includes(
+                this.selectedShader,
+            )
         ) {
             // Dividing the time by 100 "slows down" the variation (i.e. in 100 ms timeFactor increases 1 unit).
             // Doing the modulus (%) by 100 makes the timeFactor loop between 0 and 99
@@ -260,29 +275,40 @@ export class MyScene extends CGFscene {
         this.lights[0].update();
 
         // Draw axis
-        this.axis.display();
+        if (this.displayAxis) {
+            this.axis.display();
+        }
+
+        this.pushMatrix();
+        this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
+
+        // apply textures
+        const object = this.objects[this.selectedObject];
+
+        if (this.selectedShader === 'Water') {
+            object.setTexture(this.textures[2]);
+            this.textures[3].bind(1);
+        } else {
+            object.setTexture(this.textures[0]);
+            this.textures[1].bind(1);
+        }
 
         // activate selected shader
         this.setActiveShader(this.shaders[this.selectedShader]);
-        this.pushMatrix();
-
-        // bind additional texture to texture unit 1
-        this.texture2.bind(1);
 
         // display the object
-        const object = this.objects[this.selectedObject];
+        object.rotate(-Math.PI / 2, 1, 0, 0);
 
         if (this.selectedObject === 'Teapot') {
             // teapot (scaled and rotated to conform to our axis)
-            object
-                .rotate(-Math.PI / 2, 1, 0, 0)
-                .scale(0.5, 0.5, 0.5)
-                .translate(0, -6, 0);
+            object.scale(0.5, 0.5, 0.5).translate(0, -6, 0);
         } else {
+            // plane
             object.scale(25, 25, 25);
         }
 
         object.display();
+        this.popMatrix();
 
         // restore default shader (will be needed for drawing the axis in next frame)
         this.setActiveShader(this.defaultShader);
