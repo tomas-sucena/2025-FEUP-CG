@@ -30,11 +30,11 @@ export class MyScene extends CGFscene {
         this.texture = null;
 
         // initial configuration of interface
-        this.selectedObject = 'Teapot';
+        this.selectedObject = 'Plane';
         this.wireframe = false;
         this.selectedShader = 'Water';
         this.showShaderCode = false;
-        this.scaleFactor = 16.0;
+        this.scaleFactor = 5.0;
     }
 
     init(application) {
@@ -56,6 +56,7 @@ export class MyScene extends CGFscene {
         this.enableTextures(true);
 
         // Object interface variables
+        this.displayAxis = true;
         this.objects = {
             'Teapot': new Teapot(this),
             'Plane': new MyPlane(this),
@@ -240,7 +241,7 @@ export class MyScene extends CGFscene {
     // called periodically (as per setUpdatePeriod() in init())
     update(t) {
         if (
-            ['Animation example', 'Yellow & Blue'].includes(
+            ['Animation example', 'Yellow & Blue', 'Water'].includes(
                 this.selectedShader,
             )
         ) {
@@ -270,7 +271,9 @@ export class MyScene extends CGFscene {
         this.lights[0].update();
 
         // Draw axis
-        this.axis.display();
+        if (this.displayAxis) {
+            this.axis.display();
+        }
 
         // activate selected shader
         this.setActiveShader(this.shaders[this.selectedShader]);
@@ -289,6 +292,7 @@ export class MyScene extends CGFscene {
                 .scale(0.5, 0.5, 0.5)
                 .translate(0, -6, 0);
         } else {
+            // plane
             object.scale(25, 25, 25);
         }
 

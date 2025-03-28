@@ -4,13 +4,19 @@ attribute vec2 aTextureCoord;
 
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
-uniform mat4 uNMatrix;
+uniform sampler2D uSampler2;
+uniform float timeFactor;
+uniform float scaleFactor;
 
 varying vec2 vTextureCoord;
 
 void main() {
+    vTextureCoord = aTextureCoord + 0.001 * vec2(1, 1) * timeFactor * scaleFactor;
 
-	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0);
+    // sample the height map
+    vec4 texSample = texture2D(uSampler2, vTextureCoord);
 
-	vTextureCoord = aTextureCoord;
+    // offset the vertex coordinates based on the height map
+    vec3 positionOffset = 0.05 * aVertexNormal * texSample.b;
+	gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition + positionOffset, 1.0);
 }
