@@ -69,17 +69,20 @@ export class MyScene extends CGFscene {
         material.setDiffuse(0.7, 0.7, 0.7, 1);
         material.setSpecular(0.0, 0.0, 0.0, 1);
         material.setShininess(120);
-
-        this.texture = new CGFtexture(this, 'images/waterTex.jpg');
-        material.setTexture(this.texture);
         material.setTextureWrap('REPEAT', 'REPEAT');
-
-        this.texture2 = new CGFtexture(this, 'images/waterMap.jpg');
 
         // apply the material to all objects
         Object.values(this.objects).forEach(
             (object) => (object.material = material),
         );
+
+        // textures
+        this.textures = [
+            new CGFtexture(this, 'images/texture.jpg'),
+            new CGFtexture(this, 'images/FEUP.jpg'),
+            new CGFtexture(this, 'images/waterTex.jpg'),
+            new CGFtexture(this, 'images/waterMap.jpg'),
+        ];
 
         // shaders
         this.shaders = {
@@ -279,19 +282,22 @@ export class MyScene extends CGFscene {
         this.pushMatrix();
         this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
+        // apply textures
+        const object = this.objects[this.selectedObject];
+
+        if (this.selectedShader === 'Water') {
+            object.setTexture(this.textures[2]);
+            this.textures[3].bind(1);
+        } else {
+            object.setTexture(this.textures[0]);
+            this.textures[1].bind(1);
+        }
+
         // activate selected shader
         this.setActiveShader(this.shaders[this.selectedShader]);
 
-        // bind additional texture to texture unit 1
-        this.texture2.bind(1);
-
         // display the object
-        const object = this.objects[this.selectedObject].rotate(
-            -Math.PI / 2,
-            1,
-            0,
-            0,
-        );
+        object.rotate(-Math.PI / 2, 1, 0, 0);
 
         if (this.selectedObject === 'Teapot') {
             // teapot (scaled and rotated to conform to our axis)

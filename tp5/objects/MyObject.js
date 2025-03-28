@@ -1,4 +1,9 @@
-import { CGFappearance, CGFobject, CGFscene } from '../../lib/CGF.js';
+import {
+    CGFappearance,
+    CGFobject,
+    CGFscene,
+    CGFtexture,
+} from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
     /**
@@ -132,7 +137,9 @@ export class MyObject extends CGFobject {
      * @param {number[]} texCoords the texture coordinates
      */
     setTexture(texture, texCoords) {
-        this.material.loadTexture(texture);
+        texture instanceof CGFtexture
+            ? this.material.setTexture(texture)
+            : this.material.loadTexture(texture);
 
         if (texCoords && texCoords.length / 2 === this.vertices.length / 3) {
             this.texCoords = [...texCoords];
