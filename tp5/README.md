@@ -12,7 +12,7 @@ $$Gray = 0.299 \times R + 0.587 \times G + 0.114 \times B$$
 
 | ![Figure 1](screenshots/cg-t04g06-tp5-1.png) |
 | :------------------------------------------: |
-|    **Figure 1:** A blue and yellow teapot    |
+|    **Figure 1:** A yellow and blue teapot    |
 
 | ![Figure 2](screenshots/cg-t04g06-tp5-2.png) |
 | :------------------------------------------: |

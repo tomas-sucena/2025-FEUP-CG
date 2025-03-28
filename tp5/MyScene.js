@@ -32,9 +32,8 @@ export class MyScene extends CGFscene {
         // initial configuration of interface
         this.selectedObject = 'Teapot';
         this.wireframe = false;
-        this.selectedShader = 'Flat Shading';
+        this.selectedShader = 'Water';
         this.showShaderCode = false;
-
         this.scaleFactor = 16.0;
     }
 
@@ -69,11 +68,11 @@ export class MyScene extends CGFscene {
         material.setSpecular(0.0, 0.0, 0.0, 1);
         material.setShininess(120);
 
-        this.texture = new CGFtexture(this, 'textures/texture.jpg');
+        this.texture = new CGFtexture(this, 'images/waterTex.jpg');
         material.setTexture(this.texture);
         material.setTextureWrap('REPEAT', 'REPEAT');
 
-        this.texture2 = new CGFtexture(this, 'textures/FEUP.jpg');
+        this.texture2 = new CGFtexture(this, 'images/waterMap.jpg');
 
         // apply the material to all objects
         Object.values(this.objects).forEach(
@@ -137,6 +136,11 @@ export class MyScene extends CGFscene {
                 'shaders/texture1.vert',
                 'shaders/grayscale.frag',
             ),
+            'Water': new CGFshader(
+                this.gl,
+                'shaders/water.vert',
+                'shaders/water.frag',
+            ),
         };
 
         // additional texture will have to be bound to texture unit 1 later, when using the shader, with "this.texture2.bind(1);"
@@ -151,8 +155,13 @@ export class MyScene extends CGFscene {
             timeFactor: 0,
         });
         this.shaders['Yellow & Blue'].setUniformsValues({
-            scaleFactor: this.scaleFactor,
             timeFactor: 0,
+            scaleFactor: this.scaleFactor,
+        });
+        this.shaders['Water'].setUniformsValues({
+            uSampler2: 1,
+            timeFactor: 0,
+            scaleFactor: this.scaleFactor,
         });
 
         // shader code panels references
@@ -231,8 +240,9 @@ export class MyScene extends CGFscene {
     // called periodically (as per setUpdatePeriod() in init())
     update(t) {
         if (
-            this.selectedShader === 'Animation example' ||
-            this.selectedShader === 'Yellow & Blue'
+            ['Animation example', 'Yellow & Blue'].includes(
+                this.selectedShader,
+            )
         ) {
             // Dividing the time by 100 "slows down" the variation (i.e. in 100 ms timeFactor increases 1 unit).
             // Doing the modulus (%) by 100 makes the timeFactor loop between 0 and 99
