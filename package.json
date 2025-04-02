@@ -10,6 +10,7 @@
     "tp2": "npx live-server --open=tp2/",
     "tp3": "npx live-server --open=tp3/",
     "tp4": "npx live-server --open=tp4/",
-    "tp5": "npx live-server --open=tp5/"
+    "tp5": "npx live-server --open=tp5/",
+    "proj": "npx live-server --open=project/"
   }
 }
