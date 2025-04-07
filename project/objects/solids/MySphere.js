@@ -1,9 +1,9 @@
 import { MyObject } from '../MyObject.js';
 
 /**
- * MyCylinder
+ * MySphere
  * @constructor
- * @param scene - Reference to MyScene object
+ * @param scene - Reference to the MyScene object
  * @param slices - number of divisions around the Z axis
  * @param stacks - number of divisions along the Z axis
  */
@@ -20,18 +20,21 @@ export class MySphere extends MyObject {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
+        this.texCoords = [];
 
-        const angOffset = (2 * Math.PI) / this.slices;
-        const zOffset = 1 / this.stacks;
+        const sliceAngOffset = (2 * Math.PI) / this.slices;
+        const stackAngOffset = (2 * Math.PI) / this.stacks;
 
         // define the slices
         for (let slice = 0; slice < this.slices; ++slice) {
-            const ang = slice * angOffset;
-            const sa = Math.sin(ang);
-            const ca = Math.cos(ang);
+            const y = Math.cos(slice * sliceAngOffset);
 
             // define the stacks
             for (let stack = 0; stack <= this.stacks; ++stack) {
+                const ang = stack * stackAngOffset;
+                const x = Math.cos(ang);
+                const z = Math.sin(ang);
+
                 // define the indices (except for the last vertex of each stack)
                 if (stack < this.stacks) {
                     const index = this.vertices.length / 3;
@@ -46,26 +49,19 @@ export class MySphere extends MyObject {
                 }
 
                 // define the vertices
-                this.vertices.push(ca, sa, stack * zOffset);
+                this.vertices.push(x, y, z);
 
                 // define the normals
-                this.normals.push(ca, sa, 0);
+                this.normals.push(x, y, z);
+
+                // define the texture coordinates
+                this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
 
+        console.log(this.vertices);
+
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
-    }
-
-    /**
-     * Called when user interacts with GUI to change object's complexity.
-     * @param {integer} complexity - changes number of slices
-     */
-    updateBuffers(complexity) {
-        this.slices = Math.max(3, Math.round(16 * complexity));
-
-        // reinitialize buffers
-        this.initBuffers();
-        this.initNormalVizBuffers();
     }
 }
