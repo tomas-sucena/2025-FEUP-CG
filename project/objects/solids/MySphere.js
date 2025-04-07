@@ -26,14 +26,16 @@ export class MySphere extends MyObject {
         const stackAngOffset = (2 * Math.PI) / this.stacks;
 
         // define the slices
-        for (let slice = 0; slice < this.slices; ++slice) {
-            const y = Math.cos(slice * sliceAngOffset);
+        for (let stack = 0; stack <= this.stacks; ++stack) {
+            const stackAng = stack * stackAngOffset;
+            const y = Math.cos(stackAng);
+            const mult = Math.sin(stackAng);
 
             // define the stacks
-            for (let stack = 0; stack <= this.stacks; ++stack) {
-                const ang = stack * stackAngOffset;
-                const x = Math.cos(ang);
-                const z = Math.sin(ang);
+            for (let slice = 0; slice <= this.slices; ++slice) {
+                const sliceAng = stack * sliceAngOffset;
+                const x = mult * Math.cos(sliceAng);
+                const z = mult * Math.sin(sliceAng);
 
                 // define the indices (except for the last vertex of each stack)
                 if (stack < this.stacks) {
