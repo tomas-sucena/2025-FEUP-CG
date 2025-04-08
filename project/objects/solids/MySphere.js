@@ -23,30 +23,28 @@ export class MySphere extends MyObject {
         this.texCoords = [];
 
         const sliceAngOffset = (2 * Math.PI) / this.slices;
-        const stackAngOffset = (2 * Math.PI) / this.stacks;
+        const stackAngOffset = Math.PI / this.stacks;
 
         // define the slices
         for (let stack = 0; stack <= this.stacks; ++stack) {
             const stackAng = stack * stackAngOffset;
+            const stackRadius = Math.cos(Math.PI / 2 - stackAng);
             const y = Math.cos(stackAng);
-            const mult = Math.sin(stackAng);
 
             // define the stacks
             for (let slice = 0; slice <= this.slices; ++slice) {
-                const sliceAng = stack * sliceAngOffset;
-                const x = mult * Math.cos(sliceAng);
-                const z = mult * Math.sin(sliceAng);
+                const sliceAng = slice * sliceAngOffset;
+                const x = stackRadius * Math.cos(sliceAng);
+                const z = stackRadius * Math.sin(sliceAng);
 
-                // define the indices (except for the last vertex of each stack)
-                if (stack < this.stacks) {
+                // define the indices
+                if (stack < this.stacks && slice < this.slices) {
                     const index = this.vertices.length / 3;
-                    const indexNextSlice = (slice + 1 < this.slices)
-                        ? index + this.stacks + 1
-                        : stack;
+                    const indexNextStack = index + this.slices + 1;
                     
                     this.indices.push(
-                        index, indexNextSlice, index + 1,
-                        indexNextSlice, indexNextSlice + 1, index + 1,
+                        index, index + 1, indexNextStack,
+                        indexNextStack, index + 1, indexNextStack + 1,
                     );
                 }
 
@@ -60,8 +58,6 @@ export class MySphere extends MyObject {
                 this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
-
-        console.log(this.vertices);
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
