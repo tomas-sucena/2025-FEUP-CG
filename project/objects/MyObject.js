@@ -45,7 +45,9 @@ export class MyObject extends CGFobject {
      */
     #invert() {
         // reverse the normals
-        this.normals.forEach((value) => value * -1);
+        for (let i = 0; i < this.normals.length; ++i) {
+            this.normals[i] *= -1;
+        }
 
         // update the indices
         for (let i = 0; i < this.indices.length; i += 3) {
