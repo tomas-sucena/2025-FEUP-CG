@@ -5,11 +5,12 @@
     "prettier": "3.5.2"
   },
   "scripts": {
-    "format": "npx prettier . --write",
+    "format": "npx prettier project/ --write",
     "tp1": "npx live-server --open=tp1/",
     "tp2": "npx live-server --open=tp2/",
     "tp3": "npx live-server --open=tp3/",
     "tp4": "npx live-server --open=tp4/",
-    "tp5": "npx live-server --open=tp5/"
+    "tp5": "npx live-server --open=tp5/",
+    "proj": "npx live-server --open=project/"
   }
 }
