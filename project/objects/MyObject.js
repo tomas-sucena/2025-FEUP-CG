@@ -26,7 +26,7 @@ export class MyObject extends CGFobject {
 
     /**
      * Returns the material to be applied to the object if none is configured.
-     * @returns {CGFappearance} the default material
+     * @returns { CGFappearance } the default material
      */
     #getDefaultMaterial() {
         const material = new CGFappearance(this.scene);
@@ -138,8 +138,8 @@ export class MyObject extends CGFobject {
 
     /**
      * Applies a texture to the object.
-     * @param {string} texture path to the texture file
-     * @param {number[]} texCoords the texture coordinates
+     * @param { string } texture path to the texture file
+     * @param { number[] } texCoords the texture coordinates
      */
     setTexture(texture, texCoords) {
         texture instanceof CGFtexture

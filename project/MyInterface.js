@@ -27,7 +27,15 @@ export class MyInterface extends CGFinterface {
             .add(this.scene, 'selectedObject', Object.keys(this.scene.objects))
             .name('Selected');
 
-        objectsFolder.add(this.scene, 'displayNormals').name('Normals');
+        objectsFolder
+            .add(this.scene, 'displayNormals')
+            .onChange(this.scene.toggleNormalVisibility.bind(this.scene))
+            .name('Normals');
+
+        objectsFolder
+            .add(this.scene, 'displayWireframe')
+            .onChange(this.scene.toggleWireframe.bind(this.scene))
+            .name('Wireframe');
 
         return true;
     }

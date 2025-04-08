@@ -43,6 +43,7 @@ export class MyScene extends CGFscene {
         //-------Objects connected to MyInterface
         this.displayAxis = true;
         this.displayNormals = false;
+        this.displayWireframe = false;
         this.selectedObject = 'Sphere';
         this.scaleFactor = 1;
     }
@@ -64,11 +65,23 @@ export class MyScene extends CGFscene {
         );
     }
 
-    // updates the selected object's wireframe mode
-    /*onWireframeChanged(v) {
-        if (v) this.objects[this.selectedObject].setLineMode();
-        else this.objects[this.selectedObject].setFillMode();
-    }*/
+    /**
+     * Toggles the selected object's normals visibility.
+     */
+    toggleNormalVisibility() {
+        this.displayNormals
+            ? this.objects[this.selectedObject].enableNormalViz()
+            : this.objects[this.selectedObject].disableNormalViz();
+    }
+
+    /**
+     * Toggles the selected object's wireframe visibility.
+     */
+    toggleWireframe() {
+        this.objects[this.selectedObject].primitiveType = this.displayWireframe
+            ? this.gl.LINES
+            : this.gl.TRIANGLES;
+    }
 
     display() {
         // ---- BEGIN Background, camera and axis setup
@@ -81,19 +94,14 @@ export class MyScene extends CGFscene {
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
 
-        // Draw axis
+        // draw the axis
         if (this.displayAxis) this.axis.display();
 
+        // apply the scale factor
         this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
         // ---- BEGIN Primitive drawing section
-        const object = this.objects[this.selectedObject];
-
-        this.displayNormals
-            ? object.enableNormalViz()
-            : object.disableNormalViz();
-
-        object.display();
+        this.objects[this.selectedObject].display();
 
         // ---- END Primitive drawing section
     }

@@ -6,10 +6,10 @@ import { MyObject } from '../MyObject.js';
 export class MySphere extends MyObject {
     /**
      * Initializes the sphere.
-     * @param {number} scene a reference to the MyScene object
-     * @param {number} slices the number of divisions around the Z-axis
-     * @param {number} stacks the number of divisions along the Z-axis
-     * @param {Object} config the object configuration
+     * @param { number } scene a reference to the MyScene object
+     * @param { number } slices the number of divisions around the Z-axis
+     * @param { number } stacks the number of divisions along the Z-axis
+     * @param { Object } config the object configuration
      */
     constructor(scene, slices, stacks, config) {
         super(scene, config);
