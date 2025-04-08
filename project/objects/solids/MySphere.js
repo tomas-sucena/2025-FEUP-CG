@@ -66,7 +66,6 @@ export class MySphere extends MyObject {
             }
         }
 
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
+        super.initBuffers();
     }
 }

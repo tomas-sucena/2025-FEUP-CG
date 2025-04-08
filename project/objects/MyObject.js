@@ -18,6 +18,8 @@ export class MyObject extends CGFobject {
         this.transformations = null;
         /** The material to be applied to the object */
         this.material = config?.material ?? this.#getDefaultMaterial();
+        /** Indicates if the object should be inverted */
+        this.invert = config?.invert ?? false;
 
         if (config?.texture) {
             this.setTexture(config.texture);
@@ -36,6 +38,23 @@ export class MyObject extends CGFobject {
         material.setShininess(10.0);
 
         return material;
+    }
+
+    /**
+     * Inverts the object by reversing its normals and updating its indices.
+     */
+    #invert() {
+        // reverse the normals
+        this.normals.forEach((value) => value * -1);
+
+        // update the indices
+        for (let i = 0; i < this.indices.length; i += 3) {
+            // swap a pair of indices to reverse the rotation direction
+            [this.indices[i], this.indices[i + 1]] = [
+                this.indices[i + 1],
+                this.indices[i],
+            ];
+        }
     }
 
     /**
@@ -62,6 +81,18 @@ export class MyObject extends CGFobject {
         }
 
         this.transformations = result;
+    }
+
+    /**
+     * Initializes the WebGL buffers.
+     */
+    initBuffers() {
+        if (this.invert) {
+            this.#invert();
+        }
+
+        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.initGLBuffers();
     }
 
     /**
