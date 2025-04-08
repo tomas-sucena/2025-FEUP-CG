@@ -8,8 +8,8 @@ import { MyObject } from '../MyObject.js';
  * @param stacks - number of divisions along the Z axis
  */
 export class MySphere extends MyObject {
-    constructor(scene, slices, stacks) {
-        super(scene);
+    constructor(scene, slices, stacks, config) {
+        super(scene, config);
 
         this.slices = slices;
         this.stacks = stacks;
@@ -41,7 +41,8 @@ export class MySphere extends MyObject {
                 if (stack < this.stacks && slice < this.slices) {
                     const index = this.vertices.length / 3;
                     const indexNextStack = index + this.slices + 1;
-                    
+
+                    // prettier-ignore
                     this.indices.push(
                         index, index + 1, indexNextStack,
                         indexNextStack, index + 1, indexNextStack + 1,
@@ -55,7 +56,10 @@ export class MySphere extends MyObject {
                 this.normals.push(x, y, z);
 
                 // define the texture coordinates
-                this.texCoords.push(slice / this.slices, stack / this.stacks);
+                this.texCoords.push(
+                    1 - slice / this.slices,
+                    stack / this.stacks,
+                );
             }
         }
 

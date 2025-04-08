@@ -9,14 +9,19 @@ export class MyObject extends CGFobject {
     /**
      * Initializes the object.
      * @param { CGFscene } scene reference to the scene the object will be a part of
+     * @param { Object } config the optional object configuration
      */
-    constructor(scene) {
+    constructor(scene, config) {
         super(scene);
 
         /** The geometric transformation matrix */
         this.transformations = null;
         /** The material to be applied to the object */
-        this.material = this.#getDefaultMaterial();
+        this.material = config?.material ?? this.#getDefaultMaterial();
+
+        if (config?.texture) {
+            this.setTexture(config.texture);
+        }
     }
 
     /**

@@ -27,9 +27,7 @@ export class MyInterface extends CGFinterface {
             .add(this.scene, 'selectedObject', Object.keys(this.scene.objects))
             .name('Selected');
 
-        objectsFolder
-            .add(this.scene, 'displayNormals')
-            .name('Normals');
+        objectsFolder.add(this.scene, 'displayNormals').name('Normals');
 
         return true;
     }
