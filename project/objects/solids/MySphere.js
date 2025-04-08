@@ -1,13 +1,16 @@
 import { MyObject } from '../MyObject.js';
 
 /**
- * MySphere
- * @constructor
- * @param scene - Reference to the MyScene object
- * @param slices - number of divisions around the Z axis
- * @param stacks - number of divisions along the Z axis
+ * A unit sphere centered in the origin.
  */
 export class MySphere extends MyObject {
+    /**
+     * Initializes the sphere.
+     * @param {number} scene a reference to the MyScene object
+     * @param {number} slices the number of divisions around the Z-axis
+     * @param {number} stacks the number of divisions along the Z-axis
+     * @param {Object} config the object configuration
+     */
     constructor(scene, slices, stacks, config) {
         super(scene, config);
 
@@ -25,13 +28,13 @@ export class MySphere extends MyObject {
         const sliceAngOffset = (2 * Math.PI) / this.slices;
         const stackAngOffset = Math.PI / this.stacks;
 
-        // define the slices
+        // define the stacks
         for (let stack = 0; stack <= this.stacks; ++stack) {
             const stackAng = stack * stackAngOffset;
             const stackRadius = Math.cos(Math.PI / 2 - stackAng);
             const y = Math.cos(stackAng);
 
-            // define the stacks
+            // define the slices
             for (let slice = 0; slice <= this.slices; ++slice) {
                 const sliceAng = slice * sliceAngOffset;
                 const x = stackRadius * Math.cos(sliceAng);
