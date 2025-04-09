@@ -14,8 +14,8 @@ export class MySphere extends MyObject {
         
         /** The number of divisions around the Z-axis */
         this.slices = config.slices;
-        /** The number of divisions along the Z-axis */
-        this.stacks = config.stacks;
+        /** The number of divisions of each hemisphere along the Z-axis*/
+        this.stacks = 2 * config.stacks;
         this.initBuffers();
     }
 

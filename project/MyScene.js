@@ -45,7 +45,7 @@ export class MyScene extends CGFscene {
         this.objects = {
             'Sphere': new MySphere(this, {
                 slices: 50,
-                stacks: 50,
+                stacks: 25,
                 texture: './assets/earth.jpg',
             }),
         };
@@ -112,7 +112,7 @@ export class MyScene extends CGFscene {
 
         // ---- BEGIN Primitive drawing section
         this.skybox.display();
-        //this.objects[this.selectedObject].display();
+        this.objects[this.selectedObject].display();
 
         // ---- END Primitive drawing section
     }
