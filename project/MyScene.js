@@ -5,6 +5,7 @@ import {
     CGFappearance,
     CGFtexture,
 } from '../lib/CGF.js';
+import { MyPanorama } from './objects/MyPanorama.js';
 
 import { MySphere } from './objects/solids/MySphere.js';
 
@@ -33,9 +34,18 @@ export class MyScene extends CGFscene {
 
         //Initialize scene objects
         this.axis = new CGFaxis(this);
+        this.skybox = new MyPanorama(this, {
+            box: MySphere,
+            slices: 50,
+            stacks: 50,
+            scale: 200,
+            texture: './assets/earth.jpg',
+        });
 
         this.objects = {
-            'Sphere': new MySphere(this, 50, 50, {
+            'Sphere': new MySphere(this, {
+                slices: 50,
+                stacks: 50,
                 texture: './assets/earth.jpg',
             }),
         };
@@ -101,7 +111,8 @@ export class MyScene extends CGFscene {
         this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
         // ---- BEGIN Primitive drawing section
-        this.objects[this.selectedObject].display();
+        this.skybox.display();
+        //this.objects[this.selectedObject].display();
 
         // ---- END Primitive drawing section
     }

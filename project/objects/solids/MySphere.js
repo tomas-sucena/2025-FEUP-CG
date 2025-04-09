@@ -7,15 +7,15 @@ export class MySphere extends MyObject {
     /**
      * Initializes the sphere.
      * @param { number } scene a reference to the MyScene object
-     * @param { number } slices the number of divisions around the Z-axis
-     * @param { number } stacks the number of divisions along the Z-axis
      * @param { Object } config the object configuration
      */
-    constructor(scene, slices, stacks, config) {
+    constructor(scene, config) {
         super(scene, config);
-
-        this.slices = slices;
-        this.stacks = stacks;
+        
+        /** The number of divisions around the Z-axis */
+        this.slices = config.slices;
+        /** The number of divisions along the Z-axis */
+        this.stacks = config.stacks;
         this.initBuffers();
     }
 
@@ -25,7 +25,7 @@ export class MySphere extends MyObject {
         this.normals = [];
         this.texCoords = [];
 
-        const sliceAngOffset = (2 * Math.PI) / this.slices;
+        const sliceAngOffset = (-2 * Math.PI) / this.slices;
         const stackAngOffset = Math.PI / this.stacks;
 
         // define the stacks
@@ -47,8 +47,8 @@ export class MySphere extends MyObject {
 
                     // prettier-ignore
                     this.indices.push(
-                        index, index + 1, indexNextStack,
-                        indexNextStack, index + 1, indexNextStack + 1,
+                        index, indexNextStack, index + 1,
+                        index + 1, indexNextStack, indexNextStack + 1,
                     );
                 }
 
@@ -60,7 +60,7 @@ export class MySphere extends MyObject {
 
                 // define the texture coordinates
                 this.texCoords.push(
-                    1 - slice / this.slices,
+                    slice / this.slices,
                     stack / this.stacks,
                 );
             }
