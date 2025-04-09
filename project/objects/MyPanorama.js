@@ -7,12 +7,12 @@ export class MyPanorama extends MyObject {
 
         this.box = new config.box(scene, config);
         this.scaleFactor = config.scale;
-        //this.position = config.position;
+        this.position = config.position;
     }
 
     render() {
         this.box.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
-            //.translate(...position)
+            .translate(...this.position)
             .display();
     }
 }

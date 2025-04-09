@@ -39,6 +39,7 @@ export class MyScene extends CGFscene {
             slices: 50,
             stacks: 50,
             scale: 200,
+            position: this.camera.position,
             texture: './assets/earth.jpg',
         });
 
