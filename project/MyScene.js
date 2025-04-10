@@ -35,11 +35,9 @@ export class MyScene extends CGFscene {
         //Initialize scene objects
         this.axis = new CGFaxis(this);
         this.skybox = new MyPanorama(this, {
-            box: MySphere,
-            slices: 50,
-            stacks: 50,
-            scale: 200,
+            type: MyPanorama.type.SPHERE,
             position: this.camera.position,
+            scaleFactor: 200,
             texture: './assets/earth.jpg',
         });
 

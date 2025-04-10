@@ -6,15 +6,15 @@ import { MyObject } from '../MyObject.js';
 export class MySphere extends MyObject {
     /**
      * Initializes the sphere.
-     * @param { number } scene a reference to the MyScene object
+     * @param { MyScene } scene a reference to the MyScene object
      * @param { Object } config the object configuration
      */
     constructor(scene, config) {
         super(scene, config);
-        
-        /** The number of divisions around the Z-axis */
+
+        /** The number of divisions around the Y-axis */
         this.slices = config.slices;
-        /** The number of divisions of each hemisphere along the Z-axis*/
+        /** The number of divisions of each hemisphere along the Y-axis*/
         this.stacks = 2 * config.stacks;
         this.initBuffers();
     }
@@ -59,10 +59,7 @@ export class MySphere extends MyObject {
                 this.normals.push(x, y, z);
 
                 // define the texture coordinates
-                this.texCoords.push(
-                    slice / this.slices,
-                    stack / this.stacks,
-                );
+                this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
 
