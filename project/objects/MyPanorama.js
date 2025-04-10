@@ -1,4 +1,5 @@
 import { MyObject } from './MyObject.js';
+import { MyCylinder } from './solids/MyCylinder.js';
 import { MySphere } from './solids/MySphere.js';
 
 /**
@@ -7,7 +8,7 @@ import { MySphere } from './solids/MySphere.js';
 export class MyPanorama extends MyObject {
     static type = Object.freeze({
         SPHERE: MySphere,
-        CYLINDER: MySphere,
+        CYLINDER: MyCylinder,
     });
 
     /**
