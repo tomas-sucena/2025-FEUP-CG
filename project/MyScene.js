@@ -37,7 +37,7 @@ export class MyScene extends CGFscene {
         this.skybox = new MyPanorama(this, {
             position: this.camera.position,
             scaleFactor: 200,
-            texture: './assets/earth.jpg',
+            texture: './assets/panorama.jpg',
         });
 
         this.objects = {
@@ -109,7 +109,7 @@ export class MyScene extends CGFscene {
         this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
 
         // ---- BEGIN Primitive drawing section
-        this.skybox.display();
+        this.skybox.translate(0, -100, 0).display();
         this.objects[this.selectedObject].display();
 
         // ---- END Primitive drawing section

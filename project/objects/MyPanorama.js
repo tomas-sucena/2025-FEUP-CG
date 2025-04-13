@@ -20,10 +20,17 @@ export class MyPanorama extends MyObject {
             texture: config.texture,
             invert: !config.invert,
         });
-        /** The coordinates where the panorama will be drawn */
-        this.position = config.position;
+
+        // configure the sphere material
+        this.sphere.material.setAmbient(0, 0, 0, 0);
+        this.sphere.material.setDiffuse(0, 0, 0, 0);
+        this.sphere.material.setSpecular(0, 0, 0, 0);
+        this.sphere.material.setEmission(1, 1, 1, 1);
+
+        /** The coordinates of the center of the panorama */
+        this.position = config?.position ?? [0, 0, 0];
         /** The scale that will be applied to the box */
-        this.scaleFactor = config.scaleFactor;
+        this.scaleFactor = config?.scaleFactor ?? 1;
     }
 
     render() {
