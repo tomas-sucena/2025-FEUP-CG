@@ -18,7 +18,7 @@ export class MyInterface extends CGFinterface {
         this.gui = new dat.GUI();
 
         this.gui.add(this.scene, 'displayAxis').name('Axis');
-        this.gui.add(this.scene, 'scaleFactor', 0.1, 10).name('Scale');
+        this.gui.add(this.scene.camera, 'fov', 0.1, 1).name('FOV');
 
         // object settings
         const objectsFolder = this.gui.addFolder('Object');
@@ -26,6 +26,8 @@ export class MyInterface extends CGFinterface {
         objectsFolder
             .add(this.scene, 'selectedObject', Object.keys(this.scene.objects))
             .name('Selected');
+
+        objectsFolder.add(this.scene, 'scaleFactor', 0.1, 10).name('Scale');
 
         objectsFolder
             .add(this.scene, 'displayNormals')
