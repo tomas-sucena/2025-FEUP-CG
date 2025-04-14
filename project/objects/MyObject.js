@@ -192,7 +192,7 @@ export class MyObject extends CGFobject {
 
         // set the emissivity
         this.material.setEmission(
-            ...(typeof emission === 'Array' ? emission : [0.6, 0.6, 0.6, 1]),
+            ...(typeof emission === 'Array' ? emission : [0, 0, 0, 1]),
         );
 
         // set the shininess
