@@ -16,28 +16,23 @@ export class MyObject extends CGFobject {
 
         /** The geometric transformation matrix */
         this.transformations = null;
-        /** The material to be applied to the object */
-        this.material = config?.material ?? this.#getDefaultMaterial();
         /** Indicates if the object should be inverted */
         this.invert = config?.invert ?? false;
 
-        if (config?.texture) {
-            this.setTexture(config.texture);
-        }
+        this.setMaterial(config?.material);
+        this.setTexture(config?.texture);
     }
 
     /**
-     * Returns the material to be applied to the object if none is configured.
-     * @returns { CGFappearance } the default material
+     * Returns all objects that constitute the object.
+     * @returns an array containing the objects that constitute the object
      */
-    #getDefaultMaterial() {
-        const material = new CGFappearance(this.scene);
-        material.setAmbient(0.6, 0.6, 0.6, 1.0);
-        material.setDiffuse(0.6, 0.6, 0.6, 1.0);
-        material.setSpecular(0.6, 0.6, 0.6, 1.0);
-        material.setShininess(10.0);
+    #getChildren() {
+        const children = Object.values(this).filter(
+            (value) => value instanceof MyObject,
+        );
 
-        return material;
+        return (children.length > 0 && children) || [this];
     }
 
     /**
@@ -170,7 +165,44 @@ export class MyObject extends CGFobject {
     }
 
     /**
-     * Applies a texture to the object.
+     * Applies a material to the object.
+     * @param { Number[] } ambient the material's ambient component
+     * @param { Number[] } diffuse the material's diffuse component
+     * @param { Number[] } specular the material's specular component
+     * @param { Number[] } emission the material's emissivity
+     * @param { Number } shininess the material's shininess
+     */
+    setMaterial({ ambient, diffuse, specular, emission, shininess } = {}) {
+        this.material = new CGFappearance(this.scene);
+
+        // set the ambient component
+        this.material.setAmbient(
+            ...(typeof ambient === 'Array' ? ambient : [0.6, 0.6, 0.6, 1]),
+        );
+
+        // set the diffuse component
+        this.material.setDiffuse(
+            ...(typeof diffuse === 'Array' ? diffuse : [0.6, 0.6, 0.6, 1]),
+        );
+
+        // set the specular component
+        this.material.setSpecular(
+            ...(typeof specular === 'Array' ? specular : [0.6, 0.6, 0.6, 1]),
+        );
+
+        // set the emissivity
+        this.material.setEmission(
+            ...(typeof emission === 'Array' ? emission : [0.6, 0.6, 0.6, 1]),
+        );
+
+        // set the shininess
+        this.material.setShininess(
+            typeof shininess === 'Number' ? shininess : 10,
+        );
+    }
+
+    /**
+     * Applies a texture to the object's material.
      * @param { string } texture path to the texture file
      * @param { number[] } texCoords the texture coordinates
      */
