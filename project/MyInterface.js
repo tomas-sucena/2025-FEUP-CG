@@ -25,6 +25,7 @@ export class MyInterface extends CGFinterface {
 
         objectsFolder
             .add(this.scene, 'selectedObject', Object.keys(this.scene.objects))
+            .onChange(this.scene.changeObject.bind(this.scene))
             .name('Selected');
 
         objectsFolder.add(this.scene, 'scaleFactor', 0.1, 10).name('Scale');

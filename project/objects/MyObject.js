@@ -42,11 +42,9 @@ export class MyObject extends CGFobject {
         const findChildren = (children, value) => {
             if (value instanceof MyObject) {
                 children.push(value);
-            }
-            else if (Array.isArray(value)) {
+            } else if (Array.isArray(value)) {
                 value.forEach((el) => findChildren(children, el));
-            }
-            else if (typeof value === 'Object') {
+            } else if (typeof value === 'Object') {
                 Object.values(value).forEach((el) =>
                     findChildren(children, el),
                 );
@@ -114,6 +112,22 @@ export class MyObject extends CGFobject {
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
+    }
+
+    /**
+     * Sets the WebGL primitive to triangles.
+     */
+    setFillMode() {
+        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.#getChildren().forEach((child) => child.setFillMode());
+    }
+
+    /**
+     * Sets the WebGL primitive to line strips so the object's wireframe is displayed.
+     */
+    setLineMode() {
+        this.primitiveType = this.scene.gl.LINE_STRIP;
+        this.#getChildren().forEach((child) => child.setLineMode());
     }
 
     /**

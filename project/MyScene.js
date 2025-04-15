@@ -101,9 +101,14 @@ export class MyScene extends CGFscene {
      * Toggles the selected object's wireframe visibility.
      */
     toggleWireframe() {
-        this.objects[this.selectedObject].primitiveType = this.displayWireframe
-            ? this.gl.LINES
-            : this.gl.TRIANGLES;
+        this.displayWireframe
+            ? this.objects[this.selectedObject].setLineMode()
+            : this.objects[this.selectedObject].setFillMode();
+    }
+
+    changeObject() {
+        this.toggleNormalVisibility();
+        this.toggleWireframe();
     }
 
     display() {
