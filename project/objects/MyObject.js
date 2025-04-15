@@ -278,9 +278,9 @@ export class MyObject extends CGFobject {
         this.scene.pushMatrix();
 
         // apply the geometric transformations, if any
-        if (this.transformations) {
-            this.scene.multMatrix(this.transformations);
-            this.transformations = null; // clear the transformation matrix
+        if (this.#transformations) {
+            this.scene.multMatrix(this.#transformations);
+            this.#transformations = null; // clear the transformation matrix
         }
 
         // apply the material
