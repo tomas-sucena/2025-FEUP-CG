@@ -82,6 +82,9 @@ export class MyScene extends CGFscene {
                 stacks: 25,
                 texture: './assets/earth.jpg',
             }),
+            'Panorama': new MyPanorama(this, {
+                texture: './assets/earth.jpg',
+            }),
         };
     }
 

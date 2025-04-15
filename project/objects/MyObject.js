@@ -6,6 +6,13 @@ import {
 } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
+    /** The geometric transformation matrix */
+    #transformations;
+    /** Indicates if the object should be inverted */
+    #inverted;
+    /** The child objects that constitute the object */
+    #children;
+
     /**
      * Initializes the object.
      * @param { CGFscene } scene reference to the scene the object will be a part of
@@ -14,10 +21,8 @@ export class MyObject extends CGFobject {
     constructor(scene, config) {
         super(scene);
 
-        /** The geometric transformation matrix */
-        this.transformations = null;
-        /** Indicates if the object should be inverted */
-        this.invert = config?.invert ?? false;
+        this.#transformations = this.#children = null;
+        this.#inverted = config?.inverted ?? false;
 
         this.setMaterial(config?.material);
         this.setTexture(config?.texture);
@@ -28,11 +33,30 @@ export class MyObject extends CGFobject {
      * @returns an array containing the objects that constitute the object
      */
     #getChildren() {
-        const children = Object.values(this).filter(
-            (value) => value instanceof MyObject,
-        );
+        // verify if the children have already been computed
+        if (this.#children) {
+            return this.#children;
+        }
 
-        return (children.length > 0 && children) || [this];
+        // a function for recursively finding child objects
+        const findChildren = (children, value) => {
+            if (value instanceof MyObject) {
+                children.push(value);
+            }
+            else if (Array.isArray(value)) {
+                value.forEach((el) => findChildren(children, el));
+            }
+            else if (typeof value === 'Object') {
+                Object.values(value).forEach((el) =>
+                    findChildren(children, el),
+                );
+            }
+
+            return children;
+        };
+
+        this.#children = Object.values(this).reduce(findChildren, []);
+        return this.#children;
     }
 
     /**
@@ -60,8 +84,8 @@ export class MyObject extends CGFobject {
      */
     #addTransformation(matrix) {
         // verify if the transformation matrix has not been defined
-        if (this.transformations === null) {
-            this.transformations = matrix;
+        if (this.#transformations === null) {
+            this.#transformations = matrix;
             return;
         }
 
@@ -72,24 +96,46 @@ export class MyObject extends CGFobject {
             for (let j = 0; j < 4; ++j) {
                 for (let k = 0; k < 4; ++k) {
                     result[i * 4 + k] +=
-                        this.transformations[i * 4 + j] * matrix[j * 4 + k];
+                        this.#transformations[i * 4 + j] * matrix[j * 4 + k];
                 }
             }
         }
 
-        this.transformations = result;
+        this.#transformations = result;
     }
 
     /**
      * Initializes the WebGL buffers.
      */
     initBuffers() {
-        if (this.invert) {
+        if (this.#inverted) {
             this.#invert();
         }
 
         this.primitiveType = this.scene.gl.TRIANGLES;
         this.initGLBuffers();
+    }
+
+    /**
+     * Displays the object's normals.
+     */
+    enableNormalViz() {
+        if (Array.isArray(this.normals)) {
+            super.enableNormalViz();
+        }
+
+        this.#getChildren().forEach((child) => child.enableNormalViz());
+    }
+
+    /**
+     * Hides the object's normals.
+     */
+    disableNormalViz() {
+        if (Array.isArray(this.normals)) {
+            super.disableNormalViz();
+        }
+
+        this.#getChildren().forEach((child) => child.disableNormalViz());
     }
 
     /**

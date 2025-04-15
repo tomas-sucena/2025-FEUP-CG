@@ -18,7 +18,7 @@ export class MyPanorama extends MyObject {
             slices: 50,
             stacks: 25,
             texture: config.texture,
-            invert: !config.invert,
+            inverted: !config.inverted,
         });
 
         // configure the sphere material
