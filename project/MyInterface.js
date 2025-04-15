@@ -19,6 +19,10 @@ export class MyInterface extends CGFinterface {
 
         this.gui.add(this.scene, 'displayAxis').name('Axis');
         this.gui.add(this.scene.camera, 'fov', 0.1, 1).name('FOV');
+        this.gui
+            .add(this.scene, 'selectedBackground', Object.keys(this.scene.backgrounds))
+            .onChange(this.scene.changeBackground.bind(this.scene))
+            .name('Background');
 
         // object settings
         const objectsFolder = this.gui.addFolder('Object');
