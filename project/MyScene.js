@@ -42,11 +42,11 @@ export class MyScene extends CGFscene {
      */
     initCameras() {
         this.camera = new CGFcamera(
-            0.5,
+            0.4,
             0.1,
             500,
-            vec3.fromValues(20, 2, 20),
-            vec3.fromValues(0, 2, 0),
+            vec3.fromValues(15, 15, 15),
+            vec3.fromValues(0, 0, 0),
         );
     }
 
@@ -65,7 +65,7 @@ export class MyScene extends CGFscene {
      */
     initObjects() {
         this.axis = new CGFaxis(this);
-        this.skybox = new MyPanorama(this, {
+        /*this.skybox = new MyPanorama(this, {
             position: this.camera.position,
             scaleFactor: 200,
             texture: {
@@ -83,7 +83,7 @@ export class MyScene extends CGFscene {
             texture: {
                 url: './assets/grass.png',
             },
-        });
+        });*/
 
         this.objects = {
             'Sphere': new MySphere(this, {
@@ -138,15 +138,15 @@ export class MyScene extends CGFscene {
             this.axis.display();
         }
 
-        this.skybox.display();
+        /* this.skybox.display();
         this.surface
             .rotate(-Math.PI / 2, 1, 0, 0)
             .scale(400, 1, 400)
-            .display();
+            .display(); */
 
-        /*this.objects[this.selectedObject]
+        this.objects[this.selectedObject]
             .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
-            .display();*/
+            .display();
 
         // ---- END Primitive drawing section
     }
