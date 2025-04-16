@@ -16,7 +16,8 @@ export class MyCylinder extends MyObject {
         this.slices = config.slices;
         /** The number of divisions along the Y-axis*/
         this.stacks = config.stacks;
-        this.initBuffers();
+
+        this.initGeometry(config);
     }
 
     initBuffers() {

@@ -12,25 +12,26 @@ export class MyPanorama extends MyObject {
      */
     constructor(scene, config) {
         super(scene, config);
+        const { inverted, position, scaleFactor, texture } = config ?? {};
 
         /** The sphere that constitutes the panorama */
         this.sphere = new MySphere(scene, {
             slices: 50,
             stacks: 25,
-            texture: config.texture,
-            inverted: !config.inverted,
+            inverted: !inverted,
+            material: {
+                ambient: [0, 0, 0, 1],
+                diffuse: [0, 0, 0, 1],
+                specular: [0, 0, 0, 1],
+                emission: [1, 1, 1, 1],
+            },
+            texture: texture,
         });
 
-        // configure the sphere material
-        this.sphere.material.setAmbient(0, 0, 0, 0);
-        this.sphere.material.setDiffuse(0, 0, 0, 0);
-        this.sphere.material.setSpecular(0, 0, 0, 0);
-        this.sphere.material.setEmission(1, 1, 1, 1);
-
         /** The coordinates of the center of the panorama */
-        this.position = config?.position ?? [0, 0, 0];
+        this.position = position ?? [0, 0, 0];
         /** The scale that will be applied to the box */
-        this.scaleFactor = config?.scaleFactor ?? 1;
+        this.scaleFactor = typeof scaleFactor === 'number' ? scaleFactor : 1;
     }
 
     render() {

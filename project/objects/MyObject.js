@@ -1,11 +1,8 @@
-import {
-    CGFappearance,
-    CGFobject,
-    CGFscene,
-    CGFtexture,
-} from '../../lib/CGF.js';
+import { CGFappearance, CGFobject, CGFscene } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
+    /** The material to be applied to the object */
+    #material;
     /** The geometric transformation matrix */
     #transformations;
     /** Indicates if the object should be inverted */
@@ -23,9 +20,6 @@ export class MyObject extends CGFobject {
 
         this.#transformations = this.#children = null;
         this.#inverted = config?.inverted ?? false;
-
-        this.setMaterial(config?.material);
-        this.setTexture(config?.texture);
     }
 
     /**
@@ -100,6 +94,22 @@ export class MyObject extends CGFobject {
         }
 
         this.#transformations = result;
+    }
+
+    /**
+     * Initializes the geometry and material of the object.
+     * @param { Object } config the object configuration
+     */
+    initGeometry(config) {
+        // initialize the WebGL buffers
+        this.initBuffers();
+
+        // initialize the material
+        this.#material = new CGFappearance(this.scene);
+        this.setMaterial(config?.material);
+
+        // initialize the texture
+        this.setTexture(config?.texture);
     }
 
     /**
@@ -226,57 +236,78 @@ export class MyObject extends CGFobject {
 
     /**
      * Applies a material to the object.
-     * @param { Number[] } ambient the material's ambient component
-     * @param { Number[] } diffuse the material's diffuse component
-     * @param { Number[] } specular the material's specular component
-     * @param { Number[] } emission the material's emissivity
-     * @param { Number } shininess the material's shininess
+     * @param { Object } config the material configuration
      */
-    setMaterial({ ambient, diffuse, specular, emission, shininess } = {}) {
-        this.material = new CGFappearance(this.scene);
+    setMaterial(config) {
+        // verify if the material exists
+        if (this.#material) {
+            const { ambient, diffuse, specular, emission, shininess } =
+                config ?? {};
 
-        // set the ambient component
-        this.material.setAmbient(
-            ...(typeof ambient === 'Array' ? ambient : [0.6, 0.6, 0.6, 1]),
-        );
+            // set the ambient component
+            if (Array.isArray(ambient)) {
+                this.#material.setAmbient(...ambient);
+            }
 
-        // set the diffuse component
-        this.material.setDiffuse(
-            ...(typeof diffuse === 'Array' ? diffuse : [0.6, 0.6, 0.6, 1]),
-        );
+            // set the diffuse component
+            if (Array.isArray(diffuse)) {
+                this.#material.setDiffuse(...diffuse);
+            }
 
-        // set the specular component
-        this.material.setSpecular(
-            ...(typeof specular === 'Array' ? specular : [0.6, 0.6, 0.6, 1]),
-        );
+            // set the specular component
+            if (Array.isArray(specular)) {
+                this.#material.setSpecular(...specular);
+            }
 
-        // set the emissivity
-        this.material.setEmission(
-            ...(typeof emission === 'Array' ? emission : [0, 0, 0, 1]),
-        );
+            // set the emissivity
+            if (Array.isArray(emission)) {
+                this.#material.setEmission(...emission);
+            }
 
-        // set the shininess
-        this.material.setShininess(
-            typeof shininess === 'Number' ? shininess : 10,
-        );
+            // set the shininess
+            if (typeof shininess === 'number') {
+                this.#material.setShininess(shininess);
+            }
+        }
+
+        // set the material of the child objects
+        this.#getChildren().forEach((child) => child.setMaterial(config));
     }
 
     /**
      * Applies a texture to the object's material.
-     * @param { string } texture path to the texture file
-     * @param { number[] } texCoords the texture coordinates
+     * @param { Object } config the texture configuration
      */
-    setTexture(texture, texCoords) {
-        texture instanceof CGFtexture
-            ? this.material.setTexture(texture)
-            : this.material.loadTexture(texture);
+    setTexture(config) {
+        // verify if the material exists
+        if (this.#material) {
+            const { url, texCoords } = config ?? {};
 
-        if (texCoords && texCoords.length / 2 === this.vertices.length / 3) {
-            this.texCoords = [...texCoords];
-            super.updateTexCoordsGLBuffers();
+            // bind the texture to the material
+            if (typeof url === 'string') {
+                this.#material.loadTexture(url);
+            }
+
+            // set the texture coordinates
+            if (
+                Array.isArray(texCoords) &&
+                texCoords.length / 2 === this?.vertices?.length / 3
+            ) {
+                this.texCoords = [...texCoords];
+                super.updateTexCoordsGLBuffers();
+            }
+
+            // set the texture wrapping mode
+            const wrapS = config?.wrapS ?? 'REPEAT';
+            const wrapT = config?.wrapT ?? 'REPEAT';
+
+            if (typeof wrapS === 'string' && typeof wrapT === 'string') {
+                this.#material.setTextureWrap(wrapS, wrapT);
+            }
         }
 
-        this.material.setTextureWrap('REPEAT', 'REPEAT');
+        // set the texture of the child objects
+        this.#getChildren().forEach((child) => child.setTexture(config));
     }
 
     /**
@@ -300,7 +331,9 @@ export class MyObject extends CGFobject {
         }
 
         // apply the material
-        this.material.apply();
+        if (this.#material) {
+            this.#material.apply();
+        }
 
         // display the geometry of the object
         this.render();

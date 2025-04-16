@@ -1,10 +1,4 @@
-import {
-    CGFscene,
-    CGFcamera,
-    CGFaxis,
-    CGFappearance,
-    CGFtexture,
-} from '../lib/CGF.js';
+import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
@@ -49,7 +43,7 @@ export class MyScene extends CGFscene {
      */
     initCameras() {
         this.camera = new CGFcamera(
-            0.4,
+            0.5,
             0.1,
             500,
             vec3.fromValues(20, 2, 20),
@@ -75,16 +69,21 @@ export class MyScene extends CGFscene {
         this.skybox = new MyPanorama(this, {
             position: this.camera.position,
             scaleFactor: 200,
-            texture: './assets/snow.jpg',
+            texture: {
+                url: './assets/snow.jpg',
+            },
         });
+
         this.surface = new MyPlane(this, {
             nrDivs: 64,
             maxS: 64,
             maxT: 64,
-            texture: './assets/grass.png',
             material: {
-                diffuse: [1, 1, 1, 1]
-            }
+                diffuse: [1, 1, 1, 1],
+            },
+            texture: {
+                url: './assets/grass.png',
+            },
         });
 
         this.backgrounds = {
@@ -98,7 +97,9 @@ export class MyScene extends CGFscene {
             'Sphere': new MySphere(this, {
                 slices: 50,
                 stacks: 25,
-                texture: './assets/earth.jpg',
+                texture: {
+                    url: './assets/earth.jpg',
+                },
             }),
         };
     }
@@ -133,9 +134,9 @@ export class MyScene extends CGFscene {
      * Changes the skybox texture.
      */
     changeBackground() {
-        this.skybox.sphere.setTexture(
-            this.backgrounds[this.selectedBackground],
-        );
+        this.skybox.sphere.setTexture({
+            url: this.backgrounds[this.selectedBackground],
+        });
     }
 
     display() {

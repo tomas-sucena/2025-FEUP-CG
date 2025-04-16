@@ -13,7 +13,7 @@ import { MyObject } from '../MyObject.js';
 export class MyPlane extends MyObject {
     constructor(scene, config) {
         super(scene, config);
-        
+
         const { nrDivs, minS, maxS, minT, maxT } = config ?? {};
         this.nrDivs = nrDivs ?? 1;
         this.patchLength = 1.0 / this.nrDivs;
@@ -24,7 +24,7 @@ export class MyPlane extends MyObject {
         this.q = (this.maxS - this.minS) / this.nrDivs;
         this.w = (this.maxT - this.minT) / this.nrDivs;
 
-        this.initBuffers();
+        this.initGeometry(config);
     }
 
     initBuffers() {
@@ -61,6 +61,7 @@ export class MyPlane extends MyObject {
                 this.indices.push(ind);
             }
         }
+
         this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
         this.initGLBuffers();
     }

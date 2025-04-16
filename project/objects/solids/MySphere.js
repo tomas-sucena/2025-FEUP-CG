@@ -16,7 +16,8 @@ export class MySphere extends MyObject {
         this.slices = config.slices;
         /** The number of divisions of each hemisphere along the Y-axis*/
         this.stacks = 2 * config.stacks;
-        this.initBuffers();
+
+        this.initGeometry(config);
     }
 
     initBuffers() {
