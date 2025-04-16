@@ -5,8 +5,9 @@ import {
     CGFappearance,
     CGFtexture,
 } from '../lib/CGF.js';
-import { MyPanorama } from './objects/MyPanorama.js';
 
+import { MyPanorama } from './objects/MyPanorama.js';
+import { MyPlane } from './objects/shapes/MyPlane.js';
 import { MySphere } from './objects/solids/MySphere.js';
 
 /**
@@ -51,8 +52,8 @@ export class MyScene extends CGFscene {
             0.4,
             0.1,
             500,
-            vec3.fromValues(15, 15, 15),
-            vec3.fromValues(0, 0, 0),
+            vec3.fromValues(20, 2, 20),
+            vec3.fromValues(0, 2, 0),
         );
     }
 
@@ -60,7 +61,7 @@ export class MyScene extends CGFscene {
      * Initializes the scene's light sources.
      */
     initLights() {
-        this.lights[0].setPosition(5, 2, 5, 1);
+        this.lights[0].setPosition(0, 20, 0, 1);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
         this.lights[0].enable();
         this.lights[0].update();
@@ -75,6 +76,15 @@ export class MyScene extends CGFscene {
             position: this.camera.position,
             scaleFactor: 200,
             texture: './assets/snow.jpg',
+        });
+        this.surface = new MyPlane(this, {
+            nrDivs: 64,
+            maxS: 64,
+            maxT: 64,
+            texture: './assets/grass.png',
+            material: {
+                diffuse: [1, 1, 1, 1]
+            }
         });
 
         this.backgrounds = {
@@ -144,10 +154,15 @@ export class MyScene extends CGFscene {
             this.axis.display();
         }
 
-        this.skybox.translate(0, -100, 0).display();
-        this.objects[this.selectedObject]
-            .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
+        this.skybox.display();
+        this.surface
+            .rotate(-Math.PI / 2, 1, 0, 0)
+            .scale(400, 1, 400)
             .display();
+
+        /*this.objects[this.selectedObject]
+            .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
+            .display();*/
 
         // ---- END Primitive drawing section
     }

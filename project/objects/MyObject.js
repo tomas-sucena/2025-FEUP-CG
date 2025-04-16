@@ -275,6 +275,8 @@ export class MyObject extends CGFobject {
             this.texCoords = [...texCoords];
             super.updateTexCoordsGLBuffers();
         }
+
+        this.material.setTextureWrap('REPEAT', 'REPEAT');
     }
 
     /**
