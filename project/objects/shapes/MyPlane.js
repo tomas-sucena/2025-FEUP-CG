@@ -66,6 +66,6 @@ export class MyPlane extends MyObject {
         }
 
         this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
-        this.initGLBuffers();
+        super.initBuffers();
     }
 }

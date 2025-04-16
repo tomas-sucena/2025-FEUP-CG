@@ -120,7 +120,7 @@ export class MyObject extends CGFobject {
             this.#invert();
         }
 
-        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.primitiveType ??= this.scene.gl.TRIANGLES;
         this.initGLBuffers();
     }
 
@@ -144,7 +144,7 @@ export class MyObject extends CGFobject {
      * Displays the object's normals.
      */
     enableNormalViz() {
-        if (Array.isArray(this.normals)) {
+        if (this.normals) {
             super.enableNormalViz();
         }
 
@@ -245,27 +245,27 @@ export class MyObject extends CGFobject {
                 config ?? {};
 
             // set the ambient component
-            if (Array.isArray(ambient)) {
+            if (ambient) {
                 this.#material.setAmbient(...ambient);
             }
 
             // set the diffuse component
-            if (Array.isArray(diffuse)) {
+            if (diffuse) {
                 this.#material.setDiffuse(...diffuse);
             }
 
             // set the specular component
-            if (Array.isArray(specular)) {
+            if (specular) {
                 this.#material.setSpecular(...specular);
             }
 
             // set the emissivity
-            if (Array.isArray(emission)) {
+            if (emission) {
                 this.#material.setEmission(...emission);
             }
 
             // set the shininess
-            if (typeof shininess === 'number') {
+            if (shininess) {
                 this.#material.setShininess(shininess);
             }
         }
@@ -281,29 +281,21 @@ export class MyObject extends CGFobject {
     setTexture(config) {
         // verify if the material exists
         if (this.#material) {
-            const { url, texCoords } = config ?? {};
+            const { url, texCoords, wrapS, wrapT } = config ?? {};
 
             // bind the texture to the material
-            if (typeof url === 'string') {
+            if (url) {
                 this.#material.loadTexture(url);
             }
 
             // set the texture coordinates
-            if (
-                Array.isArray(texCoords) &&
-                texCoords.length / 2 === this?.vertices?.length / 3
-            ) {
+            if (texCoords?.length / 2 === this.vertices.length / 3) {
                 this.texCoords = [...texCoords];
                 super.updateTexCoordsGLBuffers();
             }
 
             // set the texture wrapping mode
-            const wrapS = config?.wrapS ?? 'REPEAT';
-            const wrapT = config?.wrapT ?? 'REPEAT';
-
-            if (typeof wrapS === 'string' && typeof wrapT === 'string') {
-                this.#material.setTextureWrap(wrapS, wrapT);
-            }
+            this.#material.setTextureWrap(wrapS ?? 'REPEAT', wrapT ?? 'REPEAT');
         }
 
         // set the texture of the child objects
