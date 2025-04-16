@@ -2,24 +2,27 @@ import { MyObject } from '../MyObject.js';
 
 /**
  * A plane.
- * @constructor
- * @param scene - Reference to MyScene object
- * @param nDivs - number of divisions in both directions of the surface
- * @param minS - minimum texture coordinate in S
- * @param maxS - maximum texture coordinate in S
- * @param minT - minimum texture coordinate in T
- * @param maxT - maximum texture coordinate in T
  */
 export class MyPlane extends MyObject {
+    /**
+     * Initializes the plane.
+     * @param { MyScene } scene a reference to the MyScene object
+     * @param { Object } config the object configuration
+     */
     constructor(scene, config) {
         super(scene, config);
-
         const { nrDivs, minS, maxS, minT, maxT } = config ?? {};
+
+        /** number of divisions in both directions of the surface */
         this.nrDivs = nrDivs ?? 1;
         this.patchLength = 1.0 / this.nrDivs;
+        /** minimum texture coordinate in S */
         this.minS = minS || 0;
+        /** maximum texture coordinate in S */
         this.maxS = maxS || 1;
+        /** minimum texture coordinate in T */
         this.minT = minT || 0;
+        /** maximum texture coordinate in T */
         this.maxT = maxT || 1;
         this.q = (this.maxS - this.minS) / this.nrDivs;
         this.w = (this.maxT - this.minT) / this.nrDivs;

@@ -31,7 +31,6 @@ export class MyScene extends CGFscene {
         this.displayNormals = false;
         this.displayWireframe = false;
         this.selectedObject = 'Sphere';
-        this.selectedBackground = 'Snow';
 
         this.initCameras();
         this.initLights();
@@ -86,13 +85,6 @@ export class MyScene extends CGFscene {
             },
         });
 
-        this.backgrounds = {
-            'Coast': './assets/coast.jpg',
-            'Island': './assets/island.jpg',
-            'Rocks': './assets/rocks.jpg',
-            'Snow': './assets/snow.jpg',
-        };
-
         this.objects = {
             'Sphere': new MySphere(this, {
                 slices: 50,
@@ -128,15 +120,6 @@ export class MyScene extends CGFscene {
     changeObject() {
         this.toggleNormalVisibility();
         this.toggleWireframe();
-    }
-
-    /**
-     * Changes the skybox texture.
-     */
-    changeBackground() {
-        this.skybox.sphere.setTexture({
-            url: this.backgrounds[this.selectedBackground],
-        });
     }
 
     display() {
