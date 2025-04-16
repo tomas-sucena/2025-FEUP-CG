@@ -1,11 +1,15 @@
-import {
-    CGFappearance,
-    CGFobject,
-    CGFscene,
-    CGFtexture,
-} from '../../lib/CGF.js';
+import { CGFappearance, CGFobject, CGFscene } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
+    /** The material to be applied to the object */
+    #material;
+    /** The geometric transformation matrix */
+    #transformations;
+    /** Indicates if the object should be inverted */
+    #inverted;
+    /** The child objects that constitute the object */
+    #children;
+
     /**
      * Initializes the object.
      * @param { CGFscene } scene reference to the scene the object will be a part of
@@ -14,28 +18,56 @@ export class MyObject extends CGFobject {
     constructor(scene, config) {
         super(scene);
 
-        /** The geometric transformation matrix */
-        this.transformations = null;
-        /** The material to be applied to the object */
-        this.material = config?.material ?? this.#getDefaultMaterial();
-
-        if (config?.texture) {
-            this.setTexture(config.texture);
-        }
+        this.#transformations = this.#children = null;
+        this.#inverted = config?.inverted ?? false;
     }
 
     /**
-     * Returns the material to be applied to the object if none is configured.
-     * @returns { CGFappearance } the default material
+     * Returns all objects that constitute the object.
+     * @returns an array containing the objects that constitute the object
      */
-    #getDefaultMaterial() {
-        const material = new CGFappearance(this.scene);
-        material.setAmbient(0.6, 0.6, 0.6, 1.0);
-        material.setDiffuse(0.6, 0.6, 0.6, 1.0);
-        material.setSpecular(0.6, 0.6, 0.6, 1.0);
-        material.setShininess(10.0);
+    #getChildren() {
+        // verify if the children have already been computed
+        if (this.#children) {
+            return this.#children;
+        }
 
-        return material;
+        // a function for recursively finding child objects
+        const findChildren = (children, value) => {
+            if (value instanceof MyObject) {
+                children.push(value);
+            } else if (Array.isArray(value)) {
+                value.forEach((el) => findChildren(children, el));
+            } else if (typeof value === 'Object') {
+                Object.values(value).forEach((el) =>
+                    findChildren(children, el),
+                );
+            }
+
+            return children;
+        };
+
+        this.#children = Object.values(this).reduce(findChildren, []);
+        return this.#children;
+    }
+
+    /**
+     * Inverts the object by reversing its normals and updating its indices.
+     */
+    #invert() {
+        // reverse the normals
+        for (let i = 0; i < this.normals.length; ++i) {
+            this.normals[i] *= -1;
+        }
+
+        // update the indices
+        for (let i = 0; i < this.indices.length; i += 3) {
+            // swap a pair of indices to reverse the rotation direction
+            [this.indices[i], this.indices[i + 1]] = [
+                this.indices[i + 1],
+                this.indices[i],
+            ];
+        }
     }
 
     /**
@@ -44,8 +76,8 @@ export class MyObject extends CGFobject {
      */
     #addTransformation(matrix) {
         // verify if the transformation matrix has not been defined
-        if (this.transformations === null) {
-            this.transformations = matrix;
+        if (this.#transformations === null) {
+            this.#transformations = matrix;
             return;
         }
 
@@ -56,12 +88,78 @@ export class MyObject extends CGFobject {
             for (let j = 0; j < 4; ++j) {
                 for (let k = 0; k < 4; ++k) {
                     result[i * 4 + k] +=
-                        this.transformations[i * 4 + j] * matrix[j * 4 + k];
+                        this.#transformations[i * 4 + j] * matrix[j * 4 + k];
                 }
             }
         }
 
-        this.transformations = result;
+        this.#transformations = result;
+    }
+
+    /**
+     * Initializes the geometry and material of the object.
+     * @param { Object } config the object configuration
+     */
+    initGeometry(config) {
+        // initialize the WebGL buffers
+        this.initBuffers();
+
+        // initialize the material
+        this.#material = new CGFappearance(this.scene);
+        this.setMaterial(config?.material);
+
+        // initialize the texture
+        this.setTexture(config?.texture);
+    }
+
+    /**
+     * Initializes the WebGL buffers.
+     */
+    initBuffers() {
+        if (this.#inverted) {
+            this.#invert();
+        }
+
+        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.initGLBuffers();
+    }
+
+    /**
+     * Sets the WebGL primitive to triangles.
+     */
+    setFillMode() {
+        this.primitiveType = this.scene.gl.TRIANGLES;
+        this.#getChildren().forEach((child) => child.setFillMode());
+    }
+
+    /**
+     * Sets the WebGL primitive to line strips so the object's wireframe is displayed.
+     */
+    setLineMode() {
+        this.primitiveType = this.scene.gl.LINE_STRIP;
+        this.#getChildren().forEach((child) => child.setLineMode());
+    }
+
+    /**
+     * Displays the object's normals.
+     */
+    enableNormalViz() {
+        if (Array.isArray(this.normals)) {
+            super.enableNormalViz();
+        }
+
+        this.#getChildren().forEach((child) => child.enableNormalViz());
+    }
+
+    /**
+     * Hides the object's normals.
+     */
+    disableNormalViz() {
+        if (Array.isArray(this.normals)) {
+            super.disableNormalViz();
+        }
+
+        this.#getChildren().forEach((child) => child.disableNormalViz());
     }
 
     /**
@@ -137,19 +235,79 @@ export class MyObject extends CGFobject {
     }
 
     /**
-     * Applies a texture to the object.
-     * @param { string } texture path to the texture file
-     * @param { number[] } texCoords the texture coordinates
+     * Applies a material to the object.
+     * @param { Object } config the material configuration
      */
-    setTexture(texture, texCoords) {
-        texture instanceof CGFtexture
-            ? this.material.setTexture(texture)
-            : this.material.loadTexture(texture);
+    setMaterial(config) {
+        // verify if the material exists
+        if (this.#material) {
+            const { ambient, diffuse, specular, emission, shininess } =
+                config ?? {};
 
-        if (texCoords && texCoords.length / 2 === this.vertices.length / 3) {
-            this.texCoords = [...texCoords];
-            super.updateTexCoordsGLBuffers();
+            // set the ambient component
+            if (Array.isArray(ambient)) {
+                this.#material.setAmbient(...ambient);
+            }
+
+            // set the diffuse component
+            if (Array.isArray(diffuse)) {
+                this.#material.setDiffuse(...diffuse);
+            }
+
+            // set the specular component
+            if (Array.isArray(specular)) {
+                this.#material.setSpecular(...specular);
+            }
+
+            // set the emissivity
+            if (Array.isArray(emission)) {
+                this.#material.setEmission(...emission);
+            }
+
+            // set the shininess
+            if (typeof shininess === 'number') {
+                this.#material.setShininess(shininess);
+            }
         }
+
+        // set the material of the child objects
+        this.#getChildren().forEach((child) => child.setMaterial(config));
+    }
+
+    /**
+     * Applies a texture to the object's material.
+     * @param { Object } config the texture configuration
+     */
+    setTexture(config) {
+        // verify if the material exists
+        if (this.#material) {
+            const { url, texCoords } = config ?? {};
+
+            // bind the texture to the material
+            if (typeof url === 'string') {
+                this.#material.loadTexture(url);
+            }
+
+            // set the texture coordinates
+            if (
+                Array.isArray(texCoords) &&
+                texCoords.length / 2 === this?.vertices?.length / 3
+            ) {
+                this.texCoords = [...texCoords];
+                super.updateTexCoordsGLBuffers();
+            }
+
+            // set the texture wrapping mode
+            const wrapS = config?.wrapS ?? 'REPEAT';
+            const wrapT = config?.wrapT ?? 'REPEAT';
+
+            if (typeof wrapS === 'string' && typeof wrapT === 'string') {
+                this.#material.setTextureWrap(wrapS, wrapT);
+            }
+        }
+
+        // set the texture of the child objects
+        this.#getChildren().forEach((child) => child.setTexture(config));
     }
 
     /**
@@ -167,13 +325,15 @@ export class MyObject extends CGFobject {
         this.scene.pushMatrix();
 
         // apply the geometric transformations, if any
-        if (this.transformations) {
-            this.scene.multMatrix(this.transformations);
-            this.transformations = null; // clear the transformation matrix
+        if (this.#transformations) {
+            this.scene.multMatrix(this.#transformations);
+            this.#transformations = null; // clear the transformation matrix
         }
 
         // apply the material
-        this.material.apply();
+        if (this.#material) {
+            this.#material.apply();
+        }
 
         // display the geometry of the object
         this.render();

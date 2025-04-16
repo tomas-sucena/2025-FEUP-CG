@@ -6,17 +6,18 @@ import { MyObject } from '../MyObject.js';
 export class MySphere extends MyObject {
     /**
      * Initializes the sphere.
-     * @param { number } scene a reference to the MyScene object
-     * @param { number } slices the number of divisions around the Z-axis
-     * @param { number } stacks the number of divisions along the Z-axis
+     * @param { MyScene } scene a reference to the MyScene object
      * @param { Object } config the object configuration
      */
-    constructor(scene, slices, stacks, config) {
+    constructor(scene, config) {
         super(scene, config);
 
-        this.slices = slices;
-        this.stacks = stacks;
-        this.initBuffers();
+        /** The number of divisions around the Y-axis */
+        this.slices = config.slices;
+        /** The number of divisions of each hemisphere along the Y-axis*/
+        this.stacks = 2 * config.stacks;
+
+        this.initGeometry(config);
     }
 
     initBuffers() {
@@ -25,7 +26,7 @@ export class MySphere extends MyObject {
         this.normals = [];
         this.texCoords = [];
 
-        const sliceAngOffset = (2 * Math.PI) / this.slices;
+        const sliceAngOffset = (-2 * Math.PI) / this.slices;
         const stackAngOffset = Math.PI / this.stacks;
 
         // define the stacks
@@ -47,8 +48,8 @@ export class MySphere extends MyObject {
 
                     // prettier-ignore
                     this.indices.push(
-                        index, index + 1, indexNextStack,
-                        indexNextStack, index + 1, indexNextStack + 1,
+                        index, indexNextStack, index + 1,
+                        index + 1, indexNextStack, indexNextStack + 1,
                     );
                 }
 
@@ -59,14 +60,10 @@ export class MySphere extends MyObject {
                 this.normals.push(x, y, z);
 
                 // define the texture coordinates
-                this.texCoords.push(
-                    1 - slice / this.slices,
-                    stack / this.stacks,
-                );
+                this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
 
-        this.primitiveType = this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
+        super.initBuffers();
     }
 }

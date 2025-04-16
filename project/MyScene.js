@@ -1,11 +1,7 @@
-import {
-    CGFscene,
-    CGFcamera,
-    CGFaxis,
-    CGFappearance,
-    CGFtexture,
-} from '../lib/CGF.js';
+import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 
+import { MyPanorama } from './objects/MyPanorama.js';
+import { MyPlane } from './objects/shapes/MyPlane.js';
 import { MySphere } from './objects/solids/MySphere.js';
 
 /**
@@ -19,10 +15,8 @@ export class MyScene extends CGFscene {
 
     init(application) {
         super.init(application);
-        this.initCameras();
-        this.initLights();
 
-        //Background color
+        // background color
         this.gl.clearColor(0.0, 0.0, 0.0, 1.0);
 
         this.gl.clearDepth(100.0);
@@ -31,38 +25,75 @@ export class MyScene extends CGFscene {
         this.gl.depthFunc(this.gl.LEQUAL);
         this.enableTextures(true);
 
-        //Initialize scene objects
-        this.axis = new CGFaxis(this);
-
-        this.objects = {
-            'Sphere': new MySphere(this, 50, 50, {
-                texture: './assets/earth.jpg',
-            }),
-        };
-
-        //-------Objects connected to MyInterface
+        // initialize the objects connected to the interface
         this.displayAxis = true;
+        this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
         this.selectedObject = 'Sphere';
-        this.scaleFactor = 1;
+
+        this.initCameras();
+        this.initLights();
+        this.initObjects();
     }
 
+    /**
+     * Initializes the scene's camera.
+     */
+    initCameras() {
+        this.camera = new CGFcamera(
+            0.5,
+            0.1,
+            500,
+            vec3.fromValues(20, 2, 20),
+            vec3.fromValues(0, 2, 0),
+        );
+    }
+
+    /**
+     * Initializes the scene's light sources.
+     */
     initLights() {
-        this.lights[0].setPosition(5, 2, 5, 1);
+        this.lights[0].setPosition(0, 20, 0, 1);
         this.lights[0].setDiffuse(1.0, 1.0, 1.0, 1.0);
         this.lights[0].enable();
         this.lights[0].update();
     }
 
-    initCameras() {
-        this.camera = new CGFcamera(
-            0.4,
-            0.1,
-            500,
-            vec3.fromValues(15, 15, 15),
-            vec3.fromValues(0, 0, 0),
-        );
+    /**
+     * Initializes the scene's objects.
+     */
+    initObjects() {
+        this.axis = new CGFaxis(this);
+        this.skybox = new MyPanorama(this, {
+            position: this.camera.position,
+            scaleFactor: 200,
+            texture: {
+                url: './assets/snow.jpg',
+            },
+        });
+
+        this.surface = new MyPlane(this, {
+            nrDivs: 64,
+            maxS: 64,
+            maxT: 64,
+            material: {
+                diffuse: [1, 1, 1, 1],
+            },
+            texture: {
+                url: './assets/grass.png',
+            },
+        });
+
+        this.objects = {
+            'Sphere': new MySphere(this, {
+                slices: 50,
+                stacks: 25,
+                texture: {
+                    url: './assets/earth.jpg',
+                },
+            }),
+        };
     }
 
     /**
@@ -78,9 +109,17 @@ export class MyScene extends CGFscene {
      * Toggles the selected object's wireframe visibility.
      */
     toggleWireframe() {
-        this.objects[this.selectedObject].primitiveType = this.displayWireframe
-            ? this.gl.LINES
-            : this.gl.TRIANGLES;
+        this.displayWireframe
+            ? this.objects[this.selectedObject].setLineMode()
+            : this.objects[this.selectedObject].setFillMode();
+    }
+
+    /**
+     * Changes the selected object.
+     */
+    changeObject() {
+        this.toggleNormalVisibility();
+        this.toggleWireframe();
     }
 
     display() {
@@ -94,14 +133,20 @@ export class MyScene extends CGFscene {
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
 
-        // draw the axis
-        if (this.displayAxis) this.axis.display();
-
-        // apply the scale factor
-        this.scale(this.scaleFactor, this.scaleFactor, this.scaleFactor);
-
         // ---- BEGIN Primitive drawing section
-        this.objects[this.selectedObject].display();
+        if (this.displayAxis) {
+            this.axis.display();
+        }
+
+        this.skybox.display();
+        this.surface
+            .rotate(-Math.PI / 2, 1, 0, 0)
+            .scale(400, 1, 400)
+            .display();
+
+        /*this.objects[this.selectedObject]
+            .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
+            .display();*/
 
         // ---- END Primitive drawing section
     }
