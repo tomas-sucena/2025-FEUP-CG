@@ -1,0 +1,73 @@
+import { MyObject } from '../MyObject.js';
+
+/**
+ * A rectangle.
+ */
+export class MyRectangle extends MyObject {
+    /**
+     * Initializes the rectangle.
+     * @param { MyScene } scene a reference to the MyScene object
+     * @param { Object } config the object configuration
+     */
+    constructor(scene, config) {
+        super(scene, config);
+        const { width, height, rows, columns } = config ?? {};
+
+        /** The dimension of the rectangle on the X-axis */
+        this.width = width ?? 1;
+        /** The dimension of the rectangle on the Y-axis */
+        this.height = height ?? 1;
+        /** The number of subdivisions of the rectangle on the Y-axis */
+        this.rows = rows ?? 1;
+        /** The number of subdivisions of the rectangle on the X-axis */
+        this.columns = columns ?? 1;
+
+        this.initGeometry(config);
+    }
+
+    initBuffers() {
+        this.vertices = [];
+        this.indices = [];
+        this.normals = [];
+        this.texCoords = [];
+
+        const xOffset = this.width / this.columns;
+        const yOffset = this.height / this.rows;
+
+        // define the rows
+        let y = this.height;
+
+        for (let row = 0; row <= this.rows; ++row) {
+            let x = -this.width / 2;
+
+            // define the columns
+            for (let column = 0; column <= this.columns; ++column) {
+                // define the indices
+                if (row < this.rows && column < this.columns) {
+                    const index = this.vertices.length / 3;
+                    const indexNextRow = index + this.columns + 1;
+
+                    // prettier-ignore
+                    this.indices.push(
+                        index, indexNextRow, index + 1,
+                        index + 1, indexNextRow, indexNextRow + 1,
+                    );
+                }
+
+                // define the vertices
+                this.vertices.push(x, y, 0);
+                x += xOffset;
+
+                // define the normals
+                this.normals.push(0, 0, 1);
+
+                // define the texture coordinates
+                this.texCoords.push(column / this.columns, row / this.rows);
+            }
+
+            y -= yOffset;
+        }
+
+        super.initBuffers();
+    }
+}
