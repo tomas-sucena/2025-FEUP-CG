@@ -1,8 +1,8 @@
 import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 
+import { MyBuilding } from './objects/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
-import { MySphere } from './objects/solids/MySphere.js';
 
 /**
  * MyScene
@@ -30,7 +30,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        // this.selectedObject = 'Sphere';
+        this.selectedObject = 'Building';
 
         this.initCameras();
         this.initLights();
@@ -85,15 +85,14 @@ export class MyScene extends CGFscene {
             },
         });
 
-        /*this.objects = {
-            'Sphere': new MySphere(this, {
-                slices: 50,
-                stacks: 25,
-                texture: {
-                    url: './assets/earth.jpg',
-                },
+        this.objects = {
+            'Building': new MyBuilding(this, {
+                width: 3,
+                height: 4,
+                floors: 3,
+                windows: 2,
             }),
-        };*/
+        };
     }
 
     /**
@@ -144,9 +143,9 @@ export class MyScene extends CGFscene {
             .scale(400, 1, 400)
             .display();
 
-        /* this.objects[this.selectedObject]
+        this.objects[this.selectedObject]
             .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
-            .display(); */
+            .display();
 
         // ---- END Primitive drawing section
     }

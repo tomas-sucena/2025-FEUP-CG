@@ -21,7 +21,7 @@ export class MyInterface extends CGFinterface {
         this.gui.add(this.scene.camera, 'fov', 0.1, 1).name('FOV');
 
         // object settings
-        /* const objectsFolder = this.gui.addFolder('Object');
+        const objectsFolder = this.gui.addFolder('Object');
 
         objectsFolder
             .add(this.scene, 'selectedObject', Object.keys(this.scene.objects))
@@ -38,7 +38,7 @@ export class MyInterface extends CGFinterface {
         objectsFolder
             .add(this.scene, 'displayWireframe')
             .onChange(this.scene.toggleWireframe.bind(this.scene))
-            .name('Wireframe'); */
+            .name('Wireframe');
 
         return true;
     }
