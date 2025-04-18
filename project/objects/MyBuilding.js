@@ -49,26 +49,13 @@ export class MyBuilding extends MyObject {
         });
     }
 
-    #displaySideModules() {
-        const heightRatio = this.floors / (this.floors + 1);
-
-        // define the front and back walls
-        this.mainModuleWall
-            .translate(this.width, this.height / 2, 0.3 * this.depth)
-            .scale(1, heightRatio, 1)
-            .display()
-            .translate(this.width, this.height / 2, 0.3 * this.depth)
-            .scale(-1, heightRatio, -1)
-            .display();
-    }
-
     /**
      * Displays the main module of the building.
      */
     #displayMainModule() {
-        const width = this.mainModuleWall.width;
+        const mainModuleWidth = 0.4 * this.width;
 
-        // define the front and back walls
+        // display the front and back walls
         this.mainModuleWall
             .translate(0, this.height / 2, this.depth / 2)
             .display()
@@ -76,26 +63,70 @@ export class MyBuilding extends MyObject {
             .translate(0, this.height / 2, -this.depth / 2)
             .display();
 
-        // define the left and right walls
+        // display the left and right walls
+        this.scene.pushMatrix();
+        this.scene.scale(1, 1, this.depth / mainModuleWidth);
+
         this.mainModuleWall
             .rotate(Math.PI / 2, 0, 1, 0)
-            .scale(1, 1, this.depth / width)
-            .translate(width / 2, this.height / 2, 0)
+            .translate(mainModuleWidth / 2, this.height / 2, 0)
             .display()
             .rotate(-Math.PI / 2, 0, 1, 0)
-            .scale(1, 1, this.depth / width)
-            .translate(-width / 2, this.height / 2, 0)
+            .translate(-mainModuleWidth / 2, this.height / 2, 0)
             .display();
 
-        // define the ceiling
+        this.scene.popMatrix();
+
+        // display the ceiling
         this.ceiling
             .rotate(-Math.PI / 2, 1, 0, 0)
             .translate(0, this.height, 0)
             .display();
     }
 
+    #displaySideModules() {
+        const sideModuleWidth = 0.3 * this.width;
+        const sideModuleHeight = this.height - 1;
+        const mainModuleWidth = 0.4 * this.width;
+
+        // display the front walls
+        this.sideModuleWall
+            .translate(
+                mainModuleWidth / 2 + sideModuleWidth / 2,
+                sideModuleHeight / 2,
+                0.3 * this.depth,
+            )
+            .display()
+            .translate(
+                -mainModuleWidth / 2 - sideModuleWidth / 2,
+                sideModuleHeight / 2,
+                0.3 * this.depth,
+            )
+            .display();
+
+        // display the back walls
+        this.scene.pushMatrix();
+        this.scene.scale(-1, 1, -1);
+
+        this.sideModuleWall
+            .translate(
+                mainModuleWidth / 2 + sideModuleWidth / 2,
+                sideModuleHeight / 2,
+                0.3 * this.depth,
+            )
+            .display()
+            .translate(
+                -mainModuleWidth / 2 - sideModuleWidth / 2,
+                sideModuleHeight / 2,
+                0.3 * this.depth,
+            )
+            .display();
+
+        this.scene.popMatrix();
+    }
+
     render() {
-        //this.#displaySideModules();
         this.#displayMainModule();
+        this.#displaySideModules();
     }
 }
