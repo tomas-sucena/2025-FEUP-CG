@@ -35,7 +35,7 @@ export class MyRectangle extends MyObject {
         const yOffset = this.height / this.rows;
 
         // define the rows
-        let y = this.height;
+        let y = this.height / 2;
 
         for (let row = 0; row <= this.rows; ++row) {
             let x = -this.width / 2;

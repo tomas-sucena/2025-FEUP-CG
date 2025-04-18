@@ -87,7 +87,7 @@ export class MyScene extends CGFscene {
 
         this.objects = {
             'Building': new MyBuilding(this, {
-                width: 3,
+                width: 10,
                 height: 4,
                 floors: 3,
                 windows: 2,
