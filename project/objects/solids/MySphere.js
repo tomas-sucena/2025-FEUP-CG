@@ -11,11 +11,12 @@ export class MySphere extends MyObject {
      */
     constructor(scene, config) {
         super(scene, config);
+        const { slices, stacks } = config;
 
         /** The number of divisions around the Y-axis */
-        this.slices = config.slices;
+        this.slices = slices;
         /** The number of divisions of each hemisphere along the Y-axis*/
-        this.stacks = 2 * config.stacks;
+        this.stacks = 2 * stacks;
 
         this.initGeometry(config);
     }

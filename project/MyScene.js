@@ -1,6 +1,6 @@
 import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 
-import { MyBuilding } from './objects/MyBuilding.js';
+import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
 
