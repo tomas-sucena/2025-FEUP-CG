@@ -3,6 +3,7 @@ import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
+import { MyBox } from './objects/solids/MyBox.js';
 
 /**
  * MyScene
@@ -30,7 +31,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Building';
+        this.selectedObject = 'Box';
 
         this.initCameras();
         this.initLights();
@@ -92,6 +93,12 @@ export class MyScene extends CGFscene {
                 floors: 3,
                 windows: 2,
             }),
+            'Box': new MyBox({
+                scene: this,
+                xDivisions: 1,
+                yDivisions: 2,
+                zDivisions: 3,
+            }),
         };
     }
 
@@ -138,10 +145,10 @@ export class MyScene extends CGFscene {
         }
 
         this.skysphere.display();
-        this.surface
+        /*this.surface
             .rotate(-Math.PI / 2, 1, 0, 0)
             .scale(400, 1, 400)
-            .display();
+            .display();*/
 
         this.objects[this.selectedObject]
             .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
