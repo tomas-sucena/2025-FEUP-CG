@@ -10,7 +10,7 @@ export class MyPlane extends MyObject {
      * @param { Object } config the object configuration
      */
     constructor(scene, config) {
-        super(scene, config);
+        super(scene);
         const { nrDivs, minS, maxS, minT, maxT } = config ?? {};
 
         /** number of divisions in both directions of the surface */
@@ -24,7 +24,7 @@ export class MyPlane extends MyObject {
         /** maximum texture coordinate in T */
         this.maxT = maxT || 1;
 
-        this.initGeometry(config);
+        this._initGeometry(config);
     }
 
     initBuffers() {
@@ -66,6 +66,5 @@ export class MyPlane extends MyObject {
         }
 
         this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
-        super.initBuffers();
     }
 }

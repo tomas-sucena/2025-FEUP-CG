@@ -2,7 +2,7 @@ import { MyObject } from '../MyObject.js';
 
 export class MyModule extends MyObject {
     constructor(scene, config) {
-        super(scene, config);
+        super(scene);
         const { width, height, depth, floors, windows, isMainModule } = config;
 
         /** The width of the module */
@@ -18,7 +18,7 @@ export class MyModule extends MyObject {
         /** Indicates if the module is the main module */
         this.isMainModule = isMainModule ?? false;
 
-        this.initGeometry(config);
+        this._initGeometry(config);
     }
 
     /**
@@ -56,14 +56,7 @@ export class MyModule extends MyObject {
 
                     // define the indices
                     if (floor < this.floors && window < this.windows) {
-                        const index = this.vertices.length / 3;
-                        const indexNextFloor = index + this.windows + 1;
-
-                        // prettier-ignore
-                        this.indices.push(
-                            index, indexNextFloor, index + 1,
-                            index + 1, indexNextFloor, indexNextFloor + 1,
-                        );
+                        this._addPairOfIndices(this.windows);
                     }
 
                     // define the vertices
@@ -94,14 +87,7 @@ export class MyModule extends MyObject {
 
                 // define the indices
                 if (i < this.windows && j < this.windows) {
-                    const index = this.vertices.length / 3;
-                    const indexNextFloor = index + this.windows + 1;
-
-                    // prettier-ignore
-                    this.indices.push(
-                        index, indexNextFloor, index + 1,
-                        index + 1, indexNextFloor, indexNextFloor + 1,
-                    );
+                    this._addPairOfIndices(this.windows);
                 }
 
                 // define the vertices
@@ -127,6 +113,5 @@ export class MyModule extends MyObject {
 
         this.#addWalls();
         this.#addCeiling();
-        super.initBuffers();
     }
 }

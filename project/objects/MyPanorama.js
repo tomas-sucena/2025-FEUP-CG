@@ -11,7 +11,7 @@ export class MyPanorama extends MyObject {
      * @param { Object } config the object configuration
      */
     constructor(scene, config) {
-        super(scene, config);
+        super(scene);
         const { inverted, position, scaleFactor, texture } = config ?? {};
 
         /** The sphere that constitutes the panorama */
@@ -31,10 +31,10 @@ export class MyPanorama extends MyObject {
         /** The coordinates of the center of the panorama */
         this.position = position ?? [0, 0, 0];
         /** The scale that will be applied to the box */
-        this.scaleFactor = typeof scaleFactor === 'number' ? scaleFactor : 1;
+        this.scaleFactor = scaleFactor ?? 1;
     }
 
-    render() {
+    _render() {
         this.sphere
             .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
             .translate(...this.position)

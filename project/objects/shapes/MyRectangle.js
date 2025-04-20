@@ -10,7 +10,7 @@ export class MyRectangle extends MyObject {
      * @param { Object } config the object configuration
      */
     constructor(scene, config) {
-        super(scene, config);
+        super(scene);
         const { width, height, rows, columns } = config ?? {};
 
         /** The dimension of the rectangle on the X-axis */
@@ -22,7 +22,7 @@ export class MyRectangle extends MyObject {
         /** The number of subdivisions of the rectangle on the X-axis */
         this.columns = columns ?? 1;
 
-        this.initGeometry(config);
+        this._initGeometry(config);
     }
 
     initBuffers() {
@@ -44,14 +44,7 @@ export class MyRectangle extends MyObject {
             for (let column = 0; column <= this.columns; ++column) {
                 // define the indices
                 if (row < this.rows && column < this.columns) {
-                    const index = this.vertices.length / 3;
-                    const indexNextRow = index + this.columns + 1;
-
-                    // prettier-ignore
-                    this.indices.push(
-                        index, indexNextRow, index + 1,
-                        index + 1, indexNextRow, indexNextRow + 1,
-                    );
+                    this._addPairOfIndices(this.columns);
                 }
 
                 // define the vertices
@@ -67,7 +60,5 @@ export class MyRectangle extends MyObject {
 
             y -= yOffset;
         }
-
-        super.initBuffers();
     }
 }

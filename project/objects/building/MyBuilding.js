@@ -3,7 +3,7 @@ import { MyModule } from './MyModule.js';
 
 export class MyBuilding extends MyObject {
     constructor(scene, config) {
-        super(scene, config);
+        super(scene);
         const { width, floors, windows } = config ?? {};
 
         /** The main module of the building **/
@@ -24,7 +24,7 @@ export class MyBuilding extends MyObject {
         });
     }
 
-    render() {
+    _render() {
         const mainModuleWidth = this.mainModule.width;
         const sideModuleWidth = this.sideModule.width;
 

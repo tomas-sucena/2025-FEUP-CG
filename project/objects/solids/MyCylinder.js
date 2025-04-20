@@ -17,7 +17,7 @@ export class MyCylinder extends MyObject {
         /** The number of divisions along the Y-axis*/
         this.stacks = config.stacks;
 
-        this.initGeometry(config);
+        this._initGeometry(config);
     }
 
     initBuffers() {
@@ -30,7 +30,7 @@ export class MyCylinder extends MyObject {
         const yOffset = 1 / this.stacks;
 
         // define the slices
-        for (let slice = 0; slice < this.slices; ++slice) {
+        for (let slice = 0; slice <= this.slices; ++slice) {
             const ang = slice * angOffset;
             const sa = Math.sin(ang);
             const ca = Math.cos(ang);

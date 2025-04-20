@@ -5,21 +5,17 @@ export class MyObject extends CGFobject {
     #material;
     /** The geometric transformation matrix */
     #transformations;
-    /** Indicates if the object should be inverted */
-    #inverted;
     /** The child objects that constitute the object */
     #children;
 
     /**
      * Initializes the object.
      * @param { CGFscene } scene reference to the scene the object will be a part of
-     * @param { Object } config the object configuration
      */
-    constructor(scene, config) {
+    constructor(scene) {
         super(scene);
 
         this.#transformations = this.#children = null;
-        this.#inverted = config?.inverted ?? false;
     }
 
     /**
@@ -97,12 +93,35 @@ export class MyObject extends CGFobject {
     }
 
     /**
+     * Adds a pair of triangles to the index buffer to connect two adjacent segments.
+     * @param {number} step - The number of vertices to skip to reach the corresponding vertex on the next segment
+     */
+    _addPairOfIndices(step) {
+        const index = this.vertices.length / 3;
+        const indexNextSegment = index + step + 1;
+
+        // prettier-ignore
+        this.indices.push(
+            index, indexNextSegment, index + 1,
+            index + 1, indexNextSegment, indexNextSegment + 1,
+        );
+    }
+
+    /**
      * Initializes the geometry and material of the object.
      * @param { Object } config the object configuration
      */
-    initGeometry(config) {
-        // initialize the WebGL buffers
+    _initGeometry(config) {
         this.initBuffers();
+
+        // invert the normals and indices if needed
+        if (config?.inverted) {
+            this.#invert();
+        }
+
+        // initialize the WebGL buffers
+        this.primitiveType ??= this.scene.gl.TRIANGLES;
+        this.initGLBuffers();
 
         // initialize the material
         this.#material = new CGFappearance(this.scene);
@@ -113,15 +132,10 @@ export class MyObject extends CGFobject {
     }
 
     /**
-     * Initializes the WebGL buffers.
+     * Displays the geometry of the object.
      */
-    initBuffers() {
-        if (this.#inverted) {
-            this.#invert();
-        }
-
-        this.primitiveType ??= this.scene.gl.TRIANGLES;
-        this.initGLBuffers();
+    _render() {
+        super.display();
     }
 
     /**
@@ -303,13 +317,6 @@ export class MyObject extends CGFobject {
     }
 
     /**
-     * Displays the geometry of the object.
-     */
-    render() {
-        super.display();
-    }
-
-    /**
      * Displays the object.
      * @returns a reference to the object
      */
@@ -328,7 +335,7 @@ export class MyObject extends CGFobject {
         }
 
         // display the geometry of the object
-        this.render();
+        this._render();
 
         this.scene.popMatrix();
         return this;
