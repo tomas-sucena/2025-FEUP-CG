@@ -1,4 +1,5 @@
 import { MyObject } from '../MyObject.js';
+import { MyRectangle } from '../shapes/MyRectangle.js';
 
 export class MyModule extends MyObject {
     constructor(scene, config) {
@@ -18,13 +19,27 @@ export class MyModule extends MyObject {
         /** Indicates if the module is the main module */
         this.isMainModule = isMainModule ?? false;
 
+        this.initWindow();
         this._initGeometry(config);
+    }
+
+    initWindow() {
+        const windowWidth = this.width / this.windows / 2;
+        const windowHeight = this.height / this.floors / 2;
+
+        /** The module's window */
+        this.window = new MyRectangle(this.scene, {
+            width: windowWidth,
+            height: windowHeight,
+            rows: 2,
+            columns: 2,
+        });
     }
 
     /**
      * Defines the module's walls by updating the object's buffers.
      */
-    #addWalls() {
+    addWalls() {
         const walls = 3 + this.isMainModule;
         const xOffset = this.width / this.windows;
         const yOffset = this.height / this.floors;
@@ -75,7 +90,7 @@ export class MyModule extends MyObject {
     /**
      * Defines the module's ceiling by updating the object's buffers.
      */
-    #addCeiling() {
+    addCeiling() {
         const xOffset = this.width / this.windows;
         const zOffset = this.depth / this.windows;
 
@@ -111,7 +126,34 @@ export class MyModule extends MyObject {
         this.normals = [];
         this.texCoords = [];
 
-        this.#addWalls();
-        this.#addCeiling();
+        this.addWalls();
+        this.addCeiling();
+    }
+
+    _render() {
+        // display the module
+        super._render();
+
+        // display the windows
+        const xOffset = this.width / this.windows;
+        const yOffset = this.height / this.floors;
+
+        const xCorner = -this.width / 2;
+        const z = this.depth / 2;
+
+        for (let floor = this.isMainModule; floor < this.floors; ++floor) {
+            const y = (floor + 0.5) * yOffset;
+
+            for (let window = 0; window < this.windows; ++window) {
+                const x = xCorner + (window + 0.5) * xOffset;
+
+                this.window
+                    .translate(x, y, z)
+                    .display()
+                    .translate(x, y, z)
+                    .scale(-1, 1, -1)
+                    .display();
+            }
+        }
     }
 }

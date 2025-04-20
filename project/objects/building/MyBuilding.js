@@ -14,7 +14,6 @@ export class MyBuilding extends MyObject {
             windows: windows,
             isMainModule: true,
         });
-
         /** The side module of the building */
         this.sideModule = new MyModule(scene, {
             width: 0.3 * width,
@@ -32,7 +31,7 @@ export class MyBuilding extends MyObject {
         this.mainModule.display();
 
         // display the right module
-        this.sideModule
+        /* this.sideModule
             .translate(mainModuleWidth / 2 + sideModuleWidth / 2, 0, 0)
             .display();
 
@@ -40,6 +39,6 @@ export class MyBuilding extends MyObject {
         this.sideModule
             .translate(mainModuleWidth / 2 + sideModuleWidth / 2, 0, 0)
             .scale(-1, 1, -1)
-            .display();
+            .display();*/
     }
 }
