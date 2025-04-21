@@ -1,4 +1,5 @@
 import { MyObject } from '../MyObject.js';
+import { MyCircle } from '../shapes/MyCircle.js';
 import { MyRectangle } from '../shapes/MyRectangle.js';
 import { MyBox } from '../solids/MyBox.js';
 
@@ -53,8 +54,8 @@ export class MyModule extends MyObject {
         this.window = new MyRectangle(this.scene, {
             width: 0.6 * (this.width / this.windows),
             height: 0.6 * (this.height / this.floors),
-            rows: 2,
-            columns: 2,
+            rows: 4,
+            columns: 4,
             texture: textures.window,
             material: {
                 diffuse: [1, 1, 1, 1],
@@ -66,13 +67,20 @@ export class MyModule extends MyObject {
             /** The module's door */
             this.door = new MyRectangle(this.scene, {
                 width: 0.8 * (this.width / this.windows),
-                height: this.height / this.floors,
+                height: 0.9 * (this.height / this.floors),
                 rows: 3,
                 columns: 3,
                 texture: textures.door,
                 material: {
                     diffuse: [1, 1, 1, 1],
                 },
+            });
+
+            /** The module's helipad */
+            this.helipad = new MyCircle(this.scene, {
+                radius: 0.4 * this.depth,
+                texture: textures.helipad,
+                slices: 32,
             });
         }
     }
@@ -104,6 +112,12 @@ export class MyModule extends MyObject {
         }
 
         // display the door
-        this.door?.translate(0, yOffset / 2, halfDepth).display();
+        this.door?.translate(0, this.door.height / 2, halfDepth).display();
+
+        // display the helipad
+        this.helipad
+            ?.rotate(-Math.PI / 2, 1, 0, 0)
+            .translate(0, this.height + 0.005, 0)
+            .display();
     }
 }

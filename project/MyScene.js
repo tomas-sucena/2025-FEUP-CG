@@ -94,10 +94,13 @@ export class MyScene extends CGFscene {
                 windows: 2,
                 textures: {
                     window: {
-                        url: './assets/building/window.webp',
+                        url: './assets/window.webp',
                     },
                     door: {
-                        url: './assets/building/door.jpg',
+                        url: './assets/door.jpg',
+                    },
+                    helipad: {
+                        url: './assets/helipad.jpg',
                     },
                 },
             }),
