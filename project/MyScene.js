@@ -31,7 +31,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Box';
+        this.selectedObject = 'Building';
 
         this.initCameras();
         this.initLights();
@@ -92,12 +92,14 @@ export class MyScene extends CGFscene {
                 height: 4,
                 floors: 3,
                 windows: 2,
-            }),
-            'Box': new MyBox({
-                scene: this,
-                xDivisions: 1,
-                yDivisions: 2,
-                zDivisions: 3,
+                textures: {
+                    window: {
+                        url: './assets/building/window.webp',
+                    },
+                    door: {
+                        url: './assets/building/door.jpg',
+                    },
+                },
             }),
         };
     }
@@ -145,10 +147,10 @@ export class MyScene extends CGFscene {
         }
 
         this.skysphere.display();
-        /*this.surface
+        this.surface
             .rotate(-Math.PI / 2, 1, 0, 0)
             .scale(400, 1, 400)
-            .display();*/
+            .display();
 
         this.objects[this.selectedObject]
             .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)

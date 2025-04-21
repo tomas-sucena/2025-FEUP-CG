@@ -31,8 +31,8 @@ export class MyRectangle extends MyObject {
         this.normals = [];
         this.texCoords = [];
 
-        const xOffset = this.width / this.columns;
-        const yOffset = this.height / this.rows;
+        const deltaX = this.width / this.columns;
+        const deltaY = this.height / this.rows;
 
         // define the rows
         let y = this.height / 2;
@@ -49,7 +49,7 @@ export class MyRectangle extends MyObject {
 
                 // define the vertices
                 this.vertices.push(x, y, 0);
-                x += xOffset;
+                x += deltaX;
 
                 // define the normals
                 this.normals.push(0, 0, 1);
@@ -58,7 +58,7 @@ export class MyRectangle extends MyObject {
                 this.texCoords.push(column / this.columns, row / this.rows);
             }
 
-            y -= yOffset;
+            y -= deltaY;
         }
     }
 }

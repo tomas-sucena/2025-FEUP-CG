@@ -1,159 +1,109 @@
 import { MyObject } from '../MyObject.js';
 import { MyRectangle } from '../shapes/MyRectangle.js';
+import { MyBox } from '../solids/MyBox.js';
 
+/**
+ * A building module.
+ * @extends MyObject
+ */
 export class MyModule extends MyObject {
     constructor(scene, config) {
         super(scene);
-        const { width, height, depth, floors, windows, isMainModule } = config;
+        const {
+            width,
+            height,
+            depth,
+            floors,
+            windows,
+            isMainModule,
+            textures,
+        } = config;
 
         /** The width of the module */
         this.width = width;
+
         /** The height of the module */
-        this.height = height;
+        this.height = height ?? floors;
+
         /** The depth of the module */
         this.depth = depth ?? 0.8 * width;
+
         /** The number of floors of the module */
         this.floors = floors;
+
         /** The number of windows on each floor of the module */
         this.windows = windows;
+
         /** Indicates if the module is the main module */
         this.isMainModule = isMainModule ?? false;
 
-        this.initWindow();
-        this._initGeometry(config);
-    }
-
-    initWindow() {
-        const windowWidth = this.width / this.windows / 2;
-        const windowHeight = this.height / this.floors / 2;
+        /** The box that constitutes the module */
+        this.box = new MyBox({
+            scene: this.scene,
+            width: this.width,
+            height: this.height,
+            depth: this.depth,
+            xDivisions: this.windows,
+            yDivisions: this.floors,
+            zDivisions: this.windows,
+            texture: textures?.box,
+        });
 
         /** The module's window */
         this.window = new MyRectangle(this.scene, {
-            width: windowWidth,
-            height: windowHeight,
+            width: 0.6 * (this.width / this.windows),
+            height: 0.6 * (this.height / this.floors),
             rows: 2,
             columns: 2,
+            texture: textures.window,
+            material: {
+                diffuse: [1, 1, 1, 1],
+                specular: [0.6, 0.6, 0.6, 1],
+            },
         });
-    }
 
-    /**
-     * Defines the module's walls by updating the object's buffers.
-     */
-    addWalls() {
-        const walls = 3 + this.isMainModule;
-        const xOffset = this.width / this.windows;
-        const yOffset = this.height / this.floors;
-        const zOffset = this.depth / this.windows;
-
-        // the X and Z coordinates of the upper left corner of each wall
-        const upperLeftCorners = [
-            { x: -this.width / 2, z: this.depth / 2 },
-            { x: this.width / 2, z: this.depth / 2 },
-            { x: this.width / 2, z: -this.depth / 2 },
-            { x: -this.width / 2, z: -this.depth / 2 },
-        ];
-
-        // define the walls
-        for (let wall = 0; wall < walls; ++wall) {
-            const ang = wall * (Math.PI / 2);
-            const ca = Math.cos(ang);
-            const sa = Math.sin(ang);
-
-            // define the floors
-            for (let floor = 0; floor <= this.floors; ++floor) {
-                const { x: xCorner, z: zCorner } = upperLeftCorners[wall];
-                const y = this.height - floor * yOffset;
-
-                // define the windows
-                for (let window = 0; window <= this.windows; ++window) {
-                    const x = xCorner + window * xOffset * ca;
-                    const z = zCorner + window * zOffset * -sa;
-
-                    // define the indices
-                    if (floor < this.floors && window < this.windows) {
-                        this._addPairOfIndices(this.windows);
-                    }
-
-                    // define the vertices
-                    this.vertices.push(x, y, z);
-
-                    // define the normals
-                    this.normals.push(sa, 0, ca);
-
-                    // define the texture coordinates
-                    this.texCoords.push(window, floor);
-                }
-            }
+        if (this.isMainModule) {
+            /** The module's door */
+            this.door = new MyRectangle(this.scene, {
+                width: 0.8 * (this.width / this.windows),
+                height: this.height / this.floors,
+                rows: 3,
+                columns: 3,
+                texture: textures.door,
+                material: {
+                    diffuse: [1, 1, 1, 1],
+                },
+            });
         }
-    }
-
-    /**
-     * Defines the module's ceiling by updating the object's buffers.
-     */
-    addCeiling() {
-        const xOffset = this.width / this.windows;
-        const zOffset = this.depth / this.windows;
-
-        for (let i = 0; i <= this.windows; ++i) {
-            const z = -this.depth / 2 + i * zOffset;
-
-            for (let j = 0; j <= this.windows; ++j) {
-                const x = -this.width / 2 + j * xOffset;
-
-                // define the indices
-                if (i < this.windows && j < this.windows) {
-                    this._addPairOfIndices(this.windows);
-                }
-
-                // define the vertices
-                this.vertices.push(x, this.height, z);
-
-                // define the normals
-                this.normals.push(0, 1, 0);
-
-                // define the texture coordinates
-                this.texCoords.push(j, i);
-            }
-        }
-    }
-
-    /**
-     * Initializes the module's vertices, indices, normals, and texture coordinates.
-     */
-    initBuffers() {
-        this.vertices = [];
-        this.indices = [];
-        this.normals = [];
-        this.texCoords = [];
-
-        this.addWalls();
-        this.addCeiling();
     }
 
     _render() {
-        // display the module
-        super._render();
+        // display the box
+        this.box.display();
 
         // display the windows
         const xOffset = this.width / this.windows;
         const yOffset = this.height / this.floors;
 
-        const xCorner = -this.width / 2;
-        const z = this.depth / 2;
+        const halfWidth = -this.width / 2;
+        const halfDepth = this.depth / 2 + 0.001; // NOTE: the small offset avoids overlapping
 
         for (let floor = this.isMainModule; floor < this.floors; ++floor) {
             const y = (floor + 0.5) * yOffset;
 
             for (let window = 0; window < this.windows; ++window) {
-                const x = xCorner + (window + 0.5) * xOffset;
+                const x = halfWidth + (window + 0.5) * xOffset;
 
                 this.window
-                    .translate(x, y, z)
+                    .translate(x, y, halfDepth)
                     .display()
-                    .translate(x, y, z)
+                    .translate(x, y, halfDepth)
                     .scale(-1, 1, -1)
                     .display();
             }
         }
+
+        // display the door
+        this.door?.translate(0, yOffset / 2, halfDepth).display();
     }
 }

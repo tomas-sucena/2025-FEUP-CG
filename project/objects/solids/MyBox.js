@@ -12,6 +12,8 @@ export class MyBox extends MyObject {
         xDivisions,
         yDivisions,
         zDivisions,
+        material,
+        texture,
     }) {
         super(scene);
 
@@ -22,7 +24,7 @@ export class MyBox extends MyObject {
         this.yDivisions = yDivisions ?? 1;
         this.zDivisions = zDivisions ?? 1;
 
-        this._initGeometry({});
+        this._initGeometry({ material, texture });
     }
 
     #addFace({ upperLeftCorner, normal }) {
