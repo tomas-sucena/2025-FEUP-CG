@@ -10,7 +10,7 @@ export class MyObject extends CGFobject {
 
     /**
      * Initializes the object.
-     * @param { CGFscene } scene - reference to the scene the object will be a part of
+     * @param { CGFscene } scene - to the scene the object will be a part of
      */
     constructor(scene) {
         super(scene);

@@ -3,7 +3,6 @@ import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
-import { MyBox } from './objects/solids/MyBox.js';
 
 /**
  * MyScene
@@ -66,9 +65,10 @@ export class MyScene extends CGFscene {
      */
     initObjects() {
         this.axis = new CGFaxis(this);
-        this.skysphere = new MyPanorama(this, {
-            position: this.camera.position,
+        this.skysphere = new MyPanorama({
+            scene: this,
             scaleFactor: 200,
+            position: this.camera.position,
             texture: './assets/snow.jpg',
         });
 

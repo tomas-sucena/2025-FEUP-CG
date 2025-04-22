@@ -6,12 +6,20 @@ import { MyObject } from '../MyObject.js';
 export class MyRectangle extends MyObject {
     /**
      * Initializes the rectangle.
-     * @param { MyScene } scene a reference to the MyScene object
+     * @param { MyScene } scene the scene the object will be displayed in
      * @param { Object } config the object configuration
      */
-    constructor(scene, config) {
+    constructor({
+        scene,
+        width,
+        height,
+        rows,
+        columns,
+        inverted,
+        material,
+        texture,
+    }) {
         super(scene);
-        const { width, height, rows, columns } = config ?? {};
 
         /** The dimension of the rectangle on the X-axis */
         this.width = width ?? 1;
@@ -22,7 +30,7 @@ export class MyRectangle extends MyObject {
         /** The number of subdivisions of the rectangle on the X-axis */
         this.columns = columns ?? 1;
 
-        this.initGeometry(config);
+        this.initGeometry({ inverted, material, texture });
     }
 
     initBuffers() {

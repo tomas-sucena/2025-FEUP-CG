@@ -44,7 +44,8 @@ export class MyModule extends MyBox {
         this.isMainModule = isMainModule ?? false;
 
         /** The module's window */
-        this.window = new MyRectangle(this.scene, {
+        this.window = new MyRectangle({
+            scene,
             width: 0.6 * (this.width / this.windows),
             height: 0.6 * (this.height / this.floors),
             rows: 4,
@@ -58,7 +59,8 @@ export class MyModule extends MyBox {
 
         if (this.isMainModule) {
             /** The module's door */
-            this.door = new MyRectangle(this.scene, {
+            this.door = new MyRectangle({
+                scene,
                 width: 0.8 * (this.width / this.windows),
                 height: 0.9 * (this.height / this.floors),
                 rows: 3,
@@ -70,10 +72,10 @@ export class MyModule extends MyBox {
             });
 
             /** The module's helipad */
-            this.helipad = new MyCircle(this.scene, {
+            this.helipad = new MyCircle({
+                scene,
                 radius: 0.4 * this.depth,
                 texture: textures.helipad,
-                slices: 32,
             });
         }
     }

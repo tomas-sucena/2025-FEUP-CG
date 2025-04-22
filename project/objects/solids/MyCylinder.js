@@ -6,18 +6,31 @@ import { MyObject } from '../MyObject.js';
 export class MyCylinder extends MyObject {
     /**
      * Initializes the cylinder.
-     * @param { MyScene } scene a reference to the MyScene object
+     * @param { MyScene } scene the scene the object will be displayed in
      * @param { Object } config the object configuration
      */
-    constructor(scene, config) {
-        super(scene, config);
+    constructor({
+        scene,
+        radius,
+        height,
+        slices,
+        stacks,
+        inverted,
+        material,
+        texture,
+    }) {
+        super(scene);
 
+        /** The width of the cylinder */
+        this.radius = radius ?? 1;
+        /** The height of the cylinder */
+        this.height = height ?? 1;
         /** The number of divisions around the Y-axis */
-        this.slices = config.slices;
+        this.slices = slices ?? 16;
         /** The number of divisions along the Y-axis*/
-        this.stacks = config.stacks;
+        this.stacks = stacks ?? 1;
 
-        this.initGeometry(config);
+        this.initGeometry({ inverted, material, texture });
     }
 
     initBuffers() {
@@ -26,12 +39,12 @@ export class MyCylinder extends MyObject {
         this.normals = [];
         this.texCoords = [];
 
-        const angOffset = (-2 * Math.PI) / this.slices;
-        const yOffset = 1 / this.stacks;
+        const deltaAng = (-2 * Math.PI) / this.slices;
+        const deltaY = this.height / this.stacks;
 
         // define the slices
         for (let slice = 0; slice <= this.slices; ++slice) {
-            const ang = slice * angOffset;
+            const ang = slice * deltaAng;
             const sa = Math.sin(ang);
             const ca = Math.cos(ang);
 
@@ -53,7 +66,11 @@ export class MyCylinder extends MyObject {
                 }
 
                 // define the vertices
-                this.vertices.push(ca, stack * yOffset, sa);
+                this.vertices.push(
+                    this.radius * ca,
+                    stack * deltaY,
+                    this.radius * sa,
+                );
 
                 // define the normals
                 this.normals.push(ca, 0, sa);
@@ -62,7 +79,5 @@ export class MyCylinder extends MyObject {
                 this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
-
-        super.initBuffers();
     }
 }

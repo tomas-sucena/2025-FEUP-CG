@@ -6,21 +6,28 @@ import { MyObject } from '../MyObject.js';
 export class MyCircle extends MyObject {
     /**
      * Initializes the circle.
-     * @param { MyScene } scene a reference to the MyScene object
+     * @param { MyScene } scene the scene the object will be displayed in
      * @param { Object } config the object configuration
      */
-    constructor(scene, config) {
+    constructor({
+        scene,
+        radius,
+        slices,
+        layers,
+        inverted,
+        material,
+        texture,
+    }) {
         super(scene);
-        const { radius, slices, layers } = config ?? {};
 
         /** The radius of the circle */
         this.radius = radius ?? 1;
         /** The number of divisions of the circle around the Z-axis */
-        this.slices = slices ?? 32;
+        this.slices = slices ?? 16;
         /** The number of divisions along the X and Y-axis */
         this.layers = layers ?? 1;
 
-        this.initGeometry(config);
+        this.initGeometry({ inverted, material, texture });
     }
 
     initBuffers() {

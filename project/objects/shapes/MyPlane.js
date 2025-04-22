@@ -6,7 +6,7 @@ import { MyObject } from '../MyObject.js';
 export class MyPlane extends MyObject {
     /**
      * Initializes the plane.
-     * @param { MyScene } scene a reference to the MyScene object
+     * @param { MyScene } scene the scene the object will be displayed in
      * @param { Object } config the object configuration
      */
     constructor(scene, config) {

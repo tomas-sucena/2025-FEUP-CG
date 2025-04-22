@@ -7,15 +7,16 @@ import { MySphere } from './solids/MySphere.js';
 export class MyPanorama extends MyObject {
     /**
      * Initializes the panorama.
-     * @param { MyScene } scene a reference to the MyScene object
+     * @param { MyScene } scene the scene the object will be displayed in
      * @param { Object } config the object configuration
      */
-    constructor(scene, config) {
+    constructor({ scene, scaleFactor, inverted, position, texture }) {
         super(scene);
-        const { inverted, position, scaleFactor, texture } = config ?? {};
 
         /** The sphere that constitutes the panorama */
-        this.sphere = new MySphere(scene, {
+        this.sphere = new MySphere({
+            scene,
+            radius: scaleFactor,
             slices: 50,
             stacks: 25,
             inverted: !inverted,
@@ -30,14 +31,12 @@ export class MyPanorama extends MyObject {
 
         /** The coordinates of the center of the panorama */
         this.position = position ?? [0, 0, 0];
-        /** The scale that will be applied to the box */
-        this.scaleFactor = scaleFactor ?? 1;
     }
 
+    /**
+     * Displays the object's geometry.
+     */
     render() {
-        this.sphere
-            .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
-            .translate(...this.position)
-            .display();
+        this.sphere.translate(...this.position).display();
     }
 }
