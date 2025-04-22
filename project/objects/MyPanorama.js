@@ -34,7 +34,7 @@ export class MyPanorama extends MyObject {
         this.scaleFactor = scaleFactor ?? 1;
     }
 
-    _render() {
+    render() {
         this.sphere
             .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
             .translate(...this.position)

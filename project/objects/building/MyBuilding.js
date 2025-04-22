@@ -6,7 +6,8 @@ export class MyBuilding extends MyObject {
         super(scene);
 
         /** The main module of the building **/
-        this.mainModule = new MyModule(scene, {
+        this.mainModule = new MyModule({
+            scene,
             width: 0.4 * width,
             height: floors + 1,
             floors: floors + 1,
@@ -14,8 +15,10 @@ export class MyBuilding extends MyObject {
             isMainModule: true,
             textures,
         });
+
         /** The side module of the building */
-        this.sideModule = new MyModule(scene, {
+        this.sideModule = new MyModule({
+            scene,
             width: 0.3 * width,
             height: floors,
             floors,
@@ -24,7 +27,7 @@ export class MyBuilding extends MyObject {
         });
     }
 
-    _render() {
+    render() {
         const mainModuleWidth = this.mainModule.width;
         const sideModuleWidth = this.sideModule.width;
 

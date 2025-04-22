@@ -22,7 +22,7 @@ export class MyRectangle extends MyObject {
         /** The number of subdivisions of the rectangle on the X-axis */
         this.columns = columns ?? 1;
 
-        this._initGeometry(config);
+        this.initGeometry(config);
     }
 
     initBuffers() {
@@ -44,7 +44,7 @@ export class MyRectangle extends MyObject {
             for (let column = 0; column <= this.columns; ++column) {
                 // define the indices
                 if (row < this.rows && column < this.columns) {
-                    this._addPairOfIndices(this.columns);
+                    this.addPairOfIndices(this.columns);
                 }
 
                 // define the vertices

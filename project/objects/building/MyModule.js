@@ -1,33 +1,35 @@
-import { MyObject } from '../MyObject.js';
+import { MyBox } from '../solids/MyBox.js';
 import { MyCircle } from '../shapes/MyCircle.js';
 import { MyRectangle } from '../shapes/MyRectangle.js';
-import { MyBox } from '../solids/MyBox.js';
 
 /**
  * A building module.
  * @extends MyObject
  */
-export class MyModule extends MyObject {
-    constructor(scene, config) {
-        super(scene);
-        const {
+export class MyModule extends MyBox {
+    constructor({
+        scene,
+        width,
+        height,
+        depth,
+        floors,
+        windows,
+        isMainModule,
+        material,
+        textures,
+    }) {
+        /** The box that constitutes the module */
+        super({
+            scene,
             width,
-            height,
-            depth,
-            floors,
-            windows,
-            isMainModule,
-            textures,
-        } = config;
-
-        /** The width of the module */
-        this.width = width;
-
-        /** The height of the module */
-        this.height = height ?? floors;
-
-        /** The depth of the module */
-        this.depth = depth ?? 0.8 * width;
+            height: height ?? floors,
+            depth: depth ?? 0.8 * width,
+            xDivisions: windows,
+            yDivisions: floors,
+            zDivisions: windows,
+            material,
+            texture: textures?.box,
+        });
 
         /** The number of floors of the module */
         this.floors = floors;
@@ -37,18 +39,6 @@ export class MyModule extends MyObject {
 
         /** Indicates if the module is the main module */
         this.isMainModule = isMainModule ?? false;
-
-        /** The box that constitutes the module */
-        this.box = new MyBox({
-            scene: this.scene,
-            width: this.width,
-            height: this.height,
-            depth: this.depth,
-            xDivisions: this.windows,
-            yDivisions: this.floors,
-            zDivisions: this.windows,
-            texture: textures?.box,
-        });
 
         /** The module's window */
         this.window = new MyRectangle(this.scene, {
@@ -85,9 +75,12 @@ export class MyModule extends MyObject {
         }
     }
 
-    _render() {
+    /**
+     * Displays the module's geometry.
+     */
+    render() {
         // display the box
-        this.box.display();
+        super.render();
 
         // display the windows
         const xOffset = this.width / this.windows;

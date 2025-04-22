@@ -18,7 +18,7 @@ export class MySphere extends MyObject {
         /** The number of divisions of each hemisphere along the Y-axis*/
         this.stacks = 2 * stacks;
 
-        this._initGeometry(config);
+        this.initGeometry(config);
     }
 
     initBuffers() {
@@ -44,7 +44,7 @@ export class MySphere extends MyObject {
 
                 // define the indices
                 if (stack < this.stacks && slice < this.slices) {
-                    this._addPairOfIndices(this.slices);
+                    this.addPairOfIndices(this.slices);
                 }
 
                 // define the vertices

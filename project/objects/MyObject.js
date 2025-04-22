@@ -10,7 +10,7 @@ export class MyObject extends CGFobject {
 
     /**
      * Initializes the object.
-     * @param { CGFscene } scene reference to the scene the object will be a part of
+     * @param { CGFscene } scene - reference to the scene the object will be a part of
      */
     constructor(scene) {
         super(scene);
@@ -96,7 +96,7 @@ export class MyObject extends CGFobject {
      * Adds a pair of triangles to the index buffer to connect two adjacent segments.
      * @param {number} step - The number of vertices to skip to reach the corresponding vertex on the next segment
      */
-    _addPairOfIndices(step) {
+    addPairOfIndices(step) {
         const index = this.vertices.length / 3;
         const indexNextSegment = index + step + 1;
 
@@ -108,14 +108,17 @@ export class MyObject extends CGFobject {
     }
 
     /**
-     * Initializes the geometry and material of the object.
-     * @param { Object } config the object configuration
+     * Initializes the buffers and material of the object.
+     * @param { Object } config - the object configuration
+     * @param { boolean } config.inverted - indicates if the object should be inverted
+     * @param { Object } config.material - the material configuration
+     * @param { string | Object } config.texture - the texture configuration
      */
-    _initGeometry(config) {
+    initGeometry({ inverted, material, texture }) {
         this.initBuffers();
 
         // invert the normals and indices if needed
-        if (config?.inverted) {
+        if (inverted) {
             this.#invert();
         }
 
@@ -125,16 +128,16 @@ export class MyObject extends CGFobject {
 
         // initialize the material
         this.#material = new CGFappearance(this.scene);
-        this.setMaterial(config?.material);
+        this.setMaterial(material);
 
         // initialize the texture
-        this.setTexture(config?.texture);
+        this.setTexture(texture);
     }
 
     /**
      * Displays the geometry of the object.
      */
-    _render() {
+    render() {
         super.display();
     }
 
@@ -250,9 +253,10 @@ export class MyObject extends CGFobject {
 
     /**
      * Applies a material to the object.
-     * @param { Object } config the material configuration
+     * @param { Object } config - the material configuration
+     * @param { boolean } recursive - indicates if the material should be recursively applied to the child objects
      */
-    setMaterial(config) {
+    setMaterial(config, recursive) {
         // verify if the material exists
         if (this.#material) {
             const { ambient, diffuse, specular, emission, shininess } =
@@ -285,35 +289,35 @@ export class MyObject extends CGFobject {
         }
 
         // set the material of the child objects
-        this.#getChildren().forEach((child) => child.setMaterial(config));
+        if (recursive) {
+            this.#getChildren().forEach((child) => child.setMaterial(config));
+        }
     }
 
     /**
      * Applies a texture to the object's material.
-     * @param { Object } config the texture configuration
+     * @param { string | Object } config the texture configuration
+     * @param { string } texture.url - the URL specifying the texture
+     * @param { string } texture.wrapS - the wrapping to be applied to the S-axis
+     * @param { string } texture.wrapT - the wrapping to be applied to the T-axis
+     * @param { boolean } recursive - indicates if the material should be recursively applied to the child objects
      */
-    setTexture(config) {
+    setTexture(config, recursive) {
         // verify if the material exists
-        if (this.#material) {
-            const { url, texCoords, wrapS, wrapT } = config ?? {};
+        if (config && this.#material) {
+            const { url, wrapS, wrapT } = config;
 
             // bind the texture to the material
-            if (url) {
-                this.#material.loadTexture(url);
-            }
-
-            // set the texture coordinates
-            if (texCoords?.length / 2 === this.vertices.length / 3) {
-                this.texCoords = [...texCoords];
-                super.updateTexCoordsGLBuffers();
-            }
+            this.#material.loadTexture(url ?? config);
 
             // set the texture wrapping mode
             this.#material.setTextureWrap(wrapS ?? 'REPEAT', wrapT ?? 'REPEAT');
         }
 
         // set the texture of the child objects
-        this.#getChildren().forEach((child) => child.setTexture(config));
+        if (recursive) {
+            this.#getChildren().forEach((child) => child.setTexture(config));
+        }
     }
 
     /**
@@ -335,7 +339,7 @@ export class MyObject extends CGFobject {
         }
 
         // display the geometry of the object
-        this._render();
+        this.render();
 
         this.scene.popMatrix();
         return this;

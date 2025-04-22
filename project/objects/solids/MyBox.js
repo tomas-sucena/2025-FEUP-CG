@@ -4,6 +4,11 @@ import { MyObject } from '../MyObject.js';
  * A box.
  */
 export class MyBox extends MyObject {
+    /**
+     * Initializes the box.
+     * @param { CGFscene } scene - the scene the box will be displayed in
+     * @param { Object } config - the box configuration
+     */
     constructor({
         scene,
         width,
@@ -12,19 +17,17 @@ export class MyBox extends MyObject {
         xDivisions,
         yDivisions,
         zDivisions,
-        material,
-        texture,
     }) {
         super(scene);
 
-        this.width = width ?? 1;
-        this.height = height ?? 1;
-        this.depth = depth ?? 1;
+        this.width = width;
+        this.height = height;
+        this.depth = depth;
         this.xDivisions = xDivisions ?? 1;
         this.yDivisions = yDivisions ?? 1;
         this.zDivisions = zDivisions ?? 1;
 
-        this._initGeometry({ material, texture });
+        this.initGeometry({});
     }
 
     #addFace({ upperLeftCorner, normal }) {
@@ -53,7 +56,7 @@ export class MyBox extends MyObject {
                 const z = zRow - column * deltaZ * normalX;
 
                 if (row < rows && column < columns) {
-                    this._addPairOfIndices(columns);
+                    this.addPairOfIndices(columns);
                 }
 
                 this.vertices.push(x, y, z);

@@ -20,7 +20,7 @@ export class MyCircle extends MyObject {
         /** The number of divisions along the X and Y-axis */
         this.layers = layers ?? 1;
 
-        this._initGeometry(config);
+        this.initGeometry(config);
     }
 
     initBuffers() {

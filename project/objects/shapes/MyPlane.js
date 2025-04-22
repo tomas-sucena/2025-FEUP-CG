@@ -24,7 +24,7 @@ export class MyPlane extends MyObject {
         /** maximum texture coordinate in T */
         this.maxT = maxT || 1;
 
-        this._initGeometry(config);
+        this.initGeometry(config);
     }
 
     initBuffers() {
