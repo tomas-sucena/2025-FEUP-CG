@@ -17,17 +17,20 @@ export class MyBox extends MyObject {
         xDivisions,
         yDivisions,
         zDivisions,
+        inverted,
+        material,
+        texture,
     }) {
         super(scene);
 
-        this.width = width;
-        this.height = height;
-        this.depth = depth;
+        this.width = width ?? 1;
+        this.height = height ?? 1;
+        this.depth = depth ?? 1;
         this.xDivisions = xDivisions ?? 1;
         this.yDivisions = yDivisions ?? 1;
         this.zDivisions = zDivisions ?? 1;
 
-        this.initGeometry({});
+        this.initGeometry({ inverted, material, texture });
     }
 
     #addFace({ upperLeftCorner, normal }) {

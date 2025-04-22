@@ -7,6 +7,10 @@ import { MyRectangle } from '../shapes/MyRectangle.js';
  * @extends MyObject
  */
 export class MyModule extends MyBox {
+    /**
+     * Initializes the module.
+     * @param { Object } config - the module configuration
+     */
     constructor({
         scene,
         width,
@@ -18,7 +22,6 @@ export class MyModule extends MyBox {
         material,
         textures,
     }) {
-        /** The box that constitutes the module */
         super({
             scene,
             width,

@@ -69,9 +69,7 @@ export class MyScene extends CGFscene {
         this.skysphere = new MyPanorama(this, {
             position: this.camera.position,
             scaleFactor: 200,
-            texture: {
-                url: './assets/snow.jpg',
-            },
+            texture: './assets/snow.jpg',
         });
 
         this.surface = new MyPlane(this, {
@@ -81,27 +79,21 @@ export class MyScene extends CGFscene {
             material: {
                 diffuse: [1, 1, 1, 1],
             },
-            texture: {
-                url: './assets/grass.png',
-            },
+            texture: './assets/grass.png',
         });
 
         this.objects = {
-            'Building': new MyBuilding(this, {
+            'Building': new MyBuilding({
+                scene: this,
                 width: 10,
                 height: 4,
                 floors: 3,
                 windows: 2,
+                color: [0.55, 0.55, 0.6, 1],
                 textures: {
-                    window: {
-                        url: './assets/window.webp',
-                    },
-                    door: {
-                        url: './assets/door.jpg',
-                    },
-                    helipad: {
-                        url: './assets/helipad.jpg',
-                    },
+                    window: './assets/window.webp',
+                    door: './assets/door.jpg',
+                    helipad: './assets/helipad.jpg',
                 },
             }),
         };
