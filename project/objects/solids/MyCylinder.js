@@ -1,7 +1,7 @@
 import { MyObject } from '../MyObject.js';
 
 /**
- * A unit cylinder.
+ * A cylinder.
  */
 export class MyCylinder extends MyObject {
     /**

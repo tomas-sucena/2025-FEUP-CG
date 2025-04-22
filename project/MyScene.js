@@ -86,13 +86,14 @@ export class MyScene extends CGFscene {
             'Building': new MyBuilding({
                 scene: this,
                 width: 10,
-                height: 4,
                 floors: 3,
                 windows: 2,
-                color: [0.55, 0.55, 0.6, 1],
+                color: [0.9, 0.9, 0.9, 1],
                 textures: {
+                    wall: './assets/concrete.jpg',
                     window: './assets/window.webp',
                     door: './assets/door.jpg',
+                    sign: './assets/sign.png',
                     helipad: './assets/helipad.jpg',
                 },
             }),

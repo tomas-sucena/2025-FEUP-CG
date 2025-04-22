@@ -2,7 +2,16 @@ import { MyObject } from '../MyObject.js';
 import { MyModule } from './MyModule.js';
 
 export class MyBuilding extends MyObject {
-    constructor({ scene, width, floors, windows, color, textures }) {
+    constructor({
+        scene,
+        width,
+        height,
+        depth,
+        floors,
+        windows,
+        color,
+        textures,
+    }) {
         super(scene);
 
         const material = {
@@ -15,7 +24,8 @@ export class MyBuilding extends MyObject {
         this.mainModule = new MyModule({
             scene,
             width: 0.4 * width,
-            height: floors + 1,
+            height: height ?? floors + 1,
+            depth,
             floors: floors + 1,
             windows,
             isMainModule: true,

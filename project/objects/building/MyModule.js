@@ -31,7 +31,7 @@ export class MyModule extends MyBox {
             yDivisions: floors,
             zDivisions: windows,
             material,
-            texture: textures?.box,
+            texture: textures?.wall,
         });
 
         /** The number of floors of the module */
@@ -46,8 +46,8 @@ export class MyModule extends MyBox {
         /** The module's window */
         this.window = new MyRectangle({
             scene,
-            width: 0.6 * (this.width / this.windows),
-            height: 0.6 * (this.height / this.floors),
+            width: 0.5 * (this.width / this.windows),
+            height: 0.5 * (this.height / this.floors),
             rows: 4,
             columns: 4,
             texture: textures.window,
@@ -62,7 +62,7 @@ export class MyModule extends MyBox {
             this.door = new MyRectangle({
                 scene,
                 width: 0.8 * (this.width / this.windows),
-                height: 0.9 * (this.height / this.floors),
+                height: 0.85 * (this.height / this.floors),
                 rows: 3,
                 columns: 3,
                 texture: textures.door,
@@ -76,6 +76,20 @@ export class MyModule extends MyBox {
                 scene,
                 radius: 0.4 * this.depth,
                 texture: textures.helipad,
+            });
+
+            /** The module's sign */
+            this.sign = new MyRectangle({
+                scene,
+                width: this.door.width,
+                height: 0.3 * this.door.height,
+                rows: 2,
+                columns: 2,
+                texture: textures.sign,
+                material: {
+                    ambient: [1, 1, 1, 1],
+                    diffuse: [1, 1, 1, 1],
+                },
             });
         }
     }
@@ -111,6 +125,15 @@ export class MyModule extends MyBox {
 
         // display the door
         this.door?.translate(0, this.door.height / 2, halfDepth).display();
+
+        // display the sign
+        this.sign
+            ?.translate(
+                0,
+                this.door.height + this.sign.height / 2 + 0.05,
+                halfDepth,
+            )
+            .display();
 
         // display the helipad
         this.helipad

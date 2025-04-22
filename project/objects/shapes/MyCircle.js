@@ -23,7 +23,7 @@ export class MyCircle extends MyObject {
         /** The radius of the circle */
         this.radius = radius ?? 1;
         /** The number of divisions of the circle around the Z-axis */
-        this.slices = slices ?? 16;
+        this.slices = slices ?? 32;
         /** The number of divisions along the X and Y-axis */
         this.layers = layers ?? 1;
 
