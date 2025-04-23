@@ -40,11 +40,13 @@ export class MyCone extends MyObject {
         this.texCoords = [];
 
         const deltaAng = (-2 * Math.PI) / this.slices;
+        const deltaRadius = this.radius / this.stacks;
         const deltaY = this.height / this.stacks;
 
         // define the stacks
         for (let stack = 0; stack <= this.stacks; ++stack) {
-            const y = stack * deltaY;
+            const y = this.height - stack * deltaY;
+            const stackRadius = stack * deltaRadius;
 
             // define the slices
             for (let slice = 0; slice <= this.slices; ++slice) {
@@ -52,7 +54,13 @@ export class MyCone extends MyObject {
                 const ca = Math.cos(ang);
                 const sa = Math.sin(ang);
 
-                this.vertices.push(ca, y, sa);
+                if (stack < this.stacks && slice < this.slices) {
+                    this.addPairOfIndices(this.slices);
+                }
+
+                this.vertices.push(ca * stackRadius, y, sa * stackRadius);
+                this.normals.push(ca, 0, sa);
+                this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
     }
