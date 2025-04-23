@@ -1,8 +1,8 @@
 import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 
+import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
-import { MySphere } from './objects/solids/MySphere.js';
 
 /**
  * MyScene
@@ -30,7 +30,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        // this.selectedObject = 'Sphere';
+        this.selectedObject = 'Building';
 
         this.initCameras();
         this.initLights();
@@ -65,12 +65,11 @@ export class MyScene extends CGFscene {
      */
     initObjects() {
         this.axis = new CGFaxis(this);
-        this.skysphere = new MyPanorama(this, {
-            position: this.camera.position,
+        this.skysphere = new MyPanorama({
+            scene: this,
             scaleFactor: 200,
-            texture: {
-                url: './assets/snow.jpg',
-            },
+            position: this.camera.position,
+            texture: './assets/snow.jpg',
         });
 
         this.surface = new MyPlane(this, {
@@ -80,20 +79,25 @@ export class MyScene extends CGFscene {
             material: {
                 diffuse: [1, 1, 1, 1],
             },
-            texture: {
-                url: './assets/grass.png',
-            },
+            texture: './assets/grass.png',
         });
 
-        /*this.objects = {
-            'Sphere': new MySphere(this, {
-                slices: 50,
-                stacks: 25,
-                texture: {
-                    url: './assets/earth.jpg',
+        this.objects = {
+            'Building': new MyBuilding({
+                scene: this,
+                width: 10,
+                floors: 3,
+                windows: 2,
+                color: [0.9, 0.9, 0.9, 1],
+                textures: {
+                    wall: './assets/concrete.jpg',
+                    window: './assets/window.webp',
+                    door: './assets/door.jpg',
+                    sign: './assets/sign.png',
+                    helipad: './assets/helipad.jpg',
                 },
             }),
-        };*/
+        };
     }
 
     /**
@@ -144,9 +148,9 @@ export class MyScene extends CGFscene {
             .scale(400, 1, 400)
             .display();
 
-        /* this.objects[this.selectedObject]
+        this.objects[this.selectedObject]
             .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
-            .display(); */
+            .display();
 
         // ---- END Primitive drawing section
     }

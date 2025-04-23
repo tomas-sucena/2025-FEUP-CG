@@ -6,16 +6,15 @@ import { MyObject } from '../MyObject.js';
 export class MyPlane extends MyObject {
     /**
      * Initializes the plane.
-     * @param { MyScene } scene a reference to the MyScene object
+     * @param { MyScene } scene the scene the object will be displayed in
      * @param { Object } config the object configuration
      */
     constructor(scene, config) {
-        super(scene, config);
+        super(scene);
         const { nrDivs, minS, maxS, minT, maxT } = config ?? {};
 
         /** number of divisions in both directions of the surface */
         this.nrDivs = nrDivs ?? 1;
-        this.patchLength = 1.0 / this.nrDivs;
         /** minimum texture coordinate in S */
         this.minS = minS || 0;
         /** maximum texture coordinate in S */
@@ -24,8 +23,6 @@ export class MyPlane extends MyObject {
         this.minT = minT || 0;
         /** maximum texture coordinate in T */
         this.maxT = maxT || 1;
-        this.q = (this.maxS - this.minS) / this.nrDivs;
-        this.w = (this.maxT - this.minT) / this.nrDivs;
 
         this.initGeometry(config);
     }
@@ -35,20 +32,23 @@ export class MyPlane extends MyObject {
         this.vertices = [];
         this.normals = [];
         this.texCoords = [];
-        var yCoord = 0.5;
+
+        const patchLength = 1.0 / this.nrDivs;
+        const q = (this.maxS - this.minS) / this.nrDivs;
+        const w = (this.maxT - this.minT) / this.nrDivs;
+
+        var y = 0.5;
         for (var j = 0; j <= this.nrDivs; j++) {
-            var xCoord = -0.5;
+            var x = -0.5;
             for (var i = 0; i <= this.nrDivs; i++) {
-                this.vertices.push(xCoord, yCoord, 0);
+                this.vertices.push(x, y, 0);
                 this.normals.push(0, 0, 1);
-                this.texCoords.push(
-                    this.minS + i * this.q,
-                    this.minT + j * this.w,
-                );
-                xCoord += this.patchLength;
+                this.texCoords.push(this.minS + i * q, this.minT + j * w);
+                x += patchLength;
             }
-            yCoord -= this.patchLength;
+            y -= patchLength;
         }
+
         // Generating indices
         this.indices = [];
 
@@ -66,6 +66,5 @@ export class MyPlane extends MyObject {
         }
 
         this.primitiveType = this.scene.gl.TRIANGLE_STRIP;
-        this.initGLBuffers();
     }
 }
