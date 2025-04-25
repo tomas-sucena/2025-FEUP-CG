@@ -39,27 +39,27 @@ export class MyCone extends MyObject {
         this.normals = [];
         this.texCoords = [];
 
-        const deltaAng = (-2 * Math.PI) / this.slices;
+        const deltaAng = (2 * Math.PI) / this.slices;
         const deltaRadius = this.radius / this.stacks;
         const deltaY = this.height / this.stacks;
 
         // define the stacks
         for (let stack = 0; stack <= this.stacks; ++stack) {
             const y = this.height - stack * deltaY;
-            const stackRadius = stack * deltaRadius;
+            const radius = stack * deltaRadius;
 
             // define the slices
             for (let slice = 0; slice <= this.slices; ++slice) {
                 const ang = slice * deltaAng;
-                const ca = Math.cos(ang);
-                const sa = Math.sin(ang);
+                const normalX = Math.sin(ang);
+                const normalZ = Math.cos(ang);
 
                 if (stack < this.stacks && slice < this.slices) {
                     this.addPairOfIndices(this.slices);
                 }
 
-                this.vertices.push(ca * stackRadius, y, sa * stackRadius);
-                this.normals.push(ca, 0, sa);
+                this.vertices.push(normalX * radius, y, normalZ * radius);
+                this.normals.push(normalX, 0, normalZ);
                 this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
