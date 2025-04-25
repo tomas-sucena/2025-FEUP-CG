@@ -3,11 +3,14 @@ import { MyCone } from '../solids/MyCone.js';
 import { MyPyramid } from '../solids/MyPyramid.js';
 
 export class MyTree extends MyObject {
-    constructor({ scene, radius, height, colors, textures }) {
+    constructor({ scene, radius, height, stacks, colors, textures }) {
         super(scene);
 
         /** The tree's height */
         this.height = height;
+
+        /** The number of stacks (pyramids) that constitute the tree's crown */
+        this.stacks = stacks ?? Math.floor(10 * Math.random());
 
         /** The tree's trunk */
         this.trunk = new MyCone({
@@ -24,7 +27,7 @@ export class MyTree extends MyObject {
         this.ruler = new MyCone({
             scene,
             radius,
-            height: this.height,
+            height,
         });
 
         /** The bottomost pyramid that constitutes the tree's crown */
@@ -32,15 +35,17 @@ export class MyTree extends MyObject {
     }
 
     render() {
-        const stacks = (0.8 * this.height) / this.trunk.radius;
+        const crownHeight = 0.8 * this.height;
+        const stacks = crownHeight / this.trunk.radius;
+
         const deltaRadius = (3 * this.trunk.radius) / stacks;
-        const deltaY = (0.8 * this.height) / stacks;
+        const deltaY = crownHeight / stacks;
 
         // display the trunk
         this.trunk.display();
 
         // display the crown
-        for (let stack = 1; stack < stacks - 1; ++stack) {
+        for (let stack = 0; stack < this.stacks; ++stack) {
             const radius = 3 * this.trunk.radius - stack * deltaRadius;
             const y = 0.2 * this.height + stack * deltaY;
 
@@ -48,6 +53,6 @@ export class MyTree extends MyObject {
         }
 
         // display the ruler
-        this.ruler.translate(2, 0, 0).display();
+        //this.ruler.translate(2, 0, 0).display();
     }
 }

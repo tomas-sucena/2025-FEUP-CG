@@ -3,8 +3,8 @@ import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
-import { MySphere } from './objects/solids/MySphere.js';
 import { MyTree } from './objects/forest/MyTree.js';
+import { MyForest } from './objects/forest/MyForest.js';
 
 /**
  * MyScene
@@ -32,7 +32,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Tree';
+        this.selectedObject = 'Forest';
 
         this.initCameras();
         this.initLights();
@@ -103,6 +103,13 @@ export class MyScene extends CGFscene {
                 scene: this,
                 radius: 0.5,
                 height: 5,
+            }),
+            'Forest': new MyForest({
+                scene: this,
+                width: 4,
+                depth: 4,
+                rows: 2,
+                columns: 2,
             }),
         };
     }

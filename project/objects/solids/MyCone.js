@@ -33,6 +33,9 @@ export class MyCone extends MyObject {
         this.initGeometry({ inverted, material, texture });
     }
 
+    /**
+     * Initializes the vertices, indices, normals, and texture coordinates.
+     */
     initBuffers() {
         this.vertices = [];
         this.indices = [];
@@ -51,15 +54,15 @@ export class MyCone extends MyObject {
             // define the slices
             for (let slice = 0; slice <= this.slices; ++slice) {
                 const ang = slice * deltaAng;
-                const normalX = Math.sin(ang);
-                const normalZ = Math.cos(ang);
+                const Nx = Math.sin(ang);
+                const Nz = Math.cos(ang);
 
                 if (stack < this.stacks && slice < this.slices) {
                     this.addPairOfIndices(this.slices);
                 }
 
-                this.vertices.push(normalX * radius, y, normalZ * radius);
-                this.normals.push(normalX, 0, normalZ);
+                this.vertices.push(Nx * radius, y, Nz * radius);
+                this.normals.push(Nx, 0, Nz);
                 this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
