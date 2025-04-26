@@ -103,13 +103,17 @@ export class MyScene extends CGFscene {
                 scene: this,
                 radius: 0.5,
                 height: 5,
+                textures: {
+                    log: './assets/log.jpg',
+                    crown: './assets/leaves.jpg',
+                },
             }),
-            'Forest': new MyForest({
+            /*'Forest': new MyForest({
                 scene: this,
                 size: 4,
                 rows: 2,
                 columns: 2,
-            }),
+            }),*/
         };
     }
 

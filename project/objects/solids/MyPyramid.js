@@ -40,6 +40,9 @@ export class MyPyramid extends MyObject {
         this.initGeometry({ inverted, material, texture });
     }
 
+    /**
+     * Initializes the vertices, indices, normals, and texture coordinates.
+     */
     initBuffers() {
         this.vertices = [];
         this.indices = [];
@@ -65,44 +68,39 @@ export class MyPyramid extends MyObject {
             const normal = [(Nx + Nxx) / 2, slope, (Nz + Nzz) / 2];
             const Nsize = Math.hypot(...normal);
 
-            normal[0] /= Nsize;
-            normal[1] /= Nsize;
-            normal[2] /= Nsize;
+            normal.forEach((_, index) => (normal[index] /= Nsize)); // normalization
 
             // define the stacks
             for (let stack = 0; stack < this.stacks; ++stack) {
                 const radius = stack * deltaRadius;
-                const y = this.height - stack * deltaY;
+                const Y = this.height - stack * deltaY;
 
                 const nextRadius = radius + deltaRadius;
-                const nextY = y - deltaY;
+                const nextY = Y - deltaY;
 
                 // define the indices
                 this.addPairOfIndices(1);
 
                 // define the vertices
-                // prettier-ignore
-                this.vertices.push(
-                    Nx * radius, y, Nz * radius,
-                    Nxx * radius, y, Nzz * radius,
-                    Nx * nextRadius, nextY, Nz * nextRadius,
-                    Nxx * nextRadius, nextY, Nzz * nextRadius,
-                );
+                this.vertices.push(Nx * radius, Y, Nz * radius); // upper left corner
+                this.vertices.push(Nxx * radius, Y, Nzz * radius); // upper right corner
+                this.vertices.push(Nx * nextRadius, nextY, Nz * nextRadius); // bottom left corner
+                this.vertices.push(Nxx * nextRadius, nextY, Nzz * nextRadius); // bottom right corner
 
                 // define the normals
                 this.normals.push(...Array(4).fill(normal).flat());
 
                 // define the texture coordinates
-                // prettier-ignore
-                this.texCoords.push(
-                    slice / this.slices, stack / this.stacks,
-                    (slice + 1) / this.slices, stack / this.stacks,
-                    slice / this.slices, (stack + 1) / this.stacks,
-                    (slice + 1) / this.slices, (stack + 1) / this.stacks,
-                );
+                const S = slice / this.slices;
+                const T = stack / this.stacks;
+                const nextS = (slice + 1) / this.slices;
+                const nextT = (stack + 1) / this.stacks;
+
+                this.texCoords.push(S, T); // upper left corner
+                this.texCoords.push(nextS, T); // upper right corner
+                this.texCoords.push(S, nextT); // bottom left corner
+                this.texCoords.push(nextS, nextT); // bottom right corner
             }
         }
-
-        console.log(this.indices);
     }
 }

@@ -50,7 +50,6 @@ export class MyForest extends MyObject {
                 });
 
                 const position = [x, 0, z];
-                console.log(position);
 
                 this.trees.push({ tree, position });
             }

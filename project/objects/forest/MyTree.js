@@ -5,12 +5,13 @@ import { MyPyramid } from '../solids/MyPyramid.js';
 export class MyTree extends MyObject {
     constructor({ scene, radius, height, stacks, colors, textures }) {
         super(scene);
+        const crownHeight = 0.8 * height;
 
         /** The tree's height */
         this.height = height;
 
         /** The number of stacks (pyramids) that constitute the tree's crown */
-        this.stacks = stacks ?? Math.floor(0.8 * height);
+        this.stacks = stacks ?? Math.floor(crownHeight);
 
         /** The tree's trunk */
         this.trunk = new MyCone({
@@ -31,25 +32,29 @@ export class MyTree extends MyObject {
         });
 
         /** The bottomost pyramid that constitutes the tree's crown */
-        this.crown = new MyPyramid(scene, 6);
+        this.crown = new MyPyramid({
+            scene,
+            radius: 3 * radius,
+            height: crownHeight,
+            slices: 6,
+        });
     }
 
     render() {
-        const crownHeight = 0.8 * this.height;
-        const deltaRadius = (2 * this.trunk.radius) / this.stacks;
-        const deltaY = crownHeight / this.stacks;
+        const deltaScaleFactor = 1 / this.stacks;
+        const deltaY = this.crown.height / this.stacks;
 
         // display the trunk
-        this.trunk.translate(0, crownHeight - this.height, 0).display();
+        this.trunk.translate(0, this.crown.height - this.height, 0).display();
 
         // display the crown
         for (let stack = 0; stack < this.stacks; ++stack) {
-            const radius = 3 * this.trunk.radius - stack * deltaRadius;
-            const y = 0.2 * this.height + stack * deltaY;
+            const scaleFactor = 1 - stack * deltaScaleFactor;
+            const Y = 0.2 * this.height + stack * deltaY;
 
             this.crown
-                .scale(radius, this.height - y, radius)
-                .translate(0, y, 0)
+                .scale(scaleFactor, scaleFactor, scaleFactor)
+                .translate(0, Y, 0)
                 .display();
         }
 
