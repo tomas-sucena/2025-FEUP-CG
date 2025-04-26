@@ -21,7 +21,7 @@ export class MyCone extends MyObject {
     }) {
         super(scene);
 
-        /** The width of the cone */
+        /** The radius of the cone */
         this.radius = radius ?? 1;
         /** The height of the cone */
         this.height = height ?? 1;
