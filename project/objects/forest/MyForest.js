@@ -2,12 +2,14 @@ import { MyObject } from '../MyObject.js';
 import { MyTree } from './MyTree.js';
 
 export class MyForest extends MyObject {
-    constructor({ scene, width, depth, rows, columns }) {
+    constructor({ scene, size, rows, columns }) {
         super(scene);
 
-        this.width = width;
-        this.depth = depth;
+        /** The dimensions of the forest along the X and Z-axis */
+        this.size = size;
+        /** The number of rows of the forest */
         this.rows = rows;
+        /** The number of columns of the forest */
         this.columns = columns;
 
         this.#initTrees();
@@ -24,38 +26,31 @@ export class MyForest extends MyObject {
     }
 
     #initTrees() {
-        const deltaX = this.width / this.columns;
-        const deltaZ = this.depth / this.rows;
-        const minDelta = Math.min(deltaX, deltaZ);
-        const maxDelta = Math.max(deltaX, deltaZ);
-
-        const xCorner = -this.width / 2 + deltaX / 2;
-        const zCorner = -this.depth / 2 + deltaZ / 2;
+        const deltaX = this.size / this.columns;
+        const deltaZ = this.size / this.rows;
+        const halfSize = this.size / 2;
 
         // generate the trees and their coordinates
         this.trees = [];
 
         for (let row = 0; row < this.rows; ++row) {
-            const z = -zCorner + row * deltaZ;
+            const z = -halfSize + row * deltaZ;
 
             for (let column = 0; column < this.columns; ++column) {
-                const x = -xCorner + column * deltaX;
+                const x = -halfSize + column * deltaX;
 
                 // compute the pseudo-random variables
-                const radius = (Math.random() * minDelta) / 2;
+                const radius = (Math.random() * this.size) / 2;
 
                 const tree = new MyTree({
                     scene: this.scene,
                     radius,
-                    height: this.#randomBetween(minDelta, maxDelta),
+                    height: this.size * this.#randomBetween(3, 7),
                     stacks: Math.floor(10 * Math.random()),
                 });
 
-                const position = [
-                    x + this.#randomBetween(-radius, radius),
-                    0,
-                    z + this.#randomBetween(-radius, radius),
-                ];
+                const position = [x, 0, z];
+                console.log(position);
 
                 this.trees.push({ tree, position });
             }
