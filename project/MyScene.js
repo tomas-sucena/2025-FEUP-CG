@@ -4,6 +4,7 @@ import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyHeli } from './objects/MyHeli.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
+import { MyCylinder } from './objects/solids/MyCylinder.js';
 
 /**
  * MyScene
@@ -98,7 +99,13 @@ export class MyScene extends CGFscene {
                     helipad: './assets/helipad.jpg',
                 },
             }),
-            'Helicopter': new MyHeli({scene: this}),
+            'Helicopter': new MyHeli({ scene: this }),
+            'Cylinder': new MyCylinder({
+                scene: this,
+                height: 2,
+                topRadius: 1,
+                bottomRadius: 2,
+            }),
         };
     }
 
