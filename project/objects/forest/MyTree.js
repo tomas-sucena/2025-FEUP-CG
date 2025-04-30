@@ -11,7 +11,7 @@ export class MyTree extends MyObject {
         this.height = height;
 
         /** The number of stacks (pyramids) that constitute the tree's crown */
-        this.stacks = stacks ?? Math.floor(crownHeight);
+        this.stacks = stacks ?? Math.floor(crownHeight / 2);
 
         /** The tree's trunk */
         this.trunk = new MyCone({
@@ -74,6 +74,6 @@ export class MyTree extends MyObject {
         }
 
         // display the ruler
-        this.ruler.translate(2, 0, 0).display();
+        //this.ruler.translate(2, 0, 0).display();
     }
 }
