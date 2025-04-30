@@ -1,3 +1,4 @@
+import { MyVec3 } from '../../utils/MyVec3.js';
 import { MyObject } from '../MyObject.js';
 
 /**
@@ -46,7 +47,7 @@ export class MyCylinder extends MyObject {
         this.normals = [];
         this.texCoords = [];
 
-        const deltaAng = (-2 * Math.PI) / this.slices;
+        const deltaAng = (2 * Math.PI) / this.slices;
         const deltaY = this.height / this.stacks;
         const slope = (this.bottomRadius - this.topRadius) / this.stacks;
 
@@ -61,15 +62,19 @@ export class MyCylinder extends MyObject {
                 const ca = Math.cos(ang);
                 const sa = Math.sin(ang);
 
-                const normal = vec3.fromValues(sa, slope, ca);
-                vec3.normalize(normal, normal);
-
+                // define the indices
                 if (stack < this.stacks && slice < this.slices) {
                     this.addPairOfIndices(this.slices);
                 }
 
+                // define the vertex
                 this.vertices.push(sa * radius, Y, ca * radius);
-                this.normals.push(...normal);
+
+                // define the normal
+                const normal = new MyVec3(sa, slope, ca).normalize();
+                this.normals.push(normal.x, normal.y, normal.z);
+
+                // define the texture coordinates
                 this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
