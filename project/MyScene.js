@@ -1,10 +1,9 @@
 import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 
 import { MyBuilding } from './objects/building/MyBuilding.js';
-import { MyHeli } from './objects/MyHeli.js';
+import { MyHeli } from './objects/helicopter/MyHeli.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
-import { MyCone } from './objects/solids/MyCone.js';
 
 /**
  * MyScene
@@ -99,13 +98,10 @@ export class MyScene extends CGFscene {
                     helipad: './assets/helipad.jpg',
                 },
             }),
-            'Helicopter': new MyHeli({ scene: this }),
-            'Cone': new MyCone({
+            'Helicopter': new MyHeli({
                 scene: this,
-                height: 4,
-                radius: 2,
-                stacks: 3,
-            }),
+                color: [0.9, 0.1, 0, 1],
+             }),
         };
     }
 
