@@ -2,7 +2,7 @@ import { MyObject } from '../MyObject.js';
 import { MyTree } from './MyTree.js';
 
 export class MyForest extends MyObject {
-    constructor({ scene, size, rows, columns }) {
+    constructor({ scene, size, rows, columns, maxTrees }) {
         super(scene);
 
         /** The dimensions of the forest along the X and Z-axis */
@@ -11,6 +11,9 @@ export class MyForest extends MyObject {
         this.rows = rows;
         /** The number of columns of the forest */
         this.columns = columns;
+        /** The trees */
+        this.trees = Array(maxTrees ?? (rows * columns));
+        console.log('trees:', this.trees);
 
         this.#initTrees();
     }
@@ -26,39 +29,34 @@ export class MyForest extends MyObject {
     }
 
     #initTrees() {
-        const deltaX = this.size / this.columns;
-        const deltaZ = this.size / this.rows;
-        const halfSize = this.size / 2;
+        for (let index = 0; index < this.trees.length; ++index) {
+            // compute the pseudo-random variables
+            const trunkRadius = this.size / this.#randomBetween(3, 6);
+            const height = this.size * this.#randomBetween(5, 10);
+            const slices = this.#randomBetween(4, 8);
 
-        // generate the trees and their coordinates
-        this.trees = [];
-
-        for (let row = 0; row < this.rows; ++row) {
-            const z = -halfSize + row * deltaZ;
-
-            for (let column = 0; column < this.columns; ++column) {
-                const x = -halfSize + column * deltaX;
-
-                // compute the pseudo-random variables
-                const radius = (Math.random() * this.size) / 2;
-
-                const tree = new MyTree({
-                    scene: this.scene,
-                    radius,
-                    height: this.size * this.#randomBetween(3, 7),
-                    stacks: Math.floor(10 * Math.random()),
-                });
-
-                const position = [x, 0, z];
-
-                this.trees.push({ tree, position });
-            }
-        }
+            // create the tree
+            this.trees[index] = new MyTree({
+                scene: this.scene,
+                radius: trunkRadius,
+                height,
+                slices,
+            })
+        };
     }
 
     render() {
-        this.trees.forEach(({ tree, position }) => {
-            tree.translate(...position).display();
-        });
+        const halfSize = this.size / 2;
+        const deltaX = this.size / this.columns;
+        const deltaZ = this.size / this.rows;
+
+        // display the trees
+        for (let row = 0; row < this.rows; ++row) {
+            const zCorner = -halfSize + row * deltaZ;
+
+            for (let column = 0; column < this.columns; ++column) {
+                
+            }
+        }
     }
 }
