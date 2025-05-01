@@ -101,7 +101,11 @@ export class MyScene extends CGFscene {
             }),
             'Tree': new MyTree({
                 scene: this,
-                radius: 1,
+                tilt: {
+                    angle: -Math.PI / 12,
+                    axis: 'Z',
+                },
+                trunkRadius: 1,
                 height: 10,
                 textures: {
                     log: './assets/log.jpg',
