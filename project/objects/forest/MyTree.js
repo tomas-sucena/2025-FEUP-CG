@@ -11,7 +11,7 @@ export class MyTree extends MyObject {
         this.height = height;
 
         /** The number of stacks (pyramids) that constitute the tree's crown */
-        this.stacks = stacks ?? Math.floor(crownHeight / 2);
+        this.stacks = Math.floor(stacks ?? crownHeight / 2);
 
         /** The tree's trunk */
         this.trunk = new MyCone({
@@ -36,7 +36,7 @@ export class MyTree extends MyObject {
             scene,
             radius: 3 * radius,
             height: crownHeight,
-            slices: slices ?? 6,
+            slices: Math.floor(slices ?? 6),
             texture: textures?.crown,
         });
     }

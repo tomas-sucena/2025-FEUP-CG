@@ -110,7 +110,7 @@ export class MyScene extends CGFscene {
             }),
             'Forest': new MyForest({
                 scene: this,
-                size: 4,
+                patchSize: 4,
                 rows: 2,
                 columns: 2,
             }),
