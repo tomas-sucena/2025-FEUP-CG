@@ -3,9 +3,39 @@ import { MyCone } from '../solids/MyCone.js';
 import { MyPyramid } from '../solids/MyPyramid.js';
 
 export class MyTree extends MyObject {
-    constructor({ scene, radius, height, stacks, slices, colors, textures }) {
+    /**
+     * Initializes a tree.
+     * @param { Object } config - the tree configuration
+     * @param { CGFscene } config.scene - the scene the tree will be displayed in
+     * @param { Object } config.tilt - describes the tilt of the tree relative to the vertical Y-axis.
+     * @param { number } config.tilt.angle - the angle (in radians) by which the tree is tilted
+     * @param { 'X' | 'Z' } config.tilt.axis - the axis around which the tree is tilted
+     * @param { number } config.trunkRadius - the radius of the tree's trunk
+     * @param { number } config.height - the tree's height
+     * @param { number } config.stacks - the number of pyramids that constitute the tree's crown
+     * @param { number } config.slices - the number of divisions around the Y-axis of the pyramids in the tree's crown
+     * @param { Object } config.colors - the colors to be applied to the tree
+     * @param { number[] } config.colors.trunk - the color of the tree's trunk
+     * @param { number[] } config.colors.crown - the color of the tree's crown
+     */
+    constructor({
+        scene,
+        tilt,
+        trunkRadius,
+        height,
+        stacks,
+        slices,
+        colors,
+        textures,
+    }) {
         super(scene);
         const crownHeight = 0.8 * height;
+
+        /** The tree's tilt */
+        this.tilt = {
+            angle: tilt?.angle ?? 0,
+            axis: tilt?.axis === 'X' ? [1, 0, 0] : [0, 0, 1],
+        };
 
         /** The tree's height */
         this.height = height;
@@ -16,10 +46,11 @@ export class MyTree extends MyObject {
         /** The tree's trunk */
         this.trunk = new MyCone({
             scene,
-            radius: 1.2 * radius,
+            radius: 1.2 * trunkRadius,
             height,
             material: {
-                diffuse: colors?.log,
+                ambient: colors?.trunk,
+                diffuse: colors?.trunk,
                 specular: [0, 0, 0, 1],
             },
             texture: textures?.log,
@@ -27,16 +58,21 @@ export class MyTree extends MyObject {
 
         this.ruler = new MyCone({
             scene,
-            radius,
+            radius: trunkRadius,
             height,
         });
 
         /** The bottomost pyramid that constitutes the tree's crown */
         this.crown = new MyPyramid({
             scene,
-            radius: 3 * radius,
+            radius: 3 * trunkRadius,
             height: crownHeight,
             slices: Math.floor(slices ?? 6),
+            material: {
+                ambient: colors?.crown,
+                diffuse: colors?.crown,
+                specular: [0, 0, 0, 1],
+            },
             texture: textures?.crown,
         });
     }
@@ -75,5 +111,8 @@ export class MyTree extends MyObject {
 
         // display the ruler
         //this.ruler.translate(2, 0, 0).display();
+
+        // tilt the tree
+        this.rotate(this.tilt.angle, ...this.tilt.axis);
     }
 }
