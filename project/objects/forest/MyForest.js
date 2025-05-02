@@ -12,7 +12,7 @@ export class MyForest extends MyObject {
         /** The number of columns of the forest */
         this.columns = columns;
         /** The trees */
-        this.trees = Array(maxTrees ?? (rows * columns));
+        this.trees = Array(maxTrees ?? rows * columns);
 
         this.#initTrees();
     }
@@ -36,16 +36,17 @@ export class MyForest extends MyObject {
             const trunkRadius = this.patchSize / this.#randomBetween(4, 6);
             const height = this.patchSize * this.#randomBetween(2, 3);
             const slices = this.#randomBetween(4, 8);
-            const stacks = this.#randomBetween(4, 8);
+            const stacks = this.#randomBetween(3, 6);
 
             // create the tree
             this.trees[index] = new MyTree({
                 scene: this.scene,
-                radius: trunkRadius,
+                trunkRadius,
                 height,
                 slices,
-            })
-        };
+                stacks,
+            });
+        }
 
         console.log(this.trees);
     }
@@ -54,8 +55,8 @@ export class MyForest extends MyObject {
      * Displays the object geometry.
      */
     render() {
-        const halfWidth = this.patchSize * this.columns / 2;
-        const halfDepth = this.patchSize * this.rows / 2;
+        const halfWidth = (this.patchSize * this.columns) / 2;
+        const halfDepth = (this.patchSize * this.rows) / 2;
 
         // display the trees
         for (let row = 0; row < this.rows; ++row) {
@@ -66,9 +67,7 @@ export class MyForest extends MyObject {
                 const x = -halfWidth + column * this.patchSize;
                 const index = rowIndex + column;
 
-                this.trees[index]
-                    .translate(x, 0, z)
-                    .display();
+                this.trees[index].translate(x, 0, z).display();
             }
         }
     }

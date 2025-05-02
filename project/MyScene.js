@@ -32,7 +32,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Tree';
+        this.selectedObject = 'Forest';
 
         this.initCameras();
         this.initLights();
@@ -114,7 +114,7 @@ export class MyScene extends CGFscene {
             }),
             'Forest': new MyForest({
                 scene: this,
-                patchSize: 4,
+                patchSize: 5,
                 rows: 2,
                 columns: 2,
             }),
