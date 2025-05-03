@@ -1,6 +1,5 @@
 import { MyObject } from '../MyObject.js';
 import { MyTree } from './MyTree.js';
-import { MyColor } from '../../utils/MyColor.js';
 
 export class MyForest extends MyObject {
     constructor({
