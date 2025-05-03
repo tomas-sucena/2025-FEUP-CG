@@ -47,7 +47,7 @@ export class MyInterface extends CGFinterface {
 
         forestSettings
             .add(this.scene.forest, 'columns', 1, 10, 1)
-            .name('columns');
+            .name('Columns');
 
         return true;
     }
