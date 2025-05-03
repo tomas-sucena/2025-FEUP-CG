@@ -62,34 +62,38 @@ export class MyForest extends MyObject {
         ];
 
         for (let index = 0; index < this.trees.length; ++index) {
-            // compute the pseudo-random variables
-            const tilt = {
-                angle: this.#randomBetween(-Math.PI / 27, Math.PI / 27),
-                axis: this.#randomElement(axis),
-            };
-            const trunkRadius = patchSize / this.#randomBetween(7, 8);
-            const height = patchSize * this.#randomBetween(2, 3);
-            const slices = this.#randomBetween(4, 8);
-            const stacks = this.#randomBetween(3, 6);
-            const colors = {
-                crown: this.#randomElement(crownColors).map(
-                    (value) => value + this.#randomBetween(-0.03, 0.03),
-                ),
-                trunk: this.#randomElement(trunkColors).map(
-                    (value) => value + this.#randomBetween(-0.02, 0.02),
-                ),
-            };
-
-            // create the tree
-            this.trees[index] = new MyTree({
+            // create the pseudo-random tree
+            const tree = new MyTree({
                 scene: this.scene,
-                tilt,
-                trunkRadius,
-                height,
-                slices,
-                stacks,
-                colors,
+                tilt: {
+                    angle: this.#randomBetween(-Math.PI / 27, Math.PI / 27),
+                    axis: this.#randomElement(axis),
+                },
+                trunkRadius: patchSize / this.#randomBetween(7, 8),
+                height: patchSize * this.#randomBetween(2, 3),
+                slices: this.#randomBetween(4, 8),
+                stacks: this.#randomBetween(3, 6),
+                colors: {
+                    crown: this.#randomElement(crownColors).map(
+                        (value) => value + this.#randomBetween(-0.03, 0.03),
+                    ),
+                    trunk: this.#randomElement(trunkColors).map(
+                        (value) => value + this.#randomBetween(-0.02, 0.02),
+                    ),
+                },
             });
+
+            // compute the pseudo-random offsets
+            const xOffset =
+                (patchSize - tree.radius) * this.#randomBetween(-0.5, 0.5);
+            const zOffset =
+                (patchSize - tree.radius) * this.#randomBetween(-0.5, 0.5);
+
+            this.trees[index] = {
+                tree,
+                xOffset,
+                zOffset,
+            };
         }
     }
 
@@ -105,15 +109,17 @@ export class MyForest extends MyObject {
 
         // display the trees
         for (let row = 0; row < this.rows; ++row) {
-            const z = zCorner + row * deltaZ;
-            const rowIndex = row * this.rows;
+            const zRow = zCorner + row * deltaZ;
+            const rowIndex = row * this.columns;
 
-            for (let column = 0; column < this.columns; ++column) {
-                const x = xCorner + column * deltaX;
-                const index = rowIndex + column;
+            this.trees
+                .slice(rowIndex, rowIndex + this.columns)
+                .forEach(({ tree, xOffset, zOffset }, column) => {
+                    const x = xCorner + column * deltaX + xOffset;
+                    const z = zRow + zOffset;
 
-                this.trees[index].translate(x, 0, z).display();
-            }
+                    tree.translate(x, 0, z).display();
+                });
         }
     }
 }
