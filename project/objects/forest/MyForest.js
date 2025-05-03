@@ -63,7 +63,7 @@ export class MyForest extends MyObject {
                 angle: this.#randomBetween(-Math.PI / 36, Math.PI / 36),
                 axis: this.#randomElement(axis),
             };
-            const trunkRadius = this.patchSize / this.#randomBetween(5, 8);
+            const trunkRadius = this.patchSize / this.#randomBetween(7, 8);
             const height = this.patchSize * this.#randomBetween(2, 3);
             const slices = this.#randomBetween(4, 8);
             const stacks = this.#randomBetween(3, 6);

@@ -85,6 +85,13 @@ export class MyScene extends CGFscene {
             texture: './assets/grass.png',
         });
 
+        this.forest = new MyForest({
+            scene: this,
+            patchSize: 5,
+            rows: 5,
+            columns: 5,
+        });
+
         this.objects = {
             'Building': new MyBuilding({
                 scene: this,
@@ -116,12 +123,7 @@ export class MyScene extends CGFscene {
                     crown: './assets/leaves.jpg',
                 },
             }),
-            'Forest': new MyForest({
-                scene: this,
-                patchSize: 5,
-                rows: 5,
-                columns: 5,
-            }),
+            'Forest': this.forest,
         };
     }
 

@@ -40,6 +40,15 @@ export class MyInterface extends CGFinterface {
             .onChange(this.scene.toggleWireframe.bind(this.scene))
             .name('Wireframe');
 
+        // forest settings
+        const forestSettings = this.gui.addFolder('Forest');
+
+        forestSettings.add(this.scene.forest, 'rows', 1, 10, 1).name('Rows');
+
+        forestSettings
+            .add(this.scene.forest, 'columns', 1, 10, 1)
+            .name('columns');
+
         return true;
     }
 }
