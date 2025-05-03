@@ -1,5 +1,6 @@
 import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 
+import { MyColor } from './utils/MyColor.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
@@ -107,6 +108,9 @@ export class MyScene extends CGFscene {
                 },
                 trunkRadius: 1,
                 height: 10,
+                colors: {
+                    crown: MyColor.fromHex('#77a37a'),
+                },
                 textures: {
                     log: './assets/log.jpg',
                     crown: './assets/leaves.jpg',
@@ -115,8 +119,8 @@ export class MyScene extends CGFscene {
             'Forest': new MyForest({
                 scene: this,
                 patchSize: 5,
-                rows: 2,
-                columns: 2,
+                rows: 5,
+                columns: 5,
             }),
         };
     }
