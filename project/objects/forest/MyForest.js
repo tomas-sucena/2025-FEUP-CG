@@ -85,9 +85,9 @@ export class MyForest extends MyObject {
 
             // compute the pseudo-random offsets
             const xOffset =
-                (patchSize - tree.radius) * this.#randomBetween(-0.5, 0.5);
+                (patchSize / 2 - tree.radius) * this.#randomBetween(-1, 1);
             const zOffset =
-                (patchSize - tree.radius) * this.#randomBetween(-0.5, 0.5);
+                (patchSize / 2 - tree.radius) * this.#randomBetween(-1, 1);
 
             this.trees[index] = {
                 tree,
