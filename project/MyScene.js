@@ -92,6 +92,14 @@ export class MyScene extends CGFscene {
             columns: 5,
             maxRows: 10,
             maxColumns: 10,
+            colors: {
+                crown: MyColor.hex('#688f4e'),
+                trunk: MyColor.hex('#6e4300'),
+            },
+            textures: {
+                log: './assets/log.jpg',
+                crown: './assets/leaves.jpg',
+            },
         });
 
         this.objects = {
@@ -107,22 +115,6 @@ export class MyScene extends CGFscene {
                     door: './assets/door.jpg',
                     sign: './assets/sign.png',
                     helipad: './assets/helipad.jpg',
-                },
-            }),
-            'Tree': new MyTree({
-                scene: this,
-                tilt: {
-                    angle: -Math.PI / 12,
-                    axis: 'Z',
-                },
-                trunkRadius: 1,
-                height: 10,
-                colors: {
-                    crown: MyColor.hex('#77a37a'),
-                },
-                textures: {
-                    log: './assets/log.jpg',
-                    crown: './assets/leaves.jpg',
                 },
             }),
             'Forest': this.forest,

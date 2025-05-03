@@ -3,7 +3,16 @@ import { MyTree } from './MyTree.js';
 import { MyColor } from '../../utils/MyColor.js';
 
 export class MyForest extends MyObject {
-    constructor({ scene, size, rows, columns, maxRows, maxColumns }) {
+    constructor({
+        scene,
+        size,
+        rows,
+        columns,
+        maxRows,
+        maxColumns,
+        colors,
+        textures,
+    }) {
         super(scene);
         maxRows ??= rows;
         maxColumns ??= columns;
@@ -17,7 +26,7 @@ export class MyForest extends MyObject {
         /** The trees */
         this.trees = Array(maxRows * maxColumns);
 
-        this.#initTrees(maxRows, maxColumns);
+        this.#initTrees(maxRows, maxColumns, colors, textures);
     }
 
     /**
@@ -31,35 +40,11 @@ export class MyForest extends MyObject {
     }
 
     /**
-     * Returns a pseudo-random element in an array.
-     * @param { Array } array - the array
-     * @returns a pseudo-random element in the array
-     */
-    #randomElement(array) {
-        return array[Math.floor(array.length * Math.random())];
-    }
-
-    /**
      * Initializes the trees.
      */
-    #initTrees(maxRows, maxColumns) {
+    #initTrees(maxRows, maxColumns, colors, textures) {
+        const { crown: crownColor, trunk: trunkColor } = colors;
         const patchSize = this.size / Math.max(maxRows, maxColumns);
-        const axis = ['X', 'Z'];
-        const crownColors = [
-            MyColor.hex('#77a37a'),
-            MyColor.hex('#5f926a'),
-            MyColor.hex('#587e60'),
-            MyColor.hex('#3a4f3f'),
-            MyColor.hex('#2b463c'),
-            MyColor.hex('#688f4e'),
-        ];
-        const trunkColors = [
-            MyColor.hex('#271810'),
-            MyColor.hex('#332211'),
-            MyColor.hex('#4f200f'),
-            MyColor.hex('#553311'),
-            MyColor.hex('#664433'),
-        ];
 
         for (let index = 0; index < this.trees.length; ++index) {
             // create the pseudo-random tree
@@ -67,20 +52,21 @@ export class MyForest extends MyObject {
                 scene: this.scene,
                 tilt: {
                     angle: this.#randomBetween(-Math.PI / 27, Math.PI / 27),
-                    axis: this.#randomElement(axis),
+                    axis: Math.random() < 0.5 ? 'X' : 'Z',
                 },
                 trunkRadius: patchSize / this.#randomBetween(7, 8),
                 height: patchSize * this.#randomBetween(2, 3),
                 slices: this.#randomBetween(4, 8),
                 stacks: this.#randomBetween(3, 6),
                 colors: {
-                    crown: this.#randomElement(crownColors).map(
-                        (value) => value + this.#randomBetween(-0.03, 0.03),
+                    crown: crownColor.map(
+                        (value) => value + this.#randomBetween(-0.08, 0.08),
                     ),
-                    trunk: this.#randomElement(trunkColors).map(
-                        (value) => value + this.#randomBetween(-0.02, 0.02),
+                    trunk: trunkColor?.map(
+                        (value) => value + this.#randomBetween(-0.05, 0.05),
                     ),
                 },
+                textures,
             });
 
             // compute the pseudo-random offsets
