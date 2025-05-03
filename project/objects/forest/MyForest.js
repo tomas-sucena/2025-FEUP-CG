@@ -33,7 +33,11 @@ export class MyForest extends MyObject {
     #initTrees() {
         for (let index = 0; index < this.trees.length; ++index) {
             // compute the pseudo-random variables
-            const trunkRadius = this.patchSize / this.#randomBetween(4, 6);
+            const tilt = {
+                angle: this.#randomBetween(-Math.PI / 36, Math.PI / 36),
+                axis: Math.random() < 0.5 ? 'X' : 'Z',
+            };
+            const trunkRadius = this.patchSize / this.#randomBetween(5, 8);
             const height = this.patchSize * this.#randomBetween(2, 3);
             const slices = this.#randomBetween(4, 8);
             const stacks = this.#randomBetween(3, 6);
@@ -41,6 +45,7 @@ export class MyForest extends MyObject {
             // create the tree
             this.trees[index] = new MyTree({
                 scene: this.scene,
+                tilt,
                 trunkRadius,
                 height,
                 slices,
