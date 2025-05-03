@@ -49,8 +49,9 @@ export class MyForest extends MyObject {
             MyColor.hex('#77a37a'),
             MyColor.hex('#5f926a'),
             MyColor.hex('#587e60'),
-            MyColor.hex('#485e52'),
             MyColor.hex('#3a4f3f'),
+            MyColor.hex('#2b463c'),
+            MyColor.hex('#688f4e'),
         ];
         const trunkColors = [
             MyColor.hex('#271810'),
@@ -63,7 +64,7 @@ export class MyForest extends MyObject {
         for (let index = 0; index < this.trees.length; ++index) {
             // compute the pseudo-random variables
             const tilt = {
-                angle: this.#randomBetween(-Math.PI / 36, Math.PI / 36),
+                angle: this.#randomBetween(-Math.PI / 27, Math.PI / 27),
                 axis: this.#randomElement(axis),
             };
             const trunkRadius = patchSize / this.#randomBetween(7, 8);
@@ -71,8 +72,12 @@ export class MyForest extends MyObject {
             const slices = this.#randomBetween(4, 8);
             const stacks = this.#randomBetween(3, 6);
             const colors = {
-                crown: this.#randomElement(crownColors),
-                trunk: this.#randomElement(trunkColors),
+                crown: this.#randomElement(crownColors).map(
+                    (value) => value + this.#randomBetween(-0.03, 0.03),
+                ),
+                trunk: this.#randomElement(trunkColors).map(
+                    (value) => value + this.#randomBetween(-0.02, 0.02),
+                ),
             };
 
             // create the tree
