@@ -1,5 +1,6 @@
 import { MyObject } from '../MyObject.js';
 import { MyTree } from './MyTree.js';
+import { MyColor } from '../../utils/MyColor.js';
 
 export class MyForest extends MyObject {
     constructor({ scene, rows, columns, patchSize, maxTrees }) {
@@ -28,19 +29,48 @@ export class MyForest extends MyObject {
     }
 
     /**
+     * Returns a pseudo-random element in an array.
+     * @param { Array } array - the array
+     * @returns a pseudo-random element in the array
+     */
+    #randomElement(array) {
+        return array[Math.floor(array.length * Math.random())];
+    }
+
+    /**
      * Initializes the trees.
      */
     #initTrees() {
+        const axis = ['X', 'Z'];
+        const crownColors = [
+            MyColor.hex('#77a37a'),
+            MyColor.hex('#5f926a'),
+            MyColor.hex('#587e60'),
+            MyColor.hex('#485e52'),
+            MyColor.hex('#3a4f3f'),
+        ];
+        const trunkColors = [
+            MyColor.hex('#271810'),
+            MyColor.hex('#332211'),
+            MyColor.hex('#4f200f'),
+            MyColor.hex('#553311'),
+            MyColor.hex('#664433'),
+        ];
+
         for (let index = 0; index < this.trees.length; ++index) {
             // compute the pseudo-random variables
             const tilt = {
                 angle: this.#randomBetween(-Math.PI / 36, Math.PI / 36),
-                axis: Math.random() < 0.5 ? 'X' : 'Z',
+                axis: this.#randomElement(axis),
             };
             const trunkRadius = this.patchSize / this.#randomBetween(5, 8);
             const height = this.patchSize * this.#randomBetween(2, 3);
             const slices = this.#randomBetween(4, 8);
             const stacks = this.#randomBetween(3, 6);
+            const colors = {
+                crown: this.#randomElement(crownColors),
+                trunk: this.#randomElement(trunkColors),
+            };
 
             // create the tree
             this.trees[index] = new MyTree({
@@ -50,10 +80,9 @@ export class MyForest extends MyObject {
                 height,
                 slices,
                 stacks,
+                colors,
             });
         }
-
-        console.log(this.trees);
     }
 
     /**

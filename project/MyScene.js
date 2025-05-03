@@ -109,7 +109,7 @@ export class MyScene extends CGFscene {
                 trunkRadius: 1,
                 height: 10,
                 colors: {
-                    crown: MyColor.fromHex('#77a37a'),
+                    crown: MyColor.hex('#77a37a'),
                 },
                 textures: {
                     log: './assets/log.jpg',
