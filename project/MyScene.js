@@ -125,6 +125,13 @@ export class MyScene extends CGFscene {
             },
         });
 
+        /** The fire department helicopter */
+        this.helicopter = new MyHeli({
+            scene: this,
+            color: MyColor.RGB(255, 0, 0),
+            position: [0, this.building.height, 0],
+        });
+
         this.objects = {
             'Building': this.building,
             'Forest': this.forest,
@@ -157,6 +164,10 @@ export class MyScene extends CGFscene {
         this.toggleWireframe();
     }
 
+    updateCamera() {
+        this.camera.setTarget(this.helicopter.position);
+    }
+
     display() {
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
@@ -167,6 +178,8 @@ export class MyScene extends CGFscene {
         this.loadIdentity();
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
+
+        this.updateCamera();
 
         // ---- BEGIN Primitive drawing section
         if (this.displayAxis) {
@@ -186,8 +199,8 @@ export class MyScene extends CGFscene {
 
         this.skysphere.display();
         this.building.display();
-
         this.forest.translate(0, 0, 35).display();
+        this.helicopter.display();
 
         // ---- END Primitive drawing section
     }

@@ -46,6 +46,16 @@ export class MyBuilding extends MyObject {
         });
     }
 
+    /**
+     * Returns the height of the building.
+     */
+    get height() {
+        return this.mainModule.height;
+    }
+
+    /**
+     * Displays the modules of the building.
+     */
     render() {
         const mainModuleWidth = this.mainModule.width;
         const sideModuleWidth = this.sideModule.width;
