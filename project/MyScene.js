@@ -168,6 +168,29 @@ export class MyScene extends CGFscene {
         this.camera.setTarget(this.helicopter.position);
     }
 
+    update() {
+        if (this.pressedKeys.has('KeyA') || this.pressedKeys.has('ArrowLeft')) {
+            this.helicopter.turn(Math.PI / 2);
+        }
+
+        if (
+            this.pressedKeys.has('KeyD') ||
+            this.pressedKeys.has('ArrowRight')
+        ) {
+            this.helicopter.turn(-Math.PI / 2);
+        }
+
+        if (this.pressedKeys.has('KeyW') || this.pressedKeys.has('ArrowUp')) {
+            this.helicopter.accelerate(0.5);
+        }
+
+        if (this.pressedKeys.has('KeyS') || this.pressedKeys.has('ArrowDown')) {
+            this.helicopter.accelerate(-0.5);
+        }
+
+        this.updateCamera();
+    }
+
     display() {
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
@@ -179,7 +202,7 @@ export class MyScene extends CGFscene {
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
 
-        this.updateCamera();
+        this.update();
 
         // ---- BEGIN Primitive drawing section
         if (this.displayAxis) {

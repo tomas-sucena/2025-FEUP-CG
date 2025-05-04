@@ -34,6 +34,14 @@ export class MyHeli extends MyObject {
         });
     }
 
+    accelerate(value) {
+        this.position[0] += value;
+    }
+
+    turn(value) {
+        this.rotate(value, 0, 1, 0);
+    }
+
     render() {
         const headHeight = 1.6 * this.head.radius;
 

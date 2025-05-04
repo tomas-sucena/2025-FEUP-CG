@@ -58,17 +58,17 @@ export class MyInterface extends CGFinterface {
 
     initKeys() {
         // disable the processKeyboard function
-        this.processKeyboard = function () {};
+        this.processKeyboard = () => {};
 
-        // create a hash set to store which keys are being pressed
-        this.pressedKeys = new Set();
+        /** A hash set to store the keys that are being pressed */
+        this.scene.pressedKeys = new Set();
     }
 
     processKeyDown(event) {
-        this.pressedKeys.add(event.code);
+        this.scene.pressedKeys.add(event.code);
     }
 
     processKeyUp(event) {
-        this.pressedKeys.delete(event.code);
+        this.scene.pressedKeys.delete(event.code);
     }
 }
