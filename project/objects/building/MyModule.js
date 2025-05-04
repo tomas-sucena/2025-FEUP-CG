@@ -106,7 +106,7 @@ export class MyModule extends MyBox {
         const yOffset = this.height / this.floors;
 
         const halfWidth = this.width / 2;
-        const halfDepth = this.depth / 2 + 0.001; // NOTE: the small offset avoids overlapping
+        const halfDepth = this.depth / 2 + 0.05; // NOTE: the small offset avoids overlapping
 
         for (let floor = this.isMainModule; floor < this.floors; ++floor) {
             const y = (floor + 0.5) * yOffset;
@@ -138,7 +138,7 @@ export class MyModule extends MyBox {
         // display the helipad
         this.helipad
             ?.rotate(-Math.PI / 2, 1, 0, 0)
-            .translate(0, this.height + 0.005, 0)
+            .translate(0, this.height + 0.05, 0)
             .display();
     }
 }

@@ -68,6 +68,8 @@ export class MyScene extends CGFscene {
      */
     initObjects() {
         this.axis = new CGFaxis(this);
+
+        /** The panorama that constitutes the skysphere */
         this.skysphere = new MyPanorama({
             scene: this,
             scaleFactor: 200,
@@ -75,6 +77,7 @@ export class MyScene extends CGFscene {
             texture: './assets/snow.jpg',
         });
 
+        /** The surface */
         this.surface = new MyPlane(this, {
             nrDivs: 64,
             maxS: 64,
@@ -85,6 +88,24 @@ export class MyScene extends CGFscene {
             texture: './assets/grass.png',
         });
 
+        /** The fire department building */
+        this.building = new MyBuilding({
+            scene: this,
+            width: 30,
+            height: 15,
+            floors: 3,
+            windows: 2,
+            color: [0.9, 0.9, 0.9, 1],
+            textures: {
+                wall: './assets/concrete.jpg',
+                window: './assets/window.webp',
+                door: './assets/door.jpg',
+                sign: './assets/sign.png',
+                helipad: './assets/helipad.jpg',
+            },
+        });
+
+        /** The forest */
         this.forest = new MyForest({
             scene: this,
             width: 40,
@@ -104,20 +125,7 @@ export class MyScene extends CGFscene {
         });
 
         this.objects = {
-            'Building': new MyBuilding({
-                scene: this,
-                width: 10,
-                floors: 3,
-                windows: 2,
-                color: [0.9, 0.9, 0.9, 1],
-                textures: {
-                    wall: './assets/concrete.jpg',
-                    window: './assets/window.webp',
-                    door: './assets/door.jpg',
-                    sign: './assets/sign.png',
-                    helipad: './assets/helipad.jpg',
-                },
-            }),
+            'Building': this.building,
             'Forest': this.forest,
         };
     }
@@ -164,15 +172,21 @@ export class MyScene extends CGFscene {
             this.axis.display();
         }
 
-        this.skysphere.display();
+        this.objects[this.selectedObject].scale(
+            this.scaleFactor,
+            this.scaleFactor,
+            this.scaleFactor,
+        );
+
         this.surface
             .rotate(-Math.PI / 2, 1, 0, 0)
             .scale(400, 1, 400)
             .display();
 
-        this.objects[this.selectedObject]
-            .scale(this.scaleFactor, this.scaleFactor, this.scaleFactor)
-            .display();
+        this.skysphere.display();
+        this.building.display();
+
+        this.forest.translate(0, 0, 35).display();
 
         // ---- END Primitive drawing section
     }
