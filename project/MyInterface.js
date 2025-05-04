@@ -41,12 +41,13 @@ export class MyInterface extends CGFinterface {
             .name('Wireframe');
 
         // forest settings
+        const forest = this.scene.forest;
         const forestSettings = this.gui.addFolder('Forest');
 
-        forestSettings.add(this.scene.forest, 'rows', 1, 10, 1).name('Rows');
+        forestSettings.add(forest, 'rows', 0, forest.maxRows, 1).name('Rows');
 
         forestSettings
-            .add(this.scene.forest, 'columns', 1, 10, 1)
+            .add(forest, 'columns', 0, forest.maxColumns, 1)
             .name('Columns');
 
         return true;
