@@ -30,43 +30,36 @@ export class MySphere extends MyObject {
         this.initGeometry({ inverted, material, texture });
     }
 
+    /**
+     * Initializes the vertices, indices, normals, and texture coordinates.
+     */
     initBuffers() {
         this.vertices = [];
         this.indices = [];
         this.normals = [];
         this.texCoords = [];
 
-        const sliceAngOffset = (-2 * Math.PI) / this.slices;
-        const stackAngOffset = Math.PI / this.stacks;
+        const deltaStackAng = Math.PI / this.stacks;
+        const deltaSliceAng = (2 * Math.PI) / this.slices;
 
         // define the stacks
         for (let stack = 0; stack <= this.stacks; ++stack) {
-            const stackAng = stack * stackAngOffset;
+            const stackAng = stack * deltaStackAng;
             const stackRadius = Math.cos(Math.PI / 2 - stackAng);
-            const normalY = Math.cos(stackAng);
+            const Ny = Math.cos(stackAng);
 
             // define the slices
             for (let slice = 0; slice <= this.slices; ++slice) {
-                const sliceAng = slice * sliceAngOffset;
-                const normalX = stackRadius * Math.cos(sliceAng);
-                const normalZ = stackRadius * Math.sin(sliceAng);
+                const sliceAng = slice * deltaSliceAng;
+                const Nx = stackRadius * Math.sin(sliceAng);
+                const Nz = stackRadius * Math.cos(sliceAng);
 
-                // define the indices
                 if (stack < this.stacks && slice < this.slices) {
                     this.addPairOfIndices(this.slices);
                 }
 
-                // define the vertices
-                this.vertices.push(
-                    normalX * this.radius,
-                    normalY * this.radius,
-                    normalZ * this.radius,
-                );
-
-                // define the normals
-                this.normals.push(normalX, normalY, normalZ);
-
-                // define the texture coordinates
+                this.vertices.push(...[Nx, Ny, Nz].map((N) => N * this.radius));
+                this.normals.push(Nx, Ny, Nz);
                 this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }

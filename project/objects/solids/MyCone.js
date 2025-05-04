@@ -35,7 +35,7 @@ export class MyCone extends MyCylinder {
             stacks,
             inverted,
             material,
-            texture
+            texture,
         });
     }
 }
