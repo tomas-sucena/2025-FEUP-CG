@@ -1,17 +1,18 @@
 import { MyObject } from '../MyObject.js';
 
 /**
- * A unit sphere centered in the origin.
+ * A cone.
  */
-export class MySphere extends MyObject {
+export class MyCone extends MyObject {
     /**
-     * Initializes the sphere.
+     * Initializes the cone.
      * @param { MyScene } scene the scene the object will be displayed in
      * @param { Object } config the object configuration
      */
     constructor({
         scene,
         radius,
+        height,
         slices,
         stacks,
         inverted,
@@ -20,12 +21,14 @@ export class MySphere extends MyObject {
     }) {
         super(scene);
 
-        /** The radius of the sphere */
+        /** The radius of the cone */
         this.radius = radius ?? 1;
+        /** The height of the cone */
+        this.height = height ?? 1;
         /** The number of divisions around the Y-axis */
-        this.slices = slices;
-        /** The number of divisions of each hemisphere along the Y-axis*/
-        this.stacks = 2 * stacks;
+        this.slices = slices ?? 16;
+        /** The number of divisions along the Y-axis*/
+        this.stacks = stacks ?? 1;
 
         this.initGeometry({ inverted, material, texture });
     }
@@ -39,27 +42,29 @@ export class MySphere extends MyObject {
         this.normals = [];
         this.texCoords = [];
 
-        const deltaStackAng = Math.PI / this.stacks;
-        const deltaSliceAng = (2 * Math.PI) / this.slices;
+        const slope = this.radius / this.height;
+        const deltaAngle = (2 * Math.PI) / this.slices;
+        const deltaRadius = this.radius / this.stacks;
+        const deltaY = this.height / this.stacks;
 
         // define the stacks
         for (let stack = 0; stack <= this.stacks; ++stack) {
-            const stackAng = stack * deltaStackAng;
-            const stackRadius = Math.cos(Math.PI / 2 - stackAng);
-            const Ny = Math.cos(stackAng);
+            const y = this.height - stack * deltaY;
+            const radius = stack * deltaRadius;
 
             // define the slices
             for (let slice = 0; slice <= this.slices; ++slice) {
-                const sliceAng = slice * deltaSliceAng;
-                const Nx = stackRadius * Math.sin(sliceAng);
-                const Nz = stackRadius * Math.cos(sliceAng);
+                const angle = slice * deltaAngle;
+                const Nx = Math.sin(angle);
+                const Nz = Math.cos(angle);
+                const Nsize = Math.hypot(Nx, slope, Nz);
 
                 if (stack < this.stacks && slice < this.slices) {
                     this.addPairOfIndices(this.slices);
                 }
 
-                this.vertices.push(...[Nx, Ny, Nz].map((N) => N * this.radius));
-                this.normals.push(Nx, Ny, Nz);
+                this.vertices.push(Nx * radius, y, Nz * radius);
+                this.normals.push(Nx / Nsize, slope / Nsize, Nz / Nsize);
                 this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }

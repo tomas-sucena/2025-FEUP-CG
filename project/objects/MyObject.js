@@ -34,7 +34,7 @@ export class MyObject extends CGFobject {
                 children.push(value);
             } else if (Array.isArray(value)) {
                 value.forEach((el) => findChildren(children, el));
-            } else if (typeof value === 'Object') {
+            } else if (typeof value === 'object') {
                 Object.values(value).forEach((el) =>
                     findChildren(children, el),
                 );
@@ -43,7 +43,9 @@ export class MyObject extends CGFobject {
             return children;
         };
 
-        this.#children = Object.values(this).reduce(findChildren, []);
+        const { scene, ...others } = this; // ignore the scene, as it causes circular references
+        this.#children = Object.values(others).reduce(findChildren, []);
+
         return this.#children;
     }
 

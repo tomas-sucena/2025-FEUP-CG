@@ -39,7 +39,7 @@ export class MyCylinder extends MyObject {
         this.normals = [];
         this.texCoords = [];
 
-        const deltaAng = (-2 * Math.PI) / this.slices;
+        const deltaAng = (2 * Math.PI) / this.slices;
         const deltaY = this.height / this.stacks;
 
         // define the slices
@@ -67,13 +67,13 @@ export class MyCylinder extends MyObject {
 
                 // define the vertices
                 this.vertices.push(
-                    this.radius * ca,
-                    stack * deltaY,
                     this.radius * sa,
+                    stack * deltaY,
+                    this.radius * ca,
                 );
 
                 // define the normals
-                this.normals.push(ca, 0, sa);
+                this.normals.push(sa, 0, ca);
 
                 // define the texture coordinates
                 this.texCoords.push(slice / this.slices, stack / this.stacks);

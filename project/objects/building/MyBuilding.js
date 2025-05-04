@@ -13,6 +13,7 @@ export class MyBuilding extends MyObject {
         textures,
     }) {
         super(scene);
+        height ??= floors + 1;
 
         const material = {
             ambient: color,
@@ -24,7 +25,7 @@ export class MyBuilding extends MyObject {
         this.mainModule = new MyModule({
             scene,
             width: 0.4 * width,
-            height: height ?? floors + 1,
+            height,
             depth,
             floors: floors + 1,
             windows,
@@ -37,7 +38,7 @@ export class MyBuilding extends MyObject {
         this.sideModule = new MyModule({
             scene,
             width: 0.3 * width,
-            height: floors,
+            height: (height * floors) / (floors + 1),
             floors,
             windows,
             material,

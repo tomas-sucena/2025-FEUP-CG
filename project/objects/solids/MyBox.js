@@ -35,40 +35,43 @@ export class MyBox extends MyObject {
 
     #addFace({ upperLeftCorner, normal }) {
         const [xCorner, yCorner, zCorner] = upperLeftCorner;
-        const [normalX, normalY, normalZ] = normal;
+        const [Nx, Ny, Nz] = normal;
 
-        const deltaX = !normalX * (this.width / this.xDivisions);
-        const deltaY = !normalY * (this.height / this.yDivisions);
-        const deltaZ = !normalZ * (this.depth / this.zDivisions);
+        const deltaX = !Nx * (Nz + !!Ny) * (this.width / this.xDivisions);
+        const deltaY = !Ny * (this.height / this.yDivisions);
+        const deltaZ = !Nz * (this.depth / this.zDivisions);
 
         const rows = Math.abs(
-            (normalX + normalZ) * this.yDivisions + normalY * this.zDivisions,
+            (Nx + Nz) * this.yDivisions + Ny * this.zDivisions,
         );
         const columns = Math.abs(
-            (normalY + normalZ) * this.xDivisions + normalX * this.zDivisions,
+            (Ny + Nz) * this.xDivisions + Nx * this.zDivisions,
         );
 
         // define the rows of the face
         for (let row = 0; row <= rows; ++row) {
             const y = yCorner - row * deltaY;
-            const zRow = zCorner + row * deltaZ * normalY;
+            const zRow = zCorner + row * deltaZ * Ny;
 
             // define the columns of the face
             for (let column = 0; column <= columns; ++column) {
-                const x = xCorner + column * deltaX * (normalZ + !!normalY);
-                const z = zRow - column * deltaZ * normalX;
+                const x = xCorner + column * deltaX;
+                const z = zRow - column * deltaZ * Nx;
 
                 if (row < rows && column < columns) {
                     this.addPairOfIndices(columns);
                 }
 
                 this.vertices.push(x, y, z);
-                this.normals.push(normalX, normalY, normalZ);
+                this.normals.push(Nx, Ny, Nz);
                 this.texCoords.push(row / rows, column / columns);
             }
         }
     }
 
+    /**
+     * Initializes the vertices, indices, normals, and texture coordinates.
+     */
     initBuffers() {
         this.vertices = [];
         this.indices = [];
