@@ -15,9 +15,27 @@ function randomBetween(min, max) {
  * A 2D grid of randomly generated trees.
  */
 export class MyForest extends MyObject {
+    /**
+     * Initializes the forest.
+     * @param { Object } config - the forest configuration
+     * @param { CGFscene } config.scene - the scene the forest will be displayed in
+     * @param { number } config.width - the dimension of the forest along the X-axis
+     * @param { number } config.depth - the dimension of the forest along the Z-axis
+     * @param { number } config.rows - the number of rows of the forest
+     * @param { number } config.columns - the number of columns of the forest
+     * @param { number } config.maxRows - the maximum number of rows of the forest
+     * @param { number } config.maxColumns - the maximum number of columns of the forest
+     * @param { Object } config.colors - the base colors to be applied to the trees
+     * @param { number[4] } config.colors.crown - the base color of the trees' crown
+     * @param { number[4] } config.colors.trunk - the base color of the trees' trunk
+     * @param { Object } config.textures - the textures to be applied to the trees
+     * @param { string } config.textures.crown - the texture to be applied to the trees' crowns
+     * @param { string } config.textures.trunk - the texture to be applied to the trees' trunks
+     */
     constructor({
         scene,
-        size,
+        width,
+        depth,
         rows,
         columns,
         maxRows,
@@ -27,8 +45,10 @@ export class MyForest extends MyObject {
     }) {
         super(scene);
 
-        /** The dimensions of the forest along the X and Z-axis */
-        this.size = size;
+        /** The dimension of the forest along the X-axis */
+        this.width = width;
+        /** The dimension of the forest along the Z-axis */
+        this.depth = depth;
         /** The number of rows of the forest */
         this.rows = rows;
         /** The number of columns of the forest */
@@ -37,8 +57,12 @@ export class MyForest extends MyObject {
         this.maxRows = maxRows ?? rows;
         /** The maximum number of tree columns */
         this.maxColumns = maxColumns ?? columns;
+
+        const numTrees = this.maxRows * this.maxColumns;
         /** The trees */
-        this.trees = Array(this.maxRows * this.maxColumns);
+        this.trees = Array(numTrees);
+        /** The offsets */
+        this.treeOffsets = Array(numTrees);
 
         this.#initTrees(colors, textures);
     }
@@ -47,8 +71,11 @@ export class MyForest extends MyObject {
      * Initializes the trees.
      */
     #initTrees(colors, textures) {
-        const { crown: crownColor, trunk: trunkColor } = colors;
-        const patchSize = this.size / Math.max(this.maxRows, this.maxColumns);
+        const patchWidth = this.width / this.maxColumns;
+        const patchDepth = this.depth / this.maxRows;
+
+        const patchMin = Math.min(patchWidth, patchDepth);
+        const patchMax = Math.max(patchWidth, patchDepth);
 
         for (let index = 0; index < this.trees.length; ++index) {
             // create the pseudo-random tree
@@ -58,31 +85,27 @@ export class MyForest extends MyObject {
                     angle: randomBetween(-Math.PI / 27, Math.PI / 27),
                     axis: Math.random() < 0.5 ? 'X' : 'Z',
                 },
-                trunkRadius: patchSize / randomBetween(7, 8),
-                height: patchSize * randomBetween(2, 3),
+                trunkRadius: patchMin / randomBetween(7, 8),
+                height: patchMax * randomBetween(2, 3),
                 slices: randomBetween(4, 8),
                 stacks: randomBetween(3, 6),
                 colors: {
-                    crown: crownColor.map(
+                    crown: colors.crown.map(
                         (value) => value + randomBetween(-0.08, 0.08),
                     ),
-                    trunk: trunkColor.map(
+                    trunk: colors.trunk.map(
                         (value) => value + randomBetween(-0.05, 0.05),
                     ),
                 },
                 textures,
             });
 
-            // compute the pseudo-random offsets
-            const xOffset =
-                (patchSize / 2 - tree.radius) * randomBetween(-1, 1);
-            const zOffset =
-                (patchSize / 2 - tree.radius) * randomBetween(-1, 1);
+            this.trees[index] = tree;
 
-            this.trees[index] = {
-                tree,
-                xOffset,
-                zOffset,
+            // compute the pseudo-random offsets
+            this.treeOffsets[index] = {
+                x: (patchWidth / 2 - tree.radius) * randomBetween(-1, 1),
+                z: (patchDepth / 2 - tree.radius) * randomBetween(-1, 1),
             };
         }
     }
@@ -91,8 +114,8 @@ export class MyForest extends MyObject {
      * Displays the trees.
      */
     render() {
-        const deltaX = this.size / this.columns;
-        const deltaZ = this.size / this.rows;
+        const deltaX = this.width / this.columns;
+        const deltaZ = this.depth / this.rows;
 
         const widthRatio = this.maxColumns / this.columns;
         const depthRatio = this.maxRows / this.rows;
@@ -105,14 +128,15 @@ export class MyForest extends MyObject {
             const zRow = zCorner + row * deltaZ;
             const rowIndex = row * this.columns;
 
-            this.trees
-                .slice(rowIndex, rowIndex + this.columns)
-                .forEach(({ tree, xOffset, zOffset }, column) => {
-                    const x = xCorner + column * deltaX + xOffset * widthRatio;
-                    const z = zRow + zOffset * depthRatio;
+            for (let column = 0; column < this.columns; ++column) {
+                const index = rowIndex + column;
+                const { x: xOffset, z: zOffset } = this.treeOffsets[index];
 
-                    tree.translate(x, 0, z).display();
-                });
+                const x = xCorner + column * deltaX + xOffset * widthRatio;
+                const z = zRow + zOffset * depthRatio;
+
+                this.trees[index].translate(x, 0, z).display();
+            }
         }
     }
 }

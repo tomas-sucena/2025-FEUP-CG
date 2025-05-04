@@ -87,11 +87,12 @@ export class MyScene extends CGFscene {
 
         this.forest = new MyForest({
             scene: this,
-            size: 50,
+            width: 40,
+            depth: 40,
             rows: 5,
             columns: 5,
-            maxRows: 10,
-            maxColumns: 10,
+            maxRows: 8,
+            maxColumns: 8,
             colors: {
                 crown: MyColor.hex('#688f4e'),
                 trunk: MyColor.hex('#6e4300'),
