@@ -181,11 +181,11 @@ export class MyScene extends CGFscene {
         }
 
         if (this.pressedKeys.has('KeyW') || this.pressedKeys.has('ArrowUp')) {
-            this.helicopter.accelerate(0.5);
+            this.helicopter.accelerate(0.01);
         }
 
         if (this.pressedKeys.has('KeyS') || this.pressedKeys.has('ArrowDown')) {
-            this.helicopter.accelerate(-0.5);
+            this.helicopter.accelerate(-0.01);
         }
 
         this.updateCamera();

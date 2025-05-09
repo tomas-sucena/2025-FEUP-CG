@@ -3,7 +3,7 @@ import { MyCylinder } from '../solids/MyCylinder.js';
 import { MySphere } from '../solids/MySphere.js';
 
 export class MyHeli extends MyObject {
-    constructor({ scene, color, position, direction, velocity }) {
+    constructor({ scene, color, position, yaw, velocity }) {
         super(scene);
 
         const material = {
@@ -18,8 +18,8 @@ export class MyHeli extends MyObject {
         /** The helicopter's velocity */
         this.velocity = velocity ?? [0, 0, 0];
 
-        /** The angle of the helicopter around the Y-axis */
-        this.direction = direction ?? 0;
+        /** The helicopter's yaw angle (rotation around the Y-axis) */
+        this.yaw = yaw ?? 0;
 
         this.head = new MySphere({
             scene,
@@ -37,15 +37,19 @@ export class MyHeli extends MyObject {
         });
     }
 
-    accelerate(value) {
-        this.position[0] += value;
+    accelerate(value, vertical = false) {
+        // update the velocity
+        this.velocity[0] += value * Math.cos(this.yaw) * !vertical;
+        this.velocity[1] += value * vertical;
+        this.velocity[2] += value * Math.sin(-this.yaw) * !vertical;
     }
 
     turn(value) {
-        this.direction += value;
+        this.yaw += value;
 
         // update the velocity
-        // TODO
+        this.velocity[0] *= Math.cos(this.yaw);
+        this.velocity[2] *= Math.sin(this.yaw);
     }
 
     render() {
@@ -57,10 +61,14 @@ export class MyHeli extends MyObject {
             .display();
 
         this.tail
-            .rotate(-Math.PI / 2, 0, 0, 1)
+            .rotate(Math.PI / 2, 0, 0, 1)
             .translate(0.5 * this.head.radius, 0.7 * headHeight, 0)
             .display();
 
-        this.rotate(this.direction, 0, 1, 0).translate(...this.position);
+        // update the position
+        vec3.add(this.position, this.position, this.velocity);
+
+        // rotate and position the helicopter
+        this.rotate(this.yaw, 0, 1, 0).translate(...this.position);
     }
 }
