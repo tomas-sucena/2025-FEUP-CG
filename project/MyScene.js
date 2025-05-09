@@ -170,14 +170,14 @@ export class MyScene extends CGFscene {
 
     update() {
         if (this.pressedKeys.has('KeyA') || this.pressedKeys.has('ArrowLeft')) {
-            this.helicopter.turn(Math.PI / 2);
+            this.helicopter.turn(Math.PI / 80);
         }
 
         if (
             this.pressedKeys.has('KeyD') ||
             this.pressedKeys.has('ArrowRight')
         ) {
-            this.helicopter.turn(-Math.PI / 2);
+            this.helicopter.turn(-Math.PI / 80);
         }
 
         if (this.pressedKeys.has('KeyW') || this.pressedKeys.has('ArrowUp')) {

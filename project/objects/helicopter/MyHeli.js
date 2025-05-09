@@ -3,7 +3,7 @@ import { MyCylinder } from '../solids/MyCylinder.js';
 import { MySphere } from '../solids/MySphere.js';
 
 export class MyHeli extends MyObject {
-    constructor({ scene, color, position, velocity }) {
+    constructor({ scene, color, position, direction, velocity }) {
         super(scene);
 
         const material = {
@@ -17,6 +17,9 @@ export class MyHeli extends MyObject {
 
         /** The helicopter's velocity */
         this.velocity = velocity ?? [0, 0, 0];
+
+        /** The angle of the helicopter around the Y-axis */
+        this.direction = direction ?? 0;
 
         this.head = new MySphere({
             scene,
@@ -39,7 +42,10 @@ export class MyHeli extends MyObject {
     }
 
     turn(value) {
-        this.rotate(value, 0, 1, 0);
+        this.direction += value;
+
+        // update the velocity
+        // TODO
     }
 
     render() {
@@ -55,6 +61,6 @@ export class MyHeli extends MyObject {
             .translate(0.5 * this.head.radius, 0.7 * headHeight, 0)
             .display();
 
-        this.translate(...this.position);
+        this.rotate(this.direction, 0, 1, 0).translate(...this.position);
     }
 }
