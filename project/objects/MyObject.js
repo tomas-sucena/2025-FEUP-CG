@@ -304,7 +304,7 @@ export class MyObject extends CGFobject {
      * @param { string } texture.wrapT - the wrapping to be applied to the T-axis
      * @param { boolean } recursive - indicates if the material should be recursively applied to the child objects
      */
-    setTexture(config, recursive) {
+    setTexture(config, recursive = false) {
         // verify if the material exists
         if (config && this.#material) {
             const { url, wrapS, wrapT } = config;
@@ -324,15 +324,19 @@ export class MyObject extends CGFobject {
 
     /**
      * Displays the object.
+     * @param { boolean } clearTransformations - indicates if the transformation matrix should be cleared
      * @returns a reference to the object
      */
-    display() {
+    display(clearTransformations = true) {
         this.scene.pushMatrix();
 
         // apply the geometric transformations, if any
         if (this.#transformations) {
             this.scene.multMatrix(this.#transformations);
-            this.#transformations = null; // clear the transformation matrix
+
+            if (clearTransformations) {
+                this.#transformations = null; // clear the transformation matrix
+            }
         }
 
         // apply the material

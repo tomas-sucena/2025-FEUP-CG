@@ -1,6 +1,7 @@
 import { MyObject } from '../MyObject.js';
 import { MyCylinder } from '../solids/MyCylinder.js';
 import { MySphere } from '../solids/MySphere.js';
+import { MyLandingGear } from './MyLandingGear.js';
 
 export class MyHeli extends MyObject {
     constructor({ scene, color, position, yaw, velocity }) {
@@ -35,6 +36,13 @@ export class MyHeli extends MyObject {
             height: 3,
             material,
         });
+
+        this.landingGear = new MyLandingGear({
+            scene,
+            width: 5,
+            height: 3,
+            depth: 5,
+        });
     }
 
     accelerate(value, vertical = false) {
@@ -53,7 +61,7 @@ export class MyHeli extends MyObject {
     }
 
     render() {
-        const headHeight = 1.6 * this.head.radius;
+        /*const headHeight = 1.6 * this.head.radius;
 
         this.head
             .scale(1.5, 0.8, 1)
@@ -63,7 +71,9 @@ export class MyHeli extends MyObject {
         this.tail
             .rotate(Math.PI / 2, 0, 0, 1)
             .translate(0.5 * this.head.radius, 0.7 * headHeight, 0)
-            .display();
+            .display();*/
+
+        this.landingGear.display();
 
         // update the position
         vec3.add(this.position, this.position, this.velocity);
