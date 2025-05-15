@@ -26,9 +26,9 @@ export class MyBox extends MyObject {
         this.width = width ?? 1;
         this.height = height ?? 1;
         this.depth = depth ?? 1;
-        this.xDivisions = xDivisions ?? 1;
-        this.yDivisions = yDivisions ?? 1;
-        this.zDivisions = zDivisions ?? 1;
+        this.xDivisions = Math.ceil(xDivisions ?? this.width);
+        this.yDivisions = Math.ceil(yDivisions ?? this.height);
+        this.zDivisions = Math.ceil(zDivisions ?? this.depth);
 
         this.initGeometry({ inverted, material, texture });
     }

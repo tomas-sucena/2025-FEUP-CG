@@ -2,6 +2,7 @@ import { MyObject } from '../MyObject.js';
 import { MyCylinder } from '../solids/MyCylinder.js';
 import { MySphere } from '../solids/MySphere.js';
 import { MyLandingGear } from './MyLandingGear.js';
+import { MyRotor } from './MyRotor.js';
 
 export class MyHeli extends MyObject {
     constructor({ scene, color, position, yaw, velocity }) {
@@ -37,11 +38,20 @@ export class MyHeli extends MyObject {
             material,
         });
 
+        /** The helicopter's landing gear */
         this.landingGear = new MyLandingGear({
             scene,
             width: 5,
-            height: 3,
+            height: 2,
             depth: 5,
+            angle: Math.PI / 6,
+        });
+
+        this.rotor = new MyRotor({
+            scene,
+            height: 0.5,
+            radius: 2,
+            blades: 8,
         });
     }
 
@@ -73,7 +83,8 @@ export class MyHeli extends MyObject {
             .translate(0.5 * this.head.radius, 0.7 * headHeight, 0)
             .display();*/
 
-        this.landingGear.display();
+        //this.landingGear.display();
+        this.rotor.display();
 
         // update the position
         vec3.add(this.position, this.position, this.velocity);
