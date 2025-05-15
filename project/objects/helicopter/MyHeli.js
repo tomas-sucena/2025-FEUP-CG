@@ -49,9 +49,10 @@ export class MyHeli extends MyObject {
 
         this.rotor = new MyRotor({
             scene,
-            height: 0.4,
-            radius: 0.5,
-            blades: 4,
+            gearHeight: 0.4,
+            gearRadius: 0.5,
+            bladeLength: 2,
+            numBlades: 4,
         });
     }
 
@@ -71,7 +72,7 @@ export class MyHeli extends MyObject {
     }
 
     render() {
-        /*const headHeight = 1.6 * this.head.radius;
+        /* const headHeight = 1.6 * this.head.radius;
 
         this.head
             .scale(1.5, 0.8, 1)
@@ -83,7 +84,7 @@ export class MyHeli extends MyObject {
             .translate(0.5 * this.head.radius, 0.7 * headHeight, 0)
             .display();*/
 
-        //this.landingGear.display();
+        this.landingGear.display();
         this.rotor.display();
 
         // update the position
