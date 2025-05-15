@@ -9,19 +9,27 @@ export class MyRotor extends MyObject {
         /** The number of blades of the rotor */
         this.blades = blades ?? 4;
 
-        /** The cylinder that connects the blades */
-        this.rotorMast = new MyCylinder({
+        /** The bottomost gear, which is connected to the rotor blades */
+        this.bottomGear = new MyCylinder({
             scene,
-            radius: 0.02 * radius,
-            height,
+            radius: radius,
+            height: height / 2,
+        });
+
+        /** The topmost gear */
+        this.topGear = new MyCylinder({
+            scene,
+            bottomRadius: this.bottomGear.radius,
+            topRadius: this.bottomGear.radius / 3,
+            height: height / 2,
         });
 
         /** A rotor blade */
         this.rotorBlade = new MyBox({
             scene,
-            width: radius,
-            height: 0.05 * height,
-            depth: 2 * this.rotorMast.radius,
+            width: 3,
+            height: this.bottomGear.height,
+            depth: height / 2,
         });
     }
 
@@ -30,20 +38,21 @@ export class MyRotor extends MyObject {
     }
 
     render() {
-        const halfBladeWidth = this.rotorBlade.width / 2;
-        const bladeY = 0.8 * this.height;
-
-        const deltaAng = (2 * Math.PI) / this.blades;
+        // display the gears
+        this.bottomGear.display();
+        this.topGear.translate(0, this.bottomGear.height, 0).display();
 
         // display the mast
-        this.rotorMast.display();
 
         // display the blades
+        const halfBladeWidth = this.rotorBlade.width / 2;
+        const deltaAng = (2 * Math.PI) / this.blades;
+
         for (let blade = 0; blade < this.blades; ++blade) {
             const ang = blade * deltaAng;
 
             this.rotorBlade
-                .translate(halfBladeWidth, bladeY, 0)
+                .translate(halfBladeWidth, 0, 0)
                 .rotate(ang, 0, 1, 0)
                 .display();
         }

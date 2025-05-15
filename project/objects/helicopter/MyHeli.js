@@ -49,9 +49,9 @@ export class MyHeli extends MyObject {
 
         this.rotor = new MyRotor({
             scene,
-            height: 0.5,
-            radius: 2,
-            blades: 8,
+            height: 0.4,
+            radius: 0.5,
+            blades: 4,
         });
     }
 

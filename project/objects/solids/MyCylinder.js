@@ -28,8 +28,6 @@ export class MyCylinder extends MyObject {
         this.topRadius = topRadius ?? radius;
         /** The radius of the bottom cylinder */
         this.bottomRadius = bottomRadius ?? this.topRadius;
-        /** The width of the cylinder */
-        this.radius = radius ?? 1;
         /** The height of the cylinder */
         this.height = height ?? 1;
         /** The number of divisions around the Y-axis */
@@ -38,6 +36,13 @@ export class MyCylinder extends MyObject {
         this.stacks = stacks ?? 1;
 
         this.initGeometry({ inverted, material, texture });
+    }
+
+    /**
+     * Returns the radius of the biggest face of the cylinder.
+     */
+    get radius() {
+        return Math.max(this.topRadius, this.bottomRadius);
     }
 
     initBuffers() {
