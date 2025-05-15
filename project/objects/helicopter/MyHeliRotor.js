@@ -2,7 +2,7 @@ import { MyObject } from '../MyObject.js';
 import { MyBox } from '../solids/MyBox.js';
 import { MyCylinder } from '../solids/MyCylinder.js';
 
-export class MyRotor extends MyObject {
+export class MyHeliRotor extends MyObject {
     constructor({ scene, gearHeight, gearRadius, bladeLength, numBlades }) {
         super(scene);
 

@@ -1,9 +1,12 @@
 import { MyObject } from '../MyObject.js';
-import { MyCylinder } from '../solids/MyCylinder.js';
 import { MySphere } from '../solids/MySphere.js';
-import { MyLandingGear } from './MyLandingGear.js';
-import { MyRotor } from './MyRotor.js';
+import { MyHeliLandingGear } from './MyHeliLandingGear.js';
+import { MyHeliRotor } from './MyHeliRotor.js';
+import { MyHeliTail } from './MyHeliTail.js';
 
+/**
+ * A helicopter.
+ */
 export class MyHeli extends MyObject {
     constructor({ scene, color, position, yaw, velocity }) {
         super(scene);
@@ -30,16 +33,16 @@ export class MyHeli extends MyObject {
             material,
         });
 
-        this.tail = new MyCylinder({
+        /** The helicopter's tail */
+        this.tail = new MyHeliTail({
             scene,
-            topRadius: 0.1,
-            bottomRadius: 0.3,
-            height: 3,
+            width: 4,
+            radius: 1,
             material,
         });
 
         /** The helicopter's landing gear */
-        this.landingGear = new MyLandingGear({
+        this.landingGear = new MyHeliLandingGear({
             scene,
             width: 5,
             height: 2,
@@ -47,7 +50,7 @@ export class MyHeli extends MyObject {
             angle: Math.PI / 6,
         });
 
-        this.rotor = new MyRotor({
+        this.rotor = new MyHeliRotor({
             scene,
             gearHeight: 0.4,
             gearRadius: 0.5,
@@ -72,20 +75,16 @@ export class MyHeli extends MyObject {
     }
 
     render() {
-        /* const headHeight = 1.6 * this.head.radius;
+        /*const headHeight = 1.6 * this.head.radius;
 
         this.head
-            .scale(1.5, 0.8, 1)
+            .scale(2, 0.8, 1.5)
             .translate(0, headHeight / 2, 0)
-            .display();
-
-        this.tail
-            .rotate(Math.PI / 2, 0, 0, 1)
-            .translate(0.5 * this.head.radius, 0.7 * headHeight, 0)
             .display();*/
 
         this.landingGear.display();
         this.rotor.display();
+        this.tail.display();
 
         // update the position
         vec3.add(this.position, this.position, this.velocity);

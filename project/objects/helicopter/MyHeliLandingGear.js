@@ -1,7 +1,7 @@
 import { MyBox } from '../solids/MyBox.js';
 import { MyObject } from '../MyObject.js';
 
-export class MyLandingGear extends MyObject {
+export class MyHeliLandingGear extends MyObject {
     constructor({ scene, width, height, depth, angle, material, texture }) {
         super(scene);
 
