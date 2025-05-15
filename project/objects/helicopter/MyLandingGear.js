@@ -1,9 +1,8 @@
 import { MyBox } from '../solids/MyBox.js';
 import { MyObject } from '../MyObject.js';
-import { MyCylinder } from '../solids/MyCylinder.js';
 
 export class MyLandingGear extends MyObject {
-    constructor({ scene, width, height, depth, material, texture }) {
+    constructor({ scene, width, height, depth, angle, material, texture }) {
         super(scene);
 
         /** The height of the landing gear */
@@ -12,11 +11,14 @@ export class MyLandingGear extends MyObject {
         /** The depth of both landing skids plus the distance between them **/
         this.depth = depth;
 
+        /** The angle between the crosstubes and the Y-axis */
+        this.angle = angle;
+
         /** A landing skid */
         this.skid = new MyBox({
             scene,
             width,
-            height: 0.05 * height,
+            height: 0.1 * height,
             depth: 0.05 * depth,
             material,
             texture,
@@ -25,9 +27,9 @@ export class MyLandingGear extends MyObject {
         /** The tubes that connect the landing skids to the cockpit */
         this.crosstube = new MyBox({
             scene,
-            width: 0.03 * depth,
+            width: 0.03 * width,
             depth: 0.03 * depth,
-            height: Math.sqrt(2) * height,
+            height: (0.9 * height) / Math.cos(this.angle),
         });
     }
 
@@ -49,14 +51,14 @@ export class MyLandingGear extends MyObject {
         // display the front skid and the corresponding crosstubes
         this.skid.translate(0, 0, halfSkidDistance).display();
         this.crosstube
-            .rotate(-Math.PI / 4, 1, 0, 0)
+            .rotate(-this.angle, 1, 0, 0)
             .translate(
                 halfCrosstubeDistance,
                 this.skid.height,
                 halfSkidDistance,
             )
             .display()
-            .rotate(-Math.PI / 4, 1, 0, 0)
+            .rotate(-this.angle, 1, 0, 0)
             .translate(
                 -halfCrosstubeDistance,
                 this.skid.height,
@@ -67,14 +69,14 @@ export class MyLandingGear extends MyObject {
         // display the back skid and the corresponding crosstubes
         this.skid.translate(0, 0, -halfSkidDistance).display();
         this.crosstube
-            .rotate(Math.PI / 4, 1, 0, 0)
+            .rotate(this.angle, 1, 0, 0)
             .translate(
                 -halfCrosstubeDistance,
                 this.skid.height,
                 -halfSkidDistance,
             )
             .display()
-            .rotate(Math.PI / 4, 1, 0, 0)
+            .rotate(this.angle, 1, 0, 0)
             .translate(
                 halfCrosstubeDistance,
                 this.skid.height,
