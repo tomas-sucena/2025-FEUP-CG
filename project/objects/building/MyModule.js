@@ -74,6 +74,7 @@ export class MyModule extends MyBox {
             /** The module's helipad */
             this.helipad = new MyCircle({
                 scene,
+                layers: 2,
                 radius: 0.4 * this.depth,
                 texture: textures.helipad,
             });
