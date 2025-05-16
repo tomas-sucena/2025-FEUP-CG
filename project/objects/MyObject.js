@@ -1,4 +1,4 @@
-import { CGFappearance, CGFobject, CGFscene } from '../../lib/CGF.js';
+import { CGFappearance, CGFobject, CGFscene, CGFshader } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
     /** The material to be applied to the object */
@@ -115,8 +115,11 @@ export class MyObject extends CGFobject {
      * @param { boolean } config.inverted - indicates if the object should be inverted
      * @param { Object } config.material - the material configuration
      * @param { string | Object } config.texture - the texture configuration
+     * @param { Object } config.shader - the shaders to be applied to the object
+     * @param { string } config.shader.vert - the vertex shader
+     * @param { string } config.shader.frag - the fragment shader
      */
-    initGeometry({ inverted, material, texture }) {
+    initGeometry({ inverted, material, texture, shader }) {
         this.initBuffers();
 
         // invert the normals and indices if needed
@@ -134,6 +137,9 @@ export class MyObject extends CGFobject {
 
         // initialize the texture
         this.setTexture(texture);
+
+        // initialize the shader
+        this.setShader(shader);
     }
 
     /**
@@ -258,7 +264,7 @@ export class MyObject extends CGFobject {
      * @param { Object } config - the material configuration
      * @param { boolean } recursive - indicates if the material should be recursively applied to the child objects
      */
-    setMaterial(config, recursive) {
+    setMaterial(config, recursive = false) {
         // verify if the material exists
         if (this.#material) {
             const { ambient, diffuse, specular, emission, shininess } =
@@ -292,7 +298,7 @@ export class MyObject extends CGFobject {
 
         // set the material of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) => child.setMaterial(config));
+            this.#getChildren().forEach((child) => child.setMaterial(config, true));
         }
     }
 
@@ -304,7 +310,7 @@ export class MyObject extends CGFobject {
      * @param { string } texture.wrapT - the wrapping to be applied to the T-axis
      * @param { boolean } recursive - indicates if the material should be recursively applied to the child objects
      */
-    setTexture(config, recursive) {
+    setTexture(config, recursive = false) {
         // verify if the material exists
         if (config && this.#material) {
             const { url, wrapS, wrapT } = config;
@@ -318,7 +324,25 @@ export class MyObject extends CGFobject {
 
         // set the texture of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) => child.setTexture(config));
+            this.#getChildren().forEach((child) => child.setTexture(config, true));
+        }
+    }
+
+    /**
+     * Sets the object's vertex and fragment shaders
+     * @param { Object } config - the shader configuration
+     * @param { string } config.vert - the URL of the vertex shader
+     * @param { string } config.frag - the URL of the fragment shader
+     * @param { boolean } recursive - indicates if the child objects should inherit the shaders
+     */
+    setShader(config, recursive = false) {
+        if (config) {
+            this.shader = new CGFshader(this.scene.gl, config.vert, config.frag);
+        }
+
+        // set the shader of the child objects
+        if (recursive) {
+            this.#getChildren().forEach((child) => child.setShader(config, true));
         }
     }
 
@@ -340,10 +364,17 @@ export class MyObject extends CGFobject {
             this.#material.apply();
         }
 
+        // apply the shaders
+        if (this.shader) {
+            this.scene.setActiveShader(this.shader);
+        }
+
         // display the geometry of the object
         this.render();
 
         this.scene.popMatrix();
+        this.scene.setActiveShader(this.scene.defaultShader); // reset the shader
+
         return this;
     }
 }
