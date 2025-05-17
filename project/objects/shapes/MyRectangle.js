@@ -18,6 +18,7 @@ export class MyRectangle extends MyObject {
         inverted,
         material,
         texture,
+        shader,
     }) {
         super(scene);
 
@@ -26,11 +27,11 @@ export class MyRectangle extends MyObject {
         /** The dimension of the rectangle on the Y-axis */
         this.height = height ?? 1;
         /** The number of subdivisions of the rectangle on the Y-axis */
-        this.rows = rows ?? 1;
+        this.rows = rows ?? this.height;
         /** The number of subdivisions of the rectangle on the X-axis */
-        this.columns = columns ?? 1;
+        this.columns = columns ?? this.width;
 
-        this.initGeometry({ inverted, material, texture });
+        this.initGeometry({ inverted, material, texture, shader });
     }
 
     initBuffers() {

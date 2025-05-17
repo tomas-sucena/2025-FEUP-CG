@@ -1,4 +1,9 @@
-import { CGFappearance, CGFobject, CGFscene, CGFshader } from '../../lib/CGF.js';
+import {
+    CGFappearance,
+    CGFobject,
+    CGFscene,
+    CGFshader,
+} from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
     /** The material to be applied to the object */
@@ -298,7 +303,9 @@ export class MyObject extends CGFobject {
 
         // set the material of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) => child.setMaterial(config, true));
+            this.#getChildren().forEach((child) =>
+                child.setMaterial(config, true),
+            );
         }
     }
 
@@ -324,7 +331,9 @@ export class MyObject extends CGFobject {
 
         // set the texture of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) => child.setTexture(config, true));
+            this.#getChildren().forEach((child) =>
+                child.setTexture(config, true),
+            );
         }
     }
 
@@ -337,12 +346,18 @@ export class MyObject extends CGFobject {
      */
     setShader(config, recursive = false) {
         if (config) {
-            this.shader = new CGFshader(this.scene.gl, config.vert, config.frag);
+            this.shader = new CGFshader(
+                this.scene.gl,
+                config.vert,
+                config.frag,
+            );
         }
 
         // set the shader of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) => child.setShader(config, true));
+            this.#getChildren().forEach((child) =>
+                child.setShader(config, true),
+            );
         }
     }
 
@@ -372,9 +387,12 @@ export class MyObject extends CGFobject {
         // display the geometry of the object
         this.render();
 
-        this.scene.popMatrix();
-        this.scene.setActiveShader(this.scene.defaultShader); // reset the shader
+        // reset the shaders
+        if (this.shader) {
+            this.scene.setActiveShader(this.scene.defaultShader);
+        }
 
+        this.scene.popMatrix();
         return this;
     }
 }

@@ -3,7 +3,7 @@ import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
 import { MyColor } from './utils/MyColor.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
-import { MyPlane } from './objects/shapes/MyPlane.js';
+import { MyRectangle } from './objects/shapes/MyRectangle.js';
 import { MyTree } from './objects/forest/MyTree.js';
 import { MyForest } from './objects/forest/MyForest.js';
 
@@ -78,14 +78,20 @@ export class MyScene extends CGFscene {
         });
 
         /** The surface */
-        this.surface = new MyPlane(this, {
-            nrDivs: 64,
-            maxS: 64,
-            maxT: 64,
+        this.surface = new MyRectangle({
+            scene: this,
+            width: 400,
+            height: 400,
+            rows: 64,
+            columns: 64,
             material: {
                 diffuse: [1, 1, 1, 1],
             },
-            texture: './assets/grass.png',
+            texture: './assets/grass.jpg',
+            shader: {
+                vert: './shaders/yellow&blue.vert',
+                frag: './shaders/yellow&blue.frag',
+            },
         });
 
         /** The fire department building */
@@ -178,11 +184,7 @@ export class MyScene extends CGFscene {
             this.scaleFactor,
         );
 
-        this.surface
-            .rotate(-Math.PI / 2, 1, 0, 0)
-            .scale(400, 1, 400)
-            .display();
-
+        this.surface.rotate(-Math.PI / 2, 1, 0, 0).display();
         this.skysphere.display();
         this.building.display();
 
