@@ -5,6 +5,7 @@ import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyRectangle } from './objects/shapes/MyRectangle.js';
 import { MyForest } from './objects/forest/MyForest.js';
+import { MyTerrain } from './objects/MyTerrain.js';
 
 /**
  * MyScene
@@ -100,20 +101,14 @@ export class MyScene extends CGFscene {
         });
 
         /** The surface */
-        this.surface = new MyRectangle({
+        this.surface = new MyTerrain({
             scene: this,
-            width: 400,
-            height: 400,
-            rows: 64,
-            columns: 64,
-            material: {
-                diffuse: [1, 1, 1, 1],
-            },
-            texture: './assets/grass.png',
-            shader: {
-                vert: './shaders/terrain.vert',
-                frag: './shaders/terrain.frag',
-            },
+            size: 400,
+            textures: [
+                './assets/terrain.jpg',
+                './assets/grass.png',
+                './assets/snow.jpg',
+            ],
         });
 
         /** The fire department building */
