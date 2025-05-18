@@ -1,10 +1,9 @@
-import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
+import { CGFscene, CGFcamera, CGFaxis, CGFtexture } from '../lib/CGF.js';
 
 import { MyColor } from './utils/MyColor.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyRectangle } from './objects/shapes/MyRectangle.js';
-import { MyTree } from './objects/forest/MyTree.js';
 import { MyForest } from './objects/forest/MyForest.js';
 
 /**
@@ -14,6 +13,29 @@ import { MyForest } from './objects/forest/MyForest.js';
 export class MyScene extends CGFscene {
     constructor() {
         super();
+
+        /** A hash map to store the textures that have already been loaded */
+        this.textures = new Map();
+    }
+
+    /**
+     * Fetches a texture and, if it isn't already a part of the scene, loads it.
+     * @param {string} textureURL - the URL that identifies the texture
+     * @return {CGFtexture} the texture
+     */
+    getTexture(textureURL) {
+        // verify if the texture has already been loaded
+        let texture = this.textures.get(textureURL);
+
+        if (texture) {
+            return texture;
+        }
+
+        // load the texture
+        texture = new CGFtexture(this, textureURL);
+        this.textures.set(textureURL, texture);
+
+        return texture;
     }
 
     init(application) {

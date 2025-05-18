@@ -3,6 +3,7 @@ import {
     CGFobject,
     CGFscene,
     CGFshader,
+    CGFtexture,
 } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
@@ -265,22 +266,17 @@ export class MyObject extends CGFobject {
 
     /**
      * Applies a texture to the object's material.
-     * @param { string | Object } config the texture configuration
-     * @param { string } texture.url - the URL specifying the texture
-     * @param { string } texture.wrapS - the wrapping to be applied to the S-axis
-     * @param { string } texture.wrapT - the wrapping to be applied to the T-axis
+     * @param { string } textureURL - the URL that identifies the texture
      * @param { boolean } recursive - indicates if the material should be recursively applied to the child objects
      */
-    setTexture(config, recursive = false) {
+    setTexture(textureURL, recursive = false) {
         // verify if the material exists
-        if (config && this.#material) {
-            const { url, wrapS, wrapT } = config;
-
+        if (textureURL && this.#material) {
             // bind the texture to the material
-            this.#material.loadTexture(url ?? config);
+            this.#material.setTexture(this.scene.getTexture(textureURL));
 
             // set the texture wrapping mode
-            this.#material.setTextureWrap(wrapS ?? 'REPEAT', wrapT ?? 'REPEAT');
+            this.#material.setTextureWrap('REPEAT', 'REPEAT');
         }
 
         // set the texture of the child objects
