@@ -87,7 +87,7 @@ export class MyScene extends CGFscene {
             material: {
                 diffuse: [1, 1, 1, 1],
             },
-            texture: './assets/grass.jpg',
+            texture: './assets/grass.png',
             shader: {
                 vert: './shaders/yellow&blue.vert',
                 frag: './shaders/yellow&blue.frag',

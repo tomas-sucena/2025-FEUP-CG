@@ -8,8 +8,6 @@ import {
 export class MyObject extends CGFobject {
     /** The material to be applied to the object */
     #material;
-    /** The geometric transformation matrix */
-    #transformations;
     /** The child objects that constitute the object */
     #children;
 
@@ -20,7 +18,9 @@ export class MyObject extends CGFobject {
     constructor(scene) {
         super(scene);
 
-        this.#transformations = this.#children = null;
+        /** The geometric transformations matrix */
+        this.transformations = mat4.create();
+        this.#children = null;
     }
 
     /**
@@ -71,32 +71,6 @@ export class MyObject extends CGFobject {
                 this.indices[i],
             ];
         }
-    }
-
-    /**
-     * Updates the transformation matrix by concatenating a new geometric transformation.
-     * @param { Array } matrix a geometric transformation matrix
-     */
-    #addTransformation(matrix) {
-        // verify if the transformation matrix has not been defined
-        if (this.#transformations === null) {
-            this.#transformations = matrix;
-            return;
-        }
-
-        // multiply the matrices (line by line)
-        const result = new Array(16).fill(0);
-
-        for (let i = 0; i < 4; ++i) {
-            for (let j = 0; j < 4; ++j) {
-                for (let k = 0; k < 4; ++k) {
-                    result[i * 4 + k] +=
-                        this.#transformations[i * 4 + j] * matrix[j * 4 + k];
-                }
-            }
-        }
-
-        this.#transformations = result;
     }
 
     /**
@@ -200,16 +174,12 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     translate(Tx, Ty, Tz) {
-        // the (transposed) translation matrix
-        // prettier-ignore
-        const translationMatrix = [
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            Tx, Ty, Tz, 1,
-        ];
+        // compute the translation matrix
+        const translationMatrix = mat4.create();
+        mat4.translate(translationMatrix, translationMatrix, [Tx, Ty, Tz]);
 
-        this.#addTransformation(translationMatrix);
+        // concatenate the geometric transformation
+        mat4.mul(this.transformations, translationMatrix, this.transformations);
         return this;
     }
 
@@ -221,16 +191,12 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     scale(Sx, Sy, Sz) {
-        // the (transposed) scaling matrix
-        // prettier-ignore
-        const scalingMatrix = [
-            Sx, 0, 0, 0,
-            0, Sy, 0, 0,
-            0, 0, Sz, 0,
-            0, 0, 0, 1,
-        ];
+        // compute the scaling matrix
+        const scalingMatrix = mat4.create();
+        mat4.scale(scalingMatrix, scalingMatrix, [Sx, Sy, Sz]);
 
-        this.#addTransformation(scalingMatrix);
+        // concatenate the geometric transformation
+        mat4.mul(this.transformations, scalingMatrix, this.transformations);
         return this;
     }
 
@@ -243,24 +209,12 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     rotate(ang, Rx, Ry, Rz) {
-        // variables to speed up computations
-        const sin = Math.sin(ang),
-            cos = Math.cos(ang),
-            cos_ = 1 - cos;
-        const xy = Rx * Ry,
-            xz = Rx * Rz,
-            yz = Ry * Rz;
+        // compute the translation matrix
+        const rotationMatrix = mat4.create();
+        mat4.rotate(rotationMatrix, rotationMatrix, ang, [Rx, Ry, Rz]);
 
-        // the (transposed) rotation matrix
-        // prettier-ignore
-        const rotationMatrix = [
-            Rx * Rx * cos_ + cos, xy * cos_ + Rz * sin, xz * cos_ - Ry * sin, 0,
-            xy * cos_ - Rz * sin, Ry * Ry * cos_ + cos, yz * cos_ + Rx * sin, 0,
-            xz * cos_ + Ry * sin, yz * cos_ - Rx * sin, Rz * Rz * cos_ + cos, 0,
-            0, 0, 0, 1,
-        ];
-
-        this.#addTransformation(rotationMatrix);
+        // concatenate the geometric transformation
+        mat4.mul(this.transformations, rotationMatrix, this.transformations);
         return this;
     }
 
@@ -368,11 +322,9 @@ export class MyObject extends CGFobject {
     display() {
         this.scene.pushMatrix();
 
-        // apply the geometric transformations, if any
-        if (this.#transformations) {
-            this.scene.multMatrix(this.#transformations);
-            this.#transformations = null; // clear the transformation matrix
-        }
+        // apply the geometric transformations
+        this.scene.multMatrix(this.transformations);
+        mat4.identity(this.transformations); // reset the transformations matrix
 
         // apply the material
         if (this.#material) {
