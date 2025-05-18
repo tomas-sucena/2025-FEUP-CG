@@ -89,8 +89,8 @@ export class MyScene extends CGFscene {
             },
             texture: './assets/grass.png',
             shader: {
-                vert: './shaders/yellow&blue.vert',
-                frag: './shaders/yellow&blue.frag',
+                vert: './shaders/terrain.vert',
+                frag: './shaders/terrain.frag',
             },
         });
 
