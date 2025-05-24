@@ -70,8 +70,9 @@ export class MyHeli extends MyObject {
         this.yaw += value;
 
         // update the velocity
-        this.velocity[0] *= Math.cos(this.yaw);
-        this.velocity[2] *= Math.sin(this.yaw);
+        const horizontalSpeed = Math.hypot(this.velocity[0], this.velocity[2]);
+        this.velocity[0] = horizontalSpeed * Math.cos(this.yaw);
+        this.velocity[2] = horizontalSpeed * -Math.sin(this.yaw);
     }
 
     render() {
