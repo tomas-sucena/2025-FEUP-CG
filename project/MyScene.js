@@ -20,7 +20,7 @@ export class MyScene extends CGFscene {
     }
 
     /**
-     * Fetches a texture and, if it isn't already a part of the scene, loads it.
+     * Fetches a texture and, loading it beforehand if it isn't already a part of the scene.
      * @param {string} textureURL - the URL that identifies the texture
      * @return {CGFtexture} the texture
      */
@@ -107,7 +107,7 @@ export class MyScene extends CGFscene {
             textures: [
                 './assets/terrain.jpg',
                 './assets/grass.png',
-                './assets/snow.jpg',
+                './assets/water.jpg',
             ],
         });
 
@@ -201,11 +201,11 @@ export class MyScene extends CGFscene {
             this.scaleFactor,
         );
 
+        //this.skysphere.display();
         this.surface.rotate(-Math.PI / 2, 1, 0, 0).display();
-        this.skysphere.display();
-        this.building.display();
+        //this.building.display();
 
-        this.forest.translate(0, 0, 35).display();
+        //this.forest.translate(0, 0, 35).display();
 
         // ---- END Primitive drawing section
     }

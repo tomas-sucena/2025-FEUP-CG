@@ -27,9 +27,9 @@ export class MyRectangle extends MyObject {
         /** The dimension of the rectangle on the Y-axis */
         this.height = height ?? 1;
         /** The number of subdivisions of the rectangle on the Y-axis */
-        this.rows = rows ?? this.height;
+        this.rows = rows ?? this.height / 2;
         /** The number of subdivisions of the rectangle on the X-axis */
-        this.columns = columns ?? this.width;
+        this.columns = columns ?? this.width / 2;
 
         this.initGeometry({ inverted, material, texture, shader });
     }
@@ -43,14 +43,17 @@ export class MyRectangle extends MyObject {
         const deltaX = this.width / this.columns;
         const deltaY = this.height / this.rows;
 
-        // define the rows
-        let y = this.height / 2;
+        const halfHeight = this.height / 2;
+        const halfWidth = this.width / 2;
 
+        // define the rows
         for (let row = 0; row <= this.rows; ++row) {
-            let x = -this.width / 2;
+            const y = halfHeight - row * deltaY;
 
             // define the columns
             for (let column = 0; column <= this.columns; ++column) {
+                const x = -halfWidth + column * deltaX;
+
                 // define the indices
                 if (row < this.rows && column < this.columns) {
                     this.addPairOfIndices(this.columns);
@@ -58,7 +61,6 @@ export class MyRectangle extends MyObject {
 
                 // define the vertices
                 this.vertices.push(x, y, 0);
-                x += deltaX;
 
                 // define the normals
                 this.normals.push(0, 0, 1);
@@ -66,8 +68,6 @@ export class MyRectangle extends MyObject {
                 // define the texture coordinates
                 this.texCoords.push(column / this.columns, row / this.rows);
             }
-
-            y -= deltaY;
         }
     }
 }

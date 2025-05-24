@@ -24,7 +24,22 @@ export class MyTerrain extends MyRectangle {
     }
 
     display() {
+        this.scene.pushMatrix();
+
+        // apply the geometric transformations
+        this.scene.multMatrix(this.transformations);
+        mat4.identity(this.transformations); // reset the transformations matrix
+
         this.textures.forEach((texture, index) => texture.bind(index));
-        super.display();
+
+        // apply the shaders
+        if (this.shader) {
+            this.scene.setActiveShader(this.shader);
+        }
+
+        super.render();
+
+        this.scene.popMatrix();
+        this.scene.setActiveShader(this.scene.defaultShader);
     }
 }

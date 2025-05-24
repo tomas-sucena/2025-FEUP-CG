@@ -3,7 +3,6 @@ precision highp float;
 #endif
 
 // input
-varying vec4 vVertexPosition;
 varying vec2 vTextureCoord;
 
 uniform sampler2D uMaskSampler;
