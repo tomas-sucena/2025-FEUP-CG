@@ -65,7 +65,7 @@ export class MyHeli extends MyObject {
             height: 2.5,
             width: 1.8,
             glassColor: [0.8, 0.85, 0.9, 0.4],
-            material
+            material,
         });
 
         this.rope = new MyHeliRope({
@@ -75,10 +75,9 @@ export class MyHeli extends MyObject {
             knotCount: 10,
             knotSize: 0.2,
             colors: {
-                knot: [0.8, 0.1, 0.1, 1]
+                knot: [0.8, 0.1, 0.1, 1],
             },
         });
-
     }
 
     accelerate(value, vertical = false) {
@@ -88,12 +87,17 @@ export class MyHeli extends MyObject {
         this.velocity[2] += value * Math.sin(-this.yaw) * !vertical;
     }
 
-    turn(value) {
-        this.yaw += value;
+    /**
+     * Turns the helicopter, updating its yaw and velocity.
+     * @param {number} delta_yaw - the angle by which to update the yaw
+     */
+    turn(delta_yaw) {
+        this.yaw += delta_yaw;
 
         // update the velocity
-        this.velocity[0] *= Math.cos(this.yaw);
-        this.velocity[2] *= Math.sin(this.yaw);
+        const horizontalSpeed = Math.hypot(this.velocity[0], this.velocity[2]);
+        this.velocity[0] = horizontalSpeed * Math.cos(this.yaw);
+        this.velocity[2] = horizontalSpeed * Math.sin(-this.yaw);
     }
 
     render() {
@@ -105,12 +109,8 @@ export class MyHeli extends MyObject {
             .display();*/
 
         this.landingGear.display();
-        this.rotor
-            .translate(0, this.tail.height*1.95, 0)
-            .display();
-        this.tail
-            .translate(-2.7, this.tail.height, 0)
-            .display();
+        this.rotor.translate(0, this.tail.height * 1.95, 0).display();
+        this.tail.translate(-2.7, this.tail.height, 0).display();
 
         this.cockpit
             .translate(-2.3, this.tail.height, 0)
@@ -118,7 +118,7 @@ export class MyHeli extends MyObject {
             .display();
 
         this.rope
-            .translate(-2.3, this.tail.height*5, 0)
+            .translate(-2.3, this.tail.height * 5, 0)
             .rotate(Math.PI, 0, 0, 0)
             .display();
 
@@ -127,6 +127,5 @@ export class MyHeli extends MyObject {
 
         // rotate and position the helicopter
         this.rotate(this.yaw, 0, 1, 0).translate(...this.position);
-    
     }
 }
