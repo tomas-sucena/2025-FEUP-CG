@@ -7,7 +7,7 @@ export class MyHeliTail extends MyCylinder {
             scene,
             bottomRadius: radius,
             topRadius: 0.2 * radius,
-            height: 0.95 * width,
+            height: 0.75 * width,
             material,
         });
 

@@ -3,6 +3,8 @@ import { MySphere } from '../solids/MySphere.js';
 import { MyHeliLandingGear } from './MyHeliLandingGear.js';
 import { MyHeliRotor } from './MyHeliRotor.js';
 import { MyHeliTail } from './MyHeliTail.js';
+import { MyHeliCockpit } from './MyHeliCockpit.js';
+import { MyHeliRope } from './MyHeliRope.js';
 
 /**
  * A helicopter.
@@ -45,7 +47,7 @@ export class MyHeli extends MyObject {
         this.landingGear = new MyHeliLandingGear({
             scene,
             width: 5,
-            height: 2,
+            height: 2.3,
             depth: 5,
             angle: Math.PI / 6,
         });
@@ -57,6 +59,26 @@ export class MyHeli extends MyObject {
             bladeLength: 2,
             numBlades: 4,
         });
+
+        this.cockpit = new MyHeliCockpit({
+            scene: this.scene,
+            height: 2.5,
+            width: 1.8,
+            glassColor: [0.8, 0.85, 0.9, 0.4],
+            material
+        });
+
+        this.rope = new MyHeliRope({
+            scene: this.scene,
+            radius: 0.05,
+            length: 8,
+            knotCount: 10,
+            knotSize: 0.2,
+            colors: {
+                knot: [0.8, 0.1, 0.1, 1]
+            },
+        });
+
     }
 
     accelerate(value, vertical = false) {
@@ -70,9 +92,8 @@ export class MyHeli extends MyObject {
         this.yaw += value;
 
         // update the velocity
-        const horizontalSpeed = Math.hypot(this.velocity[0], this.velocity[2]);
-        this.velocity[0] = horizontalSpeed * Math.cos(this.yaw);
-        this.velocity[2] = horizontalSpeed * -Math.sin(this.yaw);
+        this.velocity[0] *= Math.cos(this.yaw);
+        this.velocity[2] *= Math.sin(this.yaw);
     }
 
     render() {
@@ -84,13 +105,28 @@ export class MyHeli extends MyObject {
             .display();*/
 
         this.landingGear.display();
-        this.rotor.display();
-        this.tail.display();
+        this.rotor
+            .translate(0, this.tail.height*1.95, 0)
+            .display();
+        this.tail
+            .translate(-2.7, this.tail.height, 0)
+            .display();
+
+        this.cockpit
+            .translate(-2.3, this.tail.height, 0)
+            .rotate(Math.PI, 0, 1, 0)
+            .display();
+
+        this.rope
+            .translate(-2.3, this.tail.height*5, 0)
+            .rotate(Math.PI, 0, 0, 0)
+            .display();
 
         // update the position
         vec3.add(this.position, this.position, this.velocity);
 
         // rotate and position the helicopter
         this.rotate(this.yaw, 0, 1, 0).translate(...this.position);
+    
     }
 }
