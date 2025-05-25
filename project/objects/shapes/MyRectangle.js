@@ -27,9 +27,9 @@ export class MyRectangle extends MyObject {
         /** The dimension of the rectangle on the Y-axis */
         this.height = height ?? 1;
         /** The number of subdivisions of the rectangle on the Y-axis */
-        this.rows = rows ?? this.height / 2;
+        this.rows = rows ?? this.height;
         /** The number of subdivisions of the rectangle on the X-axis */
-        this.columns = columns ?? this.width / 2;
+        this.columns = columns ?? this.width;
 
         this.initGeometry({ inverted, material, texture, shader });
     }

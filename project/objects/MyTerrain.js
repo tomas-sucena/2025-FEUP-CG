@@ -6,6 +6,8 @@ export class MyTerrain extends MyRectangle {
             scene,
             width: size,
             height: size,
+            rows: 200,
+            columns: 200,
             shader: {
                 vert: './shaders/terrain.vert',
                 frag: './shaders/terrain.frag',
