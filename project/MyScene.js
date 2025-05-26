@@ -1,4 +1,4 @@
-import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
+import { CGFscene, CGFcamera, CGFaxis, CGFshader } from '../lib/CGF.js';
 
 import { MyColor } from './utils/MyColor.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
@@ -7,6 +7,7 @@ import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
 import { MyTree } from './objects/forest/MyTree.js';
 import { MyForest } from './objects/forest/MyForest.js';
+import { MyCone } from './objects/solids/MyCone.js';
 
 /**
  * MyScene
@@ -132,10 +133,19 @@ export class MyScene extends CGFscene {
             position: [0, this.building.height, 0],
         });
 
+        this.fire = new MyCone({
+            scene: this,
+            radius: 2,
+            height: 3,
+        });
+
         this.objects = {
             'Building': this.building,
             'Forest': this.forest,
         };
+
+        this.fireShader = new CGFshader(this.gl, "./shaders/fire.vert", "./shaders/fire.frag");
+        this.fireShader.setUniformsValues({ uTime: 0 });
     }
 
     /**
@@ -168,7 +178,7 @@ export class MyScene extends CGFscene {
         this.camera.setTarget(this.helicopter.position);
     }
 
-    update() {
+    update(time) {
         if (this.pressedKeys.has('KeyA') || this.pressedKeys.has('ArrowLeft')) {
             this.helicopter.turn(Math.PI / 80);
         }
@@ -189,6 +199,7 @@ export class MyScene extends CGFscene {
         }
 
         this.updateCamera();
+        this.fireShader.setUniformsValues({ uTime: (time / 100) % 100 });
     }
 
     display() {
@@ -223,7 +234,11 @@ export class MyScene extends CGFscene {
         this.skysphere.display();
         this.building.display();
         this.forest.translate(0, 0, 35).display();
-        this.helicopter.display();
+        //this.helicopter.display();
+        
+        this.setActiveShader(this.fireShader)
+        this.fire.translate(0, this.building.height, 0).display();
+        this.setActiveShader(this.defaultShader);
 
         // ---- END Primitive drawing section
     }
