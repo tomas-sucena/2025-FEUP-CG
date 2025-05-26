@@ -40,6 +40,9 @@ export class MyScene extends CGFscene {
         this.initCameras();
         this.initLights();
         this.initObjects();
+
+        // configure the scene update rate
+        this.setUpdatePeriod(50); // ms
     }
 
     /**
@@ -212,8 +215,6 @@ export class MyScene extends CGFscene {
         this.loadIdentity();
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
-
-        this.update();
 
         // ---- BEGIN Primitive drawing section
         if (this.displayAxis) {

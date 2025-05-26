@@ -18,13 +18,7 @@ float rand(vec2 co) {
 }
 
 void main() {
-    // Calculate a pseudo-random offset based on the vertex's original position
-    // This ensures each vertex has a slightly different oscillation phase/magnitude
-    float randomness = rand(aVertexPosition.xz); // Use XZ for horizontal randomness
-    
-    vec3 positionOffset = aVertexNormal;
-    positionOffset.x = randomness * 0.01;
-    positionOffset.z = randomness * 0.02;
+    vec3 positionOffset = aVertexNormal * 0.1 * sin(uTime);
 
     // Transform the new position
     gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition + positionOffset, 1.0);
