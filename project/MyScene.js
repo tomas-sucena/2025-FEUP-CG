@@ -8,6 +8,7 @@ import { MyPlane } from './objects/shapes/MyPlane.js';
 import { MyTree } from './objects/forest/MyTree.js';
 import { MyForest } from './objects/forest/MyForest.js';
 import { MyCone } from './objects/solids/MyCone.js';
+import { MyPyramid } from './objects/solids/MyPyramid.js';
 
 /**
  * MyScene
@@ -136,10 +137,11 @@ export class MyScene extends CGFscene {
             position: [0, this.building.height, 0],
         });
 
-        this.fire = new MyCone({
+        this.fire = new MyPyramid({
             scene: this,
             radius: 2,
             height: 3,
+            slices: 4,
         });
 
         this.objects = {
