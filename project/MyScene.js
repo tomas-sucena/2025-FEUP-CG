@@ -56,7 +56,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Forest';
+        this.selectedObject = 'Terrain';
 
         this.initCameras();
         this.initLights();
@@ -148,6 +148,7 @@ export class MyScene extends CGFscene {
         });
 
         this.objects = {
+            'Terrain': this.surface,
             'Building': this.building,
             'Forest': this.forest,
         };

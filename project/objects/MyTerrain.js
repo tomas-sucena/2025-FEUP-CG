@@ -6,8 +6,8 @@ export class MyTerrain extends MyRectangle {
             scene,
             width: size,
             height: size,
-            rows: 200,
-            columns: 200,
+            rows: size / 2,
+            columns: size / 2,
             shader: {
                 vert: './shaders/terrain.vert',
                 frag: './shaders/terrain.frag',
@@ -42,6 +42,6 @@ export class MyTerrain extends MyRectangle {
         super.render();
 
         this.scene.popMatrix();
-        this.scene.setActiveShader(this.scene.defaultShader);
+        //this.scene.setActiveShader(this.scene.defaultShader);
     }
 }
