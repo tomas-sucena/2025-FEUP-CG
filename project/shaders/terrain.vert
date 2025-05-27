@@ -22,7 +22,7 @@ void main() {
 
     // lake
     if (mask.r < 1.0) {
-        vVertexPosition -= 1.5 * aVertexNormal;
+        vVertexPosition += (sin(vVertexPosition.x / 5.0) - 2.0) * aVertexNormal;
     }
 
     vTextureCoord = aTextureCoord;
