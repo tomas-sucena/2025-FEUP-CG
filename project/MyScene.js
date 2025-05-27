@@ -149,7 +149,11 @@ export class MyScene extends CGFscene {
             'Forest': this.forest,
         };
 
-        this.fireShader = new CGFshader(this.gl, "./shaders/fire.vert", "./shaders/fire.frag");
+        this.fireShader = new CGFshader(
+            this.gl,
+            './shaders/fire.vert',
+            './shaders/fire.frag',
+        );
         this.fireShader.setUniformsValues({ uTime: 0 });
     }
 
@@ -238,8 +242,8 @@ export class MyScene extends CGFscene {
         this.building.display();
         this.forest.translate(0, 0, 35).display();
         //this.helicopter.display();
-        
-        this.setActiveShader(this.fireShader)
+
+        this.setActiveShader(this.fireShader);
         this.fire.translate(0, this.building.height, 0).display();
         this.setActiveShader(this.defaultShader);
 

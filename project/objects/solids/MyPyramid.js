@@ -66,9 +66,7 @@ export class MyPyramid extends MyObject {
 
             // compute the normal
             const normal = [(Nx + Nxx) / 2, slope, (Nz + Nzz) / 2];
-            const Nsize = Math.hypot(...normal);
-
-            normal.forEach((_, index) => (normal[index] /= Nsize)); // normalization
+            vec3.normalize(normal, normal);
 
             // define the stacks
             for (let stack = 0; stack < this.stacks; ++stack) {
