@@ -61,6 +61,8 @@ export class MyScene extends CGFscene {
         this.initCameras();
         this.initLights();
         this.initObjects();
+
+        this.setUpdatePeriod(50); // ms
     }
 
     /**
@@ -178,6 +180,10 @@ export class MyScene extends CGFscene {
     changeObject() {
         this.toggleNormalVisibility();
         this.toggleWireframe();
+    }
+
+    update(time) {
+        this.surface.update((time / 100) % 100);
     }
 
     display() {

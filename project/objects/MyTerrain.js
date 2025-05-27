@@ -25,6 +25,10 @@ export class MyTerrain extends MyRectangle {
         });
     }
 
+    update(time) {
+        this.shader.setUniformsValues({ uTime: time });
+    }
+
     display() {
         this.scene.pushMatrix();
 

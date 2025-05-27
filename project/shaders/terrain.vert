@@ -8,9 +8,8 @@ attribute vec2 aTextureCoord;
 
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
-// uniform float timeFactor;
-// uniform float slider;
 uniform sampler2D uMaskSampler;
+uniform float uTime;
 
 // output
 varying vec3 vVertexPosition;
@@ -22,7 +21,7 @@ void main() {
 
     // lake
     if (mask.r < 1.0) {
-        vVertexPosition += (sin(vVertexPosition.x / 5.0) - 2.0) * aVertexNormal;
+        vVertexPosition += (0.2 * sin( vVertexPosition.x * uTime / 10.0) - 2.0) * aVertexNormal;
     }
 
     vTextureCoord = aTextureCoord;
