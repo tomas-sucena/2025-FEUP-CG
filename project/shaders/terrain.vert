@@ -21,7 +21,8 @@ void main() {
 
     // lake
     if (mask.r < 1.0) {
-        vVertexPosition += (0.2 * sin( vVertexPosition.x * uTime / 10.0) - 2.0) * aVertexNormal;
+        vVertexPosition -= 2.0 * aVertexNormal; // slightly below ground
+        vVertexPosition += 1.2 * sin((uTime + vVertexPosition.y) / 10.0) * aVertexNormal; // undulation
     }
 
     vTextureCoord = aTextureCoord;
