@@ -5,10 +5,8 @@ import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyHeli } from './objects/helicopter/MyHeli.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyPlane } from './objects/shapes/MyPlane.js';
-import { MyTree } from './objects/forest/MyTree.js';
 import { MyForest } from './objects/forest/MyForest.js';
-import { MyCone } from './objects/solids/MyCone.js';
-import { MyPyramid } from './objects/solids/MyPyramid.js';
+
 
 /**
  * MyScene
@@ -17,6 +15,7 @@ import { MyPyramid } from './objects/solids/MyPyramid.js';
 export class MyScene extends CGFscene {
     constructor() {
         super();
+        this.lastUpdateTime = 0;
     }
 
     init(application) {
@@ -44,6 +43,8 @@ export class MyScene extends CGFscene {
 
         // configure the scene update rate
         this.setUpdatePeriod(50); // ms
+
+        this.lastUpdateTime = 0;
     }
 
     /**
@@ -128,6 +129,7 @@ export class MyScene extends CGFscene {
                 log: './assets/log.jpg',
                 crown: './assets/leaves.jpg',
             },
+            fireCount: 5,
         });
 
         /** The fire department helicopter */
@@ -137,24 +139,18 @@ export class MyScene extends CGFscene {
             position: [0, this.building.height, 0],
         });
 
-        this.fire = new MyPyramid({
-            scene: this,
-            radius: 2,
-            height: 3,
-            slices: 4,
-        });
+        // this.fire = new MyPyramid({
+        //     scene: this,
+        //     radius: 2,
+        //     height: 3,
+        //     slices: 4,
+        // });
 
         this.objects = {
             'Building': this.building,
             'Forest': this.forest,
         };
 
-        this.fireShader = new CGFshader(
-            this.gl,
-            './shaders/fire.vert',
-            './shaders/fire.frag',
-        );
-        this.fireShader.setUniformsValues({ uTime: 0 });
     }
 
     /**
@@ -207,8 +203,14 @@ export class MyScene extends CGFscene {
             this.helicopter.accelerate(-0.01);
         }
 
+        const elapsed = time - this.lastUpdateTime;
+        this.lastUpdateTime = time;
+
+        if (this.forest) {
+            this.forest.update(elapsed);
+        }
+
         this.updateCamera();
-        this.fireShader.setUniformsValues({ uTime: (time / 100) % 100 });
     }
 
     display() {
@@ -243,9 +245,6 @@ export class MyScene extends CGFscene {
         this.forest.translate(0, 0, 35).display();
         //this.helicopter.display();
 
-        this.setActiveShader(this.fireShader);
-        this.fire.translate(0, this.building.height, 0).display();
-        this.setActiveShader(this.defaultShader);
 
         // ---- END Primitive drawing section
     }
