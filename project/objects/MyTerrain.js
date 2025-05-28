@@ -27,7 +27,7 @@ export class MyTerrain extends MyRectangle {
     }
 
     get lakeRadius() {
-        return 0.15 * this.width; 
+        return 0.15 * this.width;
     }
 
     update(time) {
@@ -37,14 +37,19 @@ export class MyTerrain extends MyRectangle {
     display() {
         this.scene.pushMatrix();
 
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_WRAP_S, 'REPEAT');
-        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_WRAP_T, 'REPEAT');
-
         // apply the geometric transformations
         this.scene.multMatrix(this.transformations);
         mat4.identity(this.transformations); // reset the transformations matrix
 
-        this.textures.forEach((texture, index) => texture.bind(index));
+        this.textures.forEach((texture, index) => {
+            // ensure the texture has been loaded
+            if (texture.bind(index)) {
+                // set the wrapping mode to REPEAT
+                const gl = texture.gl;
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.REPEAT);
+                gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.REPEAT);
+            }
+        });
 
         // apply the shaders
         if (this.shader) {
