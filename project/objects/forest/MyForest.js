@@ -35,6 +35,7 @@ export class MyForest extends MyObject {
     constructor({
         scene,
         width,
+        height,
         depth,
         rows,
         columns,

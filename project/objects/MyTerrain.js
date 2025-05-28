@@ -22,7 +22,12 @@ export class MyTerrain extends MyRectangle {
             uMaskSampler: 0,
             uGrassSampler: 1,
             uLakeSampler: 2,
+            size,
         });
+    }
+
+    get lakeRadius() {
+        return 0.15 * this.width; 
     }
 
     update(time) {
@@ -31,6 +36,9 @@ export class MyTerrain extends MyRectangle {
 
     display() {
         this.scene.pushMatrix();
+
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_WRAP_S, 'REPEAT');
+        this.scene.gl.texParameteri(this.scene.gl.TEXTURE_2D, this.scene.gl.TEXTURE_WRAP_T, 'REPEAT');
 
         // apply the geometric transformations
         this.scene.multMatrix(this.transformations);
@@ -46,6 +54,6 @@ export class MyTerrain extends MyRectangle {
         super.render();
 
         this.scene.popMatrix();
-        //this.scene.setActiveShader(this.scene.defaultShader);
+        this.scene.setActiveShader(this.scene.defaultShader);
     }
 }

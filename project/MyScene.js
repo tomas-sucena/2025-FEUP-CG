@@ -183,7 +183,7 @@ export class MyScene extends CGFscene {
     }
 
     update(time) {
-        this.surface.update((time / 100) % 100);
+        this.surface.update((time / 100) % (100 * Math.PI));
     }
 
     display() {
@@ -210,9 +210,9 @@ export class MyScene extends CGFscene {
 
         //this.skysphere.display();
         this.surface.rotate(-Math.PI / 2, 1, 0, 0).display();
-        //this.building.display();
+        this.building.translate(0, 0, -1.3 * this.surface.lakeRadius).display();
 
-        //this.forest.translate(0, 0, 35).display();
+        this.forest.translate(0, 0, this.surface.lakeRadius).display();
 
         // ---- END Primitive drawing section
     }
