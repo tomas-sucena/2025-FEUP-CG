@@ -4,7 +4,7 @@ import { MyHeliLandingGear } from './MyHeliLandingGear.js';
 import { MyHeliRotor } from './MyHeliRotor.js';
 import { MyHeliTail } from './MyHeliTail.js';
 import { MyHeliCockpit } from './MyHeliCockpit.js';
-import { MyHeliRope } from './MyHeliRope.js';
+import { MyHeliBucket } from './MyHeliBucket.js';
 
 /**
  * A helicopter.
@@ -68,15 +68,16 @@ export class MyHeli extends MyObject {
             material
         });
 
-        this.rope = new MyHeliRope({
+        this.bucket = new MyHeliBucket({
             scene: this.scene,
-            radius: 0.05,
-            length: 8,
-            knotCount: 10,
-            knotSize: 0.2,
-            colors: {
-                knot: [0.8, 0.1, 0.1, 1]
-            },
+            radius: 0.5,
+            height: 2,
+            material: {
+                ambient: [0.2, 0.2, 0.2, 1],
+                diffuse: [0.2, 0.2, 0.2, 1],
+                specular: [0.5, 0.5, 0.5, 1],
+                shininess: 50
+            }
         });
 
     }
@@ -117,9 +118,10 @@ export class MyHeli extends MyObject {
             .rotate(Math.PI, 0, 1, 0)
             .display();
 
-        this.rope
-            .translate(-2.3, this.tail.height*5, 0)
-            .rotate(Math.PI, 0, 0, 0)
+
+        this.bucket
+            .translate(-4.9, this.tail.height * -2.5, 0)
+            .rotate(Math.PI / 2, 0, 1, 0)
             .display();
 
         // update the position
