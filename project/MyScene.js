@@ -108,7 +108,7 @@ export class MyScene extends CGFscene {
             size: 400,
             textures: [
                 './assets/terrain.png',
-                './assets/forest.avif',
+                './assets/grass.png',
                 './assets/lake.jpg',
             ],
         });

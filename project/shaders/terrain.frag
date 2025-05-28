@@ -12,9 +12,8 @@ uniform float size;
 
 void main() {
     vec4 mask = texture2D(uMaskSampler, vTextureCoord);
-    vec2 scaledTextureCoord = vTextureCoord * size;
     
     gl_FragColor = (mask.r == 1.0)
-        ? texture2D(uGrassSampler, scaledTextureCoord / 64.0)
-        : texture2D(uLakeSampler, scaledTextureCoord / 16.0);
+        ? texture2D(uGrassSampler, vTextureCoord * 2.0)
+        : texture2D(uLakeSampler, vTextureCoord * size / 16.0);
 }
