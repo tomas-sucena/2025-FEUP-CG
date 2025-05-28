@@ -15,6 +15,6 @@ void main() {
     vec2 scaledTextureCoord = vTextureCoord * size;
     
     gl_FragColor = (mask.r == 1.0)
-        ? texture2D(uGrassSampler, scaledTextureCoord)
-        : texture2D(uLakeSampler, scaledTextureCoord);
+        ? texture2D(uGrassSampler, scaledTextureCoord / 64.0)
+        : texture2D(uLakeSampler, scaledTextureCoord / 16.0);
 }

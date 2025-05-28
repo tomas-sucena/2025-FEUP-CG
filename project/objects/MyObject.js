@@ -112,8 +112,10 @@ export class MyObject extends CGFobject {
         this.initGLBuffers();
 
         // initialize the material
-        this.#material = new CGFappearance(this.scene);
-        this.setMaterial(material);
+        if (material) {
+            this.#material = new CGFappearance(this.scene);
+            this.setMaterial(material);
+        }
 
         // initialize the texture
         this.setTexture(texture);

@@ -34,13 +34,11 @@ export class MyTerrain extends MyRectangle {
         this.shader.setUniformsValues({ uTime: time });
     }
 
+    /**
+     * Displays the terrain.
+     */
     display() {
-        this.scene.pushMatrix();
-
-        // apply the geometric transformations
-        this.scene.multMatrix(this.transformations);
-        mat4.identity(this.transformations); // reset the transformations matrix
-
+        // bind each texture to the shader
         this.textures.forEach((texture, index) => {
             // ensure the texture has been loaded
             if (texture.bind(index)) {
@@ -51,14 +49,6 @@ export class MyTerrain extends MyRectangle {
             }
         });
 
-        // apply the shaders
-        if (this.shader) {
-            this.scene.setActiveShader(this.shader);
-        }
-
-        super.render();
-
-        this.scene.popMatrix();
-        this.scene.setActiveShader(this.scene.defaultShader);
+        super.display();
     }
 }
