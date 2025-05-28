@@ -131,13 +131,50 @@ export class MyScene extends CGFscene {
         });
 
         /** The forest */
+        this.forests = {
+            front: new MyForest({
+                scene: this,
+                width: 400,
+                depth: 160,
+                rows: 10,
+                columns: 20,
+                maxRows: 16,
+                maxColumns: 40,
+                colors: {
+                    crown: MyColor.hex('#688f4e'),
+                    trunk: MyColor.hex('#6e4300'),
+                },
+                textures: {
+                    log: './assets/log.jpg',
+                    crown: './assets/leaves.jpg',
+                },
+            }),
+            back: new MyForest({
+                scene: this,
+                width: 400,
+                depth: 100,
+                rows: 8,
+                columns: 20,
+                maxRows: 10,
+                maxColumns: 40,
+                colors: {
+                    crown: MyColor.hex('#688f4e'),
+                    trunk: MyColor.hex('#6e4300'),
+                },
+                textures: {
+                    log: './assets/log.jpg',
+                    crown: './assets/leaves.jpg',
+                },
+            }),
+        };
+
         this.forest = new MyForest({
             scene: this,
             width: 400,
             depth: 160,
-            rows: 8,
-            columns: 20,
-            maxRows: 15,
+            rows: 12,
+            columns: 30,
+            maxRows: 16,
             maxColumns: 40,
             colors: {
                 crown: MyColor.hex('#688f4e'),
@@ -214,7 +251,13 @@ export class MyScene extends CGFscene {
             .translate(0, 0, -this.surface.lakeRadius - this.building.depth)
             .display();
 
-        this.forest.translate(0, 0, 2 * this.surface.lakeRadius).display();
+        // display the forests
+        this.forests.front
+            .translate(0, 0, 2 * this.surface.lakeRadius)
+            .display();
+        this.forests.back
+            .translate(0, 0, -200 + this.forests.back.depth / 2)
+            .display();
 
         // ---- END Primitive drawing section
     }

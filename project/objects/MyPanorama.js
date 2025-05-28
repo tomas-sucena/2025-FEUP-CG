@@ -37,6 +37,7 @@ export class MyPanorama extends MyObject {
      * Displays the object's geometry.
      */
     render() {
-        this.sphere.translate(...this.position).display();
+        this.sphere /*.translate(...this.position)*/
+            .display();
     }
 }
