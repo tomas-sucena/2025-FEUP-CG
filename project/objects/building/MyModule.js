@@ -76,6 +76,10 @@ export class MyModule extends MyBox {
                 scene,
                 radius: 0.4 * this.depth,
                 texture: textures.helipad,
+                material: {
+                    ambient: [0, 0, 0, 1],
+                    diffuse: [1, 1, 1, 1],
+                }
             });
 
             /** The module's sign */

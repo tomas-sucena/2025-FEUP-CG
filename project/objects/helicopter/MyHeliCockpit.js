@@ -9,6 +9,7 @@ export class MyHeliCockpit extends MyObject {
         height = 2,
         width = 1.5,
         material,
+        textures,
         glassColor = [0.7, 0.8, 0.9, 0.5]
     }) {
         super(scene);
@@ -22,12 +23,12 @@ export class MyHeliCockpit extends MyObject {
             slices: 32,
             stacks: 16,
             material: {
-                ...material,
                 ambient: glassColor,
                 diffuse: glassColor,
                 specular: [0.9, 0.9, 0.9, 1],
                 shininess: 100
-            }
+            },
+            texture: textures?.frosted_glass
         });
 
         // Main cockpit dome (ellipsoid)
@@ -38,7 +39,8 @@ export class MyHeliCockpit extends MyObject {
             radiusZ: width * 1.2,
             slices: 32,
             stacks: 16,
-            material: material
+            material: material,
+            texture: textures?.cockpit
         });
 
 

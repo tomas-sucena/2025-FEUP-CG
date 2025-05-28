@@ -100,9 +100,9 @@ export class MyScene extends CGFscene {
             textures: {
                 wall: './assets/concrete.jpg',
                 window: './assets/window.webp',
-                door: './assets/door.jpg',
+                door: './assets/door.png',
                 sign: './assets/sign.png',
-                helipad: './assets/helipad.jpg',
+                helipad: './assets/helipad.png',
             },
         });
 
@@ -128,8 +128,14 @@ export class MyScene extends CGFscene {
         /** The fire department helicopter */
         this.helicopter = new MyHeli({
             scene: this,
-            color: MyColor.RGB(255, 0, 0),
+            color: MyColor.RGB(255, 255, 255),
             position: [0, this.building.height, 0],
+            textures: {
+                metal: './assets/metallic.jpg',
+                cockpit: './assets/helicopter.png',
+                tail: './assets/tail.png',
+                frosted_glass: './assets/frosted_glass.jpg',
+            },
         });
 
         this.objects = {

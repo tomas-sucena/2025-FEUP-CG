@@ -2,13 +2,14 @@ import { MyCylinder } from '../solids/MyCylinder.js';
 import { MyHeliRotor } from './MyHeliRotor.js';
 
 export class MyHeliTail extends MyCylinder {
-    constructor({ scene, width, radius, material }) {
+    constructor({ scene, width, radius, material, textures }) {
         super({
             scene,
             bottomRadius: radius,
             topRadius: 0.2 * radius,
             height: 0.75 * width,
             material,
+            texture: textures?.tail,
         });
 
         /** The tail's rotor */
@@ -18,6 +19,7 @@ export class MyHeliTail extends MyCylinder {
             gearRadius: this.topRadius,
             bladeLength: radius,
             numBlades: 6,
+            textures,
         });
     }
 

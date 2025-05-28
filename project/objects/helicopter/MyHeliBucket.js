@@ -9,6 +9,7 @@ export class MyHeliBucket extends MyObject {
         height = 2,
         width = 1.5,
         color = [0.3, 0.2, 0.1, 1],
+        textures
     }) {
         super(scene);
 
@@ -22,6 +23,7 @@ export class MyHeliBucket extends MyObject {
                 diffuse: color,
                 specular: [0.5, 0.5, 0.5, 1],
             },
+            texture: textures?.bucket,
 
         });
 
@@ -36,6 +38,7 @@ export class MyHeliBucket extends MyObject {
                 specular: [0.5, 0.5, 0.5, 1],
             },
             inverted: true,
+            texture: textures?.bucketInside,
         });
 
         this.bottom = new MyCircle({
@@ -46,7 +49,8 @@ export class MyHeliBucket extends MyObject {
                 ambient: color,
                 diffuse: color,
                 specular: [0.5, 0.5, 0.5, 1]
-            }
+            },
+            texture: textures?.bucketBottom,
         });
 
         this.bottomInside = new MyCircle({
@@ -59,6 +63,7 @@ export class MyHeliBucket extends MyObject {
                 specular: [0.5, 0.5, 0.5, 1]
             },
             inverted: true,
+            texture: textures?.bucketBottomInside,
         });
 
 

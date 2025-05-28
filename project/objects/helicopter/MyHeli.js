@@ -10,13 +10,13 @@ import { MyHeliBucket } from './MyHeliBucket.js';
  * A helicopter.
  */
 export class MyHeli extends MyObject {
-    constructor({ scene, color, position, yaw, velocity }) {
+    constructor({ scene, color, position, yaw, velocity, textures }) {
         super(scene);
 
         const material = {
             ambient: color,
             diffuse: color,
-            specular: [0.5, 0.5, 0.5, 1],
+            specular: [1, 1, 1, 1],
         };
 
         /** The helicopter's position */
@@ -41,6 +41,7 @@ export class MyHeli extends MyObject {
             width: 4,
             radius: 1,
             material,
+            textures,
         });
 
         /** The helicopter's landing gear */
@@ -50,6 +51,7 @@ export class MyHeli extends MyObject {
             height: 2.3,
             depth: 5,
             angle: Math.PI / 6,
+            textures,
         });
 
         this.rotor = new MyHeliRotor({
@@ -58,6 +60,7 @@ export class MyHeli extends MyObject {
             gearRadius: 0.5,
             bladeLength: 2,
             numBlades: 4,
+            textures,
         });
 
         this.cockpit = new MyHeliCockpit({
@@ -66,6 +69,7 @@ export class MyHeli extends MyObject {
             width: 1.8,
             glassColor: [0.8, 0.85, 0.9, 0.4],
             material,
+            textures,
         });
 
         this.bucket = new MyHeliBucket({
@@ -77,7 +81,8 @@ export class MyHeli extends MyObject {
                 diffuse: [0.2, 0.2, 0.2, 1],
                 specular: [0.5, 0.5, 0.5, 1],
                 shininess: 50
-            }
+            },
+            textures,
         });
     }
 
