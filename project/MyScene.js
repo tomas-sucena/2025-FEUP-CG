@@ -72,7 +72,7 @@ export class MyScene extends CGFscene {
         this.camera = new CGFcamera(
             0.5,
             0.1,
-            500,
+            1000,
             vec3.fromValues(20, 2, 20),
             vec3.fromValues(0, 2, 0),
         );
@@ -116,10 +116,10 @@ export class MyScene extends CGFscene {
         /** The fire department building */
         this.building = new MyBuilding({
             scene: this,
-            width: 30,
-            height: 15,
-            floors: 3,
-            windows: 2,
+            width: 70,
+            height: 30,
+            floors: 4,
+            windows: 3,
             color: [0.9, 0.9, 0.9, 1],
             textures: {
                 wall: './assets/concrete.jpg',
@@ -133,12 +133,12 @@ export class MyScene extends CGFscene {
         /** The forest */
         this.forest = new MyForest({
             scene: this,
-            width: 40,
-            depth: 40,
-            rows: 5,
-            columns: 5,
-            maxRows: 8,
-            maxColumns: 8,
+            width: 400,
+            depth: 160,
+            rows: 8,
+            columns: 20,
+            maxRows: 15,
+            maxColumns: 40,
             colors: {
                 crown: MyColor.hex('#688f4e'),
                 trunk: MyColor.hex('#6e4300'),
@@ -208,11 +208,13 @@ export class MyScene extends CGFscene {
             this.scaleFactor,
         );
 
-        //this.skysphere.display();
+        this.skysphere.display();
         this.surface.rotate(-Math.PI / 2, 1, 0, 0).display();
-        this.building.translate(0, 0, -1.3 * this.surface.lakeRadius).display();
+        this.building
+            .translate(0, 0, -this.surface.lakeRadius - this.building.depth)
+            .display();
 
-        this.forest.translate(0, 0, this.surface.lakeRadius).display();
+        this.forest.translate(0, 0, 2 * this.surface.lakeRadius).display();
 
         // ---- END Primitive drawing section
     }
