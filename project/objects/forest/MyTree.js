@@ -88,16 +88,15 @@ export class MyTree extends MyObject {
      * Displays the geometry of the tree.
      */
     render() {
+        // display the trunk
+        const visibleLogHeight = 0.2 * this.height;
+        this.trunk.translate(0, -visibleLogHeight, 0).display();
+
+        // display the crown
         const deltaHeightFactor = 1 / this.stacks;
         const deltaRadiusFactor = 0.6 / this.stacks;
         const deltaY = this.crown.height / this.stacks;
 
-        const visibleLogHeight = 0.2 * this.height;
-
-        // display the trunk
-        this.trunk.translate(0, -visibleLogHeight, 0).display();
-
-        // display the crown
         for (let stack = 0; stack < this.stacks; ++stack) {
             const radiusFactor = 1 - stack * deltaRadiusFactor;
             const heightFactor = 1 - stack * deltaHeightFactor;

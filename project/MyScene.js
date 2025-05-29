@@ -2,6 +2,7 @@ import { CGFscene, CGFcamera, CGFaxis, CGFtexture } from '../lib/CGF.js';
 
 import { MyColor } from './utils/MyColor.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
+import { MyHeli } from './objects/helicopter/MyHeli.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyRectangle } from './objects/shapes/MyRectangle.js';
 import { MyForest } from './objects/forest/MyForest.js';
@@ -124,9 +125,9 @@ export class MyScene extends CGFscene {
             textures: {
                 wall: './assets/concrete.jpg',
                 window: './assets/window.webp',
-                door: './assets/door.jpg',
+                door: './assets/door.png',
                 sign: './assets/sign.png',
-                helipad: './assets/helipad.jpg',
+                helipad: './assets/helipad.png',
             },
         });
 
@@ -168,6 +169,19 @@ export class MyScene extends CGFscene {
             }),
         };
 
+        /** The fire department helicopter */
+        this.helicopter = new MyHeli({
+            scene: this,
+            color: MyColor.RGB(255, 255, 255),
+            position: [0, this.building.height, 0],
+            textures: {
+                metal: './assets/metallic.jpg',
+                cockpit: './assets/helicopter.png',
+                tail: './assets/tail.png',
+                frosted_glass: './assets/frosted_glass.jpg',
+            },
+        });
+
         this.objects = {
             'Terrain': this.surface,
             'Building': this.building,
@@ -201,7 +215,31 @@ export class MyScene extends CGFscene {
         this.toggleWireframe();
     }
 
+    updateCamera() {
+        this.camera.setTarget(this.helicopter.position);
+    }
+
     update(time) {
+        if (this.pressedKeys.has('KeyA') || this.pressedKeys.has('ArrowLeft')) {
+            this.helicopter.turn(Math.PI / 80);
+        }
+
+        if (
+            this.pressedKeys.has('KeyD') ||
+            this.pressedKeys.has('ArrowRight')
+        ) {
+            this.helicopter.turn(-Math.PI / 80);
+        }
+
+        if (this.pressedKeys.has('KeyW') || this.pressedKeys.has('ArrowUp')) {
+            this.helicopter.accelerate(0.01);
+        }
+
+        if (this.pressedKeys.has('KeyS') || this.pressedKeys.has('ArrowDown')) {
+            this.helicopter.accelerate(-0.01);
+        }
+
+        this.updateCamera();
         this.surface.update((time / 100) % (100 * Math.PI));
     }
 
@@ -215,6 +253,8 @@ export class MyScene extends CGFscene {
         this.loadIdentity();
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
+
+        this.update();
 
         // ---- BEGIN Primitive drawing section
         if (this.displayAxis) {
@@ -233,7 +273,7 @@ export class MyScene extends CGFscene {
             .rotate(Math.PI / 2, 0, 1, 0)
             .translate(-this.surface.lake.width - this.building.depth, 0, 0)
             .display();
-
+        
         // display the forests
         this.forests.front
             .translate(
@@ -245,7 +285,6 @@ export class MyScene extends CGFscene {
         this.forests.back
             .translate(0, 0, -200 + this.forests.back.depth / 2)
             .display();
-
         // ---- END Primitive drawing section
     }
 }

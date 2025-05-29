@@ -20,6 +20,9 @@ export class MyInterface extends CGFinterface {
         this.gui.add(this.scene, 'displayAxis').name('Axis');
         this.gui.add(this.scene.camera, 'fov', 0.1, 1).name('FOV');
 
+        // initialize the keyboard actions
+        this.initKeys();
+
         // object settings
         const objectsFolder = this.gui.addFolder('Object');
 
@@ -51,5 +54,21 @@ export class MyInterface extends CGFinterface {
             .name('Columns');
 
         return true;
+    }
+
+    initKeys() {
+        // disable the processKeyboard function
+        this.processKeyboard = () => {};
+
+        /** A hash set to store the keys that are being pressed */
+        this.scene.pressedKeys = new Set();
+    }
+
+    processKeyDown(event) {
+        this.scene.pressedKeys.add(event.code);
+    }
+
+    processKeyUp(event) {
+        this.scene.pressedKeys.delete(event.code);
     }
 }

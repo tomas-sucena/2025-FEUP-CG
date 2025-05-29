@@ -23,9 +23,9 @@ export class MySphere extends MyObject {
         /** The radius of the sphere */
         this.radius = radius ?? 1;
         /** The number of divisions around the Y-axis */
-        this.slices = slices;
+        this.slices = slices ?? 16;
         /** The number of divisions of each hemisphere along the Y-axis*/
-        this.stacks = 2 * stacks;
+        this.stacks = 2 * (stacks ?? 8);
 
         this.initGeometry({ inverted, material, texture });
     }
