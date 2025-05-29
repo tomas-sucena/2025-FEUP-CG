@@ -231,7 +231,7 @@ export class MyScene extends CGFscene {
 
     update(time) {
         this.heliController.control();
-        this.helicopter.update();
+        this.helicopter.update(time);
         this.terrain.update((time / 100) % (100 * Math.PI));
     }
 
