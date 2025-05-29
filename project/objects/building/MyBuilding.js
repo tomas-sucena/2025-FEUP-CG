@@ -46,6 +46,13 @@ export class MyBuilding extends MyObject {
         });
     }
 
+    /**
+     * Returns the depth of the building.
+     */
+    get depth() {
+        return this.mainModule.depth;
+    }
+
     render() {
         const mainModuleWidth = this.mainModule.width;
         const sideModuleWidth = this.sideModule.width;

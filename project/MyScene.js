@@ -1,11 +1,11 @@
-import { CGFscene, CGFcamera, CGFaxis } from '../lib/CGF.js';
+import { CGFscene, CGFcamera, CGFaxis, CGFtexture } from '../lib/CGF.js';
 
 import { MyColor } from './utils/MyColor.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyPanorama } from './objects/MyPanorama.js';
-import { MyPlane } from './objects/shapes/MyPlane.js';
-import { MyTree } from './objects/forest/MyTree.js';
+import { MyRectangle } from './objects/shapes/MyRectangle.js';
 import { MyForest } from './objects/forest/MyForest.js';
+import { MyTerrain } from './objects/MyTerrain.js';
 
 /**
  * MyScene
@@ -14,6 +14,29 @@ import { MyForest } from './objects/forest/MyForest.js';
 export class MyScene extends CGFscene {
     constructor() {
         super();
+
+        /** A hash map to store the textures that have already been loaded */
+        this.textures = new Map();
+    }
+
+    /**
+     * Fetches a texture and, loading it beforehand if it isn't already a part of the scene.
+     * @param {string} textureURL - the URL that identifies the texture
+     * @return {CGFtexture} the texture
+     */
+    getTexture(textureURL) {
+        // verify if the texture has already been loaded
+        let texture = this.textures.get(textureURL);
+
+        if (texture) {
+            return texture;
+        }
+
+        // load the texture
+        texture = new CGFtexture(this, textureURL);
+        this.textures.set(textureURL, texture);
+
+        return texture;
     }
 
     init(application) {
@@ -33,11 +56,13 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Forest';
+        this.selectedObject = 'Terrain';
 
         this.initCameras();
         this.initLights();
         this.initObjects();
+
+        this.setUpdatePeriod(50); // ms
     }
 
     /**
@@ -47,7 +72,7 @@ export class MyScene extends CGFscene {
         this.camera = new CGFcamera(
             0.5,
             0.1,
-            500,
+            1000,
             vec3.fromValues(20, 2, 20),
             vec3.fromValues(0, 2, 0),
         );
@@ -78,23 +103,23 @@ export class MyScene extends CGFscene {
         });
 
         /** The surface */
-        this.surface = new MyPlane(this, {
-            nrDivs: 64,
-            maxS: 64,
-            maxT: 64,
-            material: {
-                diffuse: [1, 1, 1, 1],
-            },
-            texture: './assets/grass.png',
+        this.surface = new MyTerrain({
+            scene: this,
+            size: 400,
+            textures: [
+                './assets/terrain_mask.png',
+                './assets/grass.png',
+                './assets/lake.jpg',
+            ],
         });
 
         /** The fire department building */
         this.building = new MyBuilding({
             scene: this,
-            width: 30,
-            height: 15,
-            floors: 3,
-            windows: 2,
+            width: 70,
+            height: 30,
+            floors: 4,
+            windows: 3,
             color: [0.9, 0.9, 0.9, 1],
             textures: {
                 wall: './assets/concrete.jpg',
@@ -106,25 +131,45 @@ export class MyScene extends CGFscene {
         });
 
         /** The forest */
-        this.forest = new MyForest({
-            scene: this,
-            width: 40,
-            depth: 40,
-            rows: 5,
-            columns: 5,
-            maxRows: 8,
-            maxColumns: 8,
-            colors: {
-                crown: MyColor.hex('#688f4e'),
-                trunk: MyColor.hex('#6e4300'),
-            },
-            textures: {
-                log: './assets/log.jpg',
-                crown: './assets/leaves.jpg',
-            },
-        });
+        this.forests = {
+            front: new MyForest({
+                scene: this,
+                width: 370,
+                depth: 120,
+                rows: 8,
+                columns: 20,
+                maxRows: 12,
+                maxColumns: 37,
+                colors: {
+                    crown: MyColor.hex('#688f4e'),
+                    trunk: MyColor.hex('#6e4300'),
+                },
+                textures: {
+                    log: './assets/log.jpg',
+                    crown: './assets/leaves.jpg',
+                },
+            }),
+            back: new MyForest({
+                scene: this,
+                width: 400,
+                depth: 100,
+                rows: 8,
+                columns: 20,
+                maxRows: 10,
+                maxColumns: 40,
+                colors: {
+                    crown: MyColor.hex('#688f4e'),
+                    trunk: MyColor.hex('#6e4300'),
+                },
+                textures: {
+                    log: './assets/log.jpg',
+                    crown: './assets/leaves.jpg',
+                },
+            }),
+        };
 
         this.objects = {
+            'Terrain': this.surface,
             'Building': this.building,
             'Forest': this.forest,
         };
@@ -156,6 +201,10 @@ export class MyScene extends CGFscene {
         this.toggleWireframe();
     }
 
+    update(time) {
+        this.surface.update((time / 100) % (100 * Math.PI));
+    }
+
     display() {
         // ---- BEGIN Background, camera and axis setup
         // Clear image and depth buffer everytime we update the scene
@@ -178,15 +227,24 @@ export class MyScene extends CGFscene {
             this.scaleFactor,
         );
 
-        this.surface
-            .rotate(-Math.PI / 2, 1, 0, 0)
-            .scale(400, 1, 400)
+        this.skysphere.display();
+        this.surface.rotate(-Math.PI / 2, 1, 0, 0).display();
+        this.building
+            .rotate(Math.PI / 2, 0, 1, 0)
+            .translate(-this.surface.lake.width - this.building.depth, 0, 0)
             .display();
 
-        this.skysphere.display();
-        this.building.display();
-
-        this.forest.translate(0, 0, 35).display();
+        // display the forests
+        this.forests.front
+            .translate(
+                0,
+                0,
+                this.forests.front.depth / 2 + 1.4 * this.surface.lake.depth,
+            )
+            .display();
+        this.forests.back
+            .translate(0, 0, -200 + this.forests.back.depth / 2)
+            .display();
 
         // ---- END Primitive drawing section
     }
