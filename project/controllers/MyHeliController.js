@@ -1,6 +1,9 @@
+/**
+ * A helicopter controller.
+ */
 export class MyHeliController {
     /**
-     * A helicopter controller.
+     * Initializes the helicopter controller.
      * @param { Object } params - the controller parameters
      * @param { CGFscene } params.scene - the scene controller will be used in
      */
@@ -61,11 +64,11 @@ export class MyHeliController {
         }
 
         if (pressedKeys.has('KeyW') || pressedKeys.has('ArrowUp')) {
-            this.helicopter.accelerate(0.01);
+            this.helicopter.accelerate(0.1);
         }
 
         if (pressedKeys.has('KeyS') || pressedKeys.has('ArrowDown')) {
-            this.helicopter.accelerate(-0.01);
+            this.helicopter.accelerate(-0.1);
         }
     }
 

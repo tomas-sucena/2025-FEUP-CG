@@ -20,7 +20,7 @@ export class MyHeli extends MyObject {
         };
 
         /** The helicopter's position */
-        this.position = position;
+        this.position = position ?? [0, 0, 0];
 
         /** The helicopter's velocity */
         this.velocity = velocity ?? [0, 0, 0];
@@ -58,7 +58,7 @@ export class MyHeli extends MyObject {
             scene,
             gearHeight: 0.4,
             gearRadius: 0.5,
-            bladeLength: 2,
+            bladeLength: 4,
             numBlades: 4,
             textures,
         });
@@ -118,13 +118,6 @@ export class MyHeli extends MyObject {
      * Displays the helicopter's geometry.
      */
     render() {
-        /*const headHeight = 1.6 * this.head.radius;
-
-        this.head
-            .scale(2, 0.8, 1.5)
-            .translate(0, headHeight / 2, 0)
-            .display();*/
-
         this.landingGear.display();
         this.rotor.translate(0, this.tail.height * 1.95, 0).display();
         this.tail.translate(-2.7, this.tail.height, 0).display();
@@ -135,8 +128,7 @@ export class MyHeli extends MyObject {
             .display();
 
         this.bucket
-            .translate(-4.9, this.tail.height * -2.5, 0)
-            .rotate(Math.PI / 2, 0, 1, 0)
+            .translate(0, -this.bucket.height + this.landingGear.height, 0)
             .display();
 
         // rotate and position the helicopter
