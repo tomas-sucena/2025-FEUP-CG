@@ -53,6 +53,13 @@ export class MyBuilding extends MyObject {
         return this.mainModule.height;
     }
 
+    /*
+     * Returns the depth of the building.
+     */
+    get depth() {
+        return this.mainModule.depth;
+    }
+
     /**
      * Displays the modules of the building.
      */

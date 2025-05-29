@@ -44,7 +44,7 @@ export class MyInterface extends CGFinterface {
             .name('Wireframe');
 
         // forest settings
-        const forest = this.scene.forest;
+        const forest = this.scene.forests.front;
         const forestSettings = this.gui.addFolder('Forest');
 
         forestSettings.add(forest, 'rows', 0, forest.maxRows, 1).name('Rows');

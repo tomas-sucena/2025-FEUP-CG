@@ -1,10 +1,14 @@
-import { CGFappearance, CGFobject, CGFscene } from '../../lib/CGF.js';
+import {
+    CGFappearance,
+    CGFobject,
+    CGFscene,
+    CGFshader,
+    CGFtexture,
+} from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
     /** The material to be applied to the object */
     #material;
-    /** The geometric transformation matrix */
-    #transformations;
     /** The child objects that constitute the object */
     #children;
 
@@ -15,7 +19,9 @@ export class MyObject extends CGFobject {
     constructor(scene) {
         super(scene);
 
-        this.#transformations = this.#children = null;
+        /** The geometric transformations matrix */
+        this.transformations = mat4.create();
+        this.#children = null;
     }
 
     /**
@@ -69,32 +75,6 @@ export class MyObject extends CGFobject {
     }
 
     /**
-     * Updates the transformation matrix by concatenating a new geometric transformation.
-     * @param { Array } matrix a geometric transformation matrix
-     */
-    #addTransformation(matrix) {
-        // verify if the transformation matrix has not been defined
-        if (this.#transformations === null) {
-            this.#transformations = matrix;
-            return;
-        }
-
-        // multiply the matrices (line by line)
-        const result = new Array(16).fill(0);
-
-        for (let i = 0; i < 4; ++i) {
-            for (let j = 0; j < 4; ++j) {
-                for (let k = 0; k < 4; ++k) {
-                    result[i * 4 + k] +=
-                        this.#transformations[i * 4 + j] * matrix[j * 4 + k];
-                }
-            }
-        }
-
-        this.#transformations = result;
-    }
-
-    /**
      * Adds a pair of triangles to the index buffer to connect two adjacent segments.
      * @param {number} step - The number of vertices to skip to reach the corresponding vertex on the next segment
      */
@@ -115,8 +95,11 @@ export class MyObject extends CGFobject {
      * @param { boolean } config.inverted - indicates if the object should be inverted
      * @param { Object } config.material - the material configuration
      * @param { string | Object } config.texture - the texture configuration
+     * @param { Object } config.shader - the shaders to be applied to the object
+     * @param { string } config.shader.vert - the vertex shader
+     * @param { string } config.shader.frag - the fragment shader
      */
-    initGeometry({ inverted, material, texture }) {
+    initGeometry({ inverted, material, texture, shader }) {
         this.initBuffers();
 
         // invert the normals and indices if needed
@@ -129,11 +112,16 @@ export class MyObject extends CGFobject {
         this.initGLBuffers();
 
         // initialize the material
-        this.#material = new CGFappearance(this.scene);
-        this.setMaterial(material);
+        if (material) {
+            this.#material = new CGFappearance(this.scene);
+            this.setMaterial(material);
+        }
 
         // initialize the texture
         this.setTexture(texture);
+
+        // initialize the shader
+        this.setShader(shader);
     }
 
     /**
@@ -189,16 +177,12 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     translate(Tx, Ty, Tz) {
-        // the (transposed) translation matrix
-        // prettier-ignore
-        const translationMatrix = [
-            1, 0, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 1, 0,
-            Tx, Ty, Tz, 1,
-        ];
+        // compute the translation matrix
+        const translationMatrix = mat4.create();
+        mat4.translate(translationMatrix, translationMatrix, [Tx, Ty, Tz]);
 
-        this.#addTransformation(translationMatrix);
+        // concatenate the geometric transformation
+        mat4.mul(this.transformations, translationMatrix, this.transformations);
         return this;
     }
 
@@ -210,16 +194,12 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     scale(Sx, Sy, Sz) {
-        // the (transposed) scaling matrix
-        // prettier-ignore
-        const scalingMatrix = [
-            Sx, 0, 0, 0,
-            0, Sy, 0, 0,
-            0, 0, Sz, 0,
-            0, 0, 0, 1,
-        ];
+        // compute the scaling matrix
+        const scalingMatrix = mat4.create();
+        mat4.scale(scalingMatrix, scalingMatrix, [Sx, Sy, Sz]);
 
-        this.#addTransformation(scalingMatrix);
+        // concatenate the geometric transformation
+        mat4.mul(this.transformations, scalingMatrix, this.transformations);
         return this;
     }
 
@@ -232,24 +212,12 @@ export class MyObject extends CGFobject {
      * @returns a reference to the object
      */
     rotate(ang, Rx, Ry, Rz) {
-        // variables to speed up computations
-        const sin = Math.sin(ang),
-            cos = Math.cos(ang),
-            cos_ = 1 - cos;
-        const xy = Rx * Ry,
-            xz = Rx * Rz,
-            yz = Ry * Rz;
+        // compute the translation matrix
+        const rotationMatrix = mat4.create();
+        mat4.rotate(rotationMatrix, rotationMatrix, ang, [Rx, Ry, Rz]);
 
-        // the (transposed) rotation matrix
-        // prettier-ignore
-        const rotationMatrix = [
-            Rx * Rx * cos_ + cos, xy * cos_ + Rz * sin, xz * cos_ - Ry * sin, 0,
-            xy * cos_ - Rz * sin, Ry * Ry * cos_ + cos, yz * cos_ + Rx * sin, 0,
-            xz * cos_ + Ry * sin, yz * cos_ - Rx * sin, Rz * Rz * cos_ + cos, 0,
-            0, 0, 0, 1,
-        ];
-
-        this.#addTransformation(rotationMatrix);
+        // concatenate the geometric transformation
+        mat4.mul(this.transformations, rotationMatrix, this.transformations);
         return this;
     }
 
@@ -258,7 +226,7 @@ export class MyObject extends CGFobject {
      * @param { Object } config - the material configuration
      * @param { boolean } recursive - indicates if the material should be recursively applied to the child objects
      */
-    setMaterial(config, recursive) {
+    setMaterial(config, recursive = false) {
         // verify if the material exists
         if (this.#material) {
             const { ambient, diffuse, specular, emission, shininess } =
@@ -292,60 +260,87 @@ export class MyObject extends CGFobject {
 
         // set the material of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) => child.setMaterial(config));
+            this.#getChildren().forEach((child) =>
+                child.setMaterial(config, true),
+            );
         }
     }
 
     /**
      * Applies a texture to the object's material.
-     * @param { string | Object } config the texture configuration
-     * @param { string } texture.url - the URL specifying the texture
-     * @param { string } texture.wrapS - the wrapping to be applied to the S-axis
-     * @param { string } texture.wrapT - the wrapping to be applied to the T-axis
+     * @param { string } textureURL - the URL that identifies the texture
      * @param { boolean } recursive - indicates if the material should be recursively applied to the child objects
      */
-    setTexture(config, recursive = false) {
+    setTexture(textureURL, recursive = false) {
         // verify if the material exists
-        if (config && this.#material) {
-            const { url, wrapS, wrapT } = config;
-
+        if (textureURL && this.#material) {
             // bind the texture to the material
-            this.#material.loadTexture(url ?? config);
+            this.#material.setTexture(this.scene.getTexture(textureURL));
 
             // set the texture wrapping mode
-            this.#material.setTextureWrap(wrapS ?? 'REPEAT', wrapT ?? 'REPEAT');
+            this.#material.setTextureWrap('REPEAT', 'REPEAT');
         }
 
         // set the texture of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) => child.setTexture(config));
+            this.#getChildren().forEach((child) =>
+                child.setTexture(config, true),
+            );
+        }
+    }
+
+    /**
+     * Sets the object's vertex and fragment shaders
+     * @param { Object } config - the shader configuration
+     * @param { string } config.vert - the URL of the vertex shader
+     * @param { string } config.frag - the URL of the fragment shader
+     * @param { boolean } recursive - indicates if the child objects should inherit the shaders
+     */
+    setShader(config, recursive = false) {
+        if (config) {
+            this.shader = new CGFshader(
+                this.scene.gl,
+                config.vert,
+                config.frag,
+            );
+        }
+
+        // set the shader of the child objects
+        if (recursive) {
+            this.#getChildren().forEach((child) =>
+                child.setShader(config, true),
+            );
         }
     }
 
     /**
      * Displays the object.
-     * @param { boolean } clearTransformations - indicates if the transformation matrix should be cleared
      * @returns a reference to the object
      */
-    display(clearTransformations = true) {
+    display() {
         this.scene.pushMatrix();
 
-        // apply the geometric transformations, if any
-        if (this.#transformations) {
-            this.scene.multMatrix(this.#transformations);
-
-            if (clearTransformations) {
-                this.#transformations = null; // clear the transformation matrix
-            }
-        }
+        // apply the geometric transformations
+        this.scene.multMatrix(this.transformations);
+        mat4.identity(this.transformations); // reset the transformations matrix
 
         // apply the material
         if (this.#material) {
             this.#material.apply();
         }
 
+        // apply the shaders
+        if (this.shader) {
+            this.scene.setActiveShader(this.shader);
+        }
+
         // display the geometry of the object
         this.render();
+
+        // reset the shaders
+        if (this.shader) {
+            this.scene.setActiveShader(this.scene.defaultShader);
+        }
 
         this.scene.popMatrix();
         return this;

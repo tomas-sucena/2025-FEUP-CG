@@ -31,10 +31,10 @@ export class MyCircle extends MyObject {
     }
 
     initBuffers() {
-        this.vertices = [0, 0, 0];
+        this.vertices = [];
         this.indices = [];
-        this.normals = [0, 0, 1];
-        this.texCoords = [0.5, 0.5];
+        this.normals = [];
+        this.texCoords = [];
 
         const deltaAng = (2 * Math.PI) / this.slices;
         const deltaRadius = this.radius / this.layers;
@@ -49,8 +49,10 @@ export class MyCircle extends MyObject {
                 const ca = Math.cos(ang);
                 const sa = Math.sin(ang);
 
-                // TODO: fix indices
-                this.indices.push(0, slice + 1, slice + 2);
+                if (layer < this.layers) {
+                    this.addPairOfIndices(this.slices - 1);
+                }
+
                 this.vertices.push(ca * radius, sa * radius, 0);
                 this.normals.push(0, 0, 1);
                 this.texCoords.push(
@@ -58,6 +60,17 @@ export class MyCircle extends MyObject {
                     0.5 * (sa * (radius / this.radius) + 1),
                 );
             }
+        }
+
+        // define the center
+        const centerIndex = this.layers * this.slices;
+        this.vertices.push(0, 0, 0);
+        this.normals.push(0, 0, 1);
+        this.texCoords.push(0.5, 0.5);
+        
+        // generate the indices that connect to the center
+        for (let slice = 0; slice < this.slices; ++slice) {
+            this.indices.push(centerIndex, slice, (slice + 1) % this.slices);
         }
     }
 }
