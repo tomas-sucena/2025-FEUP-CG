@@ -104,7 +104,7 @@ export class MyScene extends CGFscene {
         });
 
         /** The surface */
-        this.surface = new MyTerrain({
+        this.terrain = new MyTerrain({
             scene: this,
             size: 400,
             textures: [
@@ -170,7 +170,7 @@ export class MyScene extends CGFscene {
         };
 
         /** The fire department helicopter */
-        this.helicopter = new MyHeli({
+        /*this.helicopter = new MyHeli({
             scene: this,
             color: MyColor.RGB(255, 255, 255),
             position: [0, this.building.height, 0],
@@ -180,10 +180,10 @@ export class MyScene extends CGFscene {
                 tail: './assets/tail.png',
                 frosted_glass: './assets/frosted_glass.jpg',
             },
-        });
+        });*/
 
         this.objects = {
-            'Terrain': this.surface,
+            'Terrain': this.terrain,
             'Building': this.building,
             'Forest': this.forest,
         };
@@ -220,7 +220,7 @@ export class MyScene extends CGFscene {
     }
 
     update(time) {
-        if (this.pressedKeys.has('KeyA') || this.pressedKeys.has('ArrowLeft')) {
+        /*if (this.pressedKeys.has('KeyA') || this.pressedKeys.has('ArrowLeft')) {
             this.helicopter.turn(Math.PI / 80);
         }
 
@@ -239,8 +239,8 @@ export class MyScene extends CGFscene {
             this.helicopter.accelerate(-0.01);
         }
 
-        this.updateCamera();
-        this.surface.update((time / 100) % (100 * Math.PI));
+        this.updateCamera();*/
+        this.terrain.update((time / 100) % (100 * Math.PI));
     }
 
     display() {
@@ -254,8 +254,6 @@ export class MyScene extends CGFscene {
         // Apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
 
-        this.update();
-
         // ---- BEGIN Primitive drawing section
         if (this.displayAxis) {
             this.axis.display();
@@ -268,18 +266,18 @@ export class MyScene extends CGFscene {
         );
 
         this.skysphere.display();
-        this.surface.rotate(-Math.PI / 2, 1, 0, 0).display();
+        this.terrain.rotate(-Math.PI / 2, 1, 0, 0).display();
         this.building
             .rotate(Math.PI / 2, 0, 1, 0)
-            .translate(-this.surface.lake.width - this.building.depth, 0, 0)
+            .translate(-this.terrain.lake.width - this.building.depth, 0, 0)
             .display();
-        
+
         // display the forests
         this.forests.front
             .translate(
                 0,
                 0,
-                this.forests.front.depth / 2 + 1.4 * this.surface.lake.depth,
+                this.forests.front.depth / 2 + 1.4 * this.terrain.lake.depth,
             )
             .display();
         this.forests.back
