@@ -80,7 +80,7 @@ export class MyHeli extends MyObject {
                 ambient: [0.2, 0.2, 0.2, 1],
                 diffuse: [0.2, 0.2, 0.2, 1],
                 specular: [0.5, 0.5, 0.5, 1],
-                shininess: 50
+                shininess: 50,
             },
             textures,
         });
@@ -106,6 +106,17 @@ export class MyHeli extends MyObject {
         this.velocity[2] = horizontalSpeed * Math.sin(-this.yaw);
     }
 
+    /**
+     * Updates the helicopter.
+     */
+    update() {
+        // update the position
+        vec3.add(this.position, this.position, this.velocity);
+    }
+
+    /**
+     * Displays the helicopter's geometry.
+     */
     render() {
         /*const headHeight = 1.6 * this.head.radius;
 
@@ -123,14 +134,10 @@ export class MyHeli extends MyObject {
             .rotate(Math.PI, 0, 1, 0)
             .display();
 
-
         this.bucket
             .translate(-4.9, this.tail.height * -2.5, 0)
             .rotate(Math.PI / 2, 0, 1, 0)
             .display();
-
-        // update the position
-        vec3.add(this.position, this.position, this.velocity);
 
         // rotate and position the helicopter
         this.rotate(this.yaw, 0, 1, 0).translate(...this.position);
