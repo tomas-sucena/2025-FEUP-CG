@@ -107,7 +107,7 @@ export class MyScene extends CGFscene {
             scene: this,
             size: 400,
             textures: [
-                './assets/terrain.png',
+                './assets/terrain_mask.png',
                 './assets/grass.png',
                 './assets/lake.jpg',
             ],
@@ -134,12 +134,12 @@ export class MyScene extends CGFscene {
         this.forests = {
             front: new MyForest({
                 scene: this,
-                width: 400,
-                depth: 160,
-                rows: 10,
+                width: 370,
+                depth: 120,
+                rows: 8,
                 columns: 20,
-                maxRows: 16,
-                maxColumns: 40,
+                maxRows: 12,
+                maxColumns: 37,
                 colors: {
                     crown: MyColor.hex('#688f4e'),
                     trunk: MyColor.hex('#6e4300'),
@@ -167,24 +167,6 @@ export class MyScene extends CGFscene {
                 },
             }),
         };
-
-        this.forest = new MyForest({
-            scene: this,
-            width: 400,
-            depth: 160,
-            rows: 12,
-            columns: 30,
-            maxRows: 16,
-            maxColumns: 40,
-            colors: {
-                crown: MyColor.hex('#688f4e'),
-                trunk: MyColor.hex('#6e4300'),
-            },
-            textures: {
-                log: './assets/log.jpg',
-                crown: './assets/leaves.jpg',
-            },
-        });
 
         this.objects = {
             'Terrain': this.surface,
@@ -248,12 +230,17 @@ export class MyScene extends CGFscene {
         this.skysphere.display();
         this.surface.rotate(-Math.PI / 2, 1, 0, 0).display();
         this.building
-            .translate(0, 0, -this.surface.lakeRadius - this.building.depth)
+            .rotate(Math.PI / 2, 0, 1, 0)
+            .translate(-this.surface.lake.width - this.building.depth, 0, 0)
             .display();
 
         // display the forests
         this.forests.front
-            .translate(0, 0, 2 * this.surface.lakeRadius)
+            .translate(
+                0,
+                0,
+                this.forests.front.depth / 2 + 1.4 * this.surface.lake.depth,
+            )
             .display();
         this.forests.back
             .translate(0, 0, -200 + this.forests.back.depth / 2)

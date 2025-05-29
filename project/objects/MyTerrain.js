@@ -1,4 +1,5 @@
 import { MyRectangle } from './shapes/MyRectangle.js';
+import { MyCone } from './solids/MyCone.js';
 
 export class MyTerrain extends MyRectangle {
     constructor({ scene, size, textures }) {
@@ -26,8 +27,14 @@ export class MyTerrain extends MyRectangle {
         });
     }
 
-    get lakeRadius() {
-        return 0.15 * this.width;
+    /**
+     * Returns the dimensions of the lake.
+     */
+    get lake() {
+        return {
+            width: 0.22 * this.width,
+            depth: 0.13 * this.height,
+        };
     }
 
     update(time) {
