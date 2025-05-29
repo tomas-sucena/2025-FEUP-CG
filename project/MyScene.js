@@ -63,7 +63,7 @@ export class MyScene extends CGFscene {
         this.initLights();
         this.initObjects();
 
-        this.setUpdatePeriod(50); // ms
+        this.setUpdatePeriod(30); // ms
     }
 
     /**
@@ -243,21 +243,23 @@ export class MyScene extends CGFscene {
             this.helicopter.accelerate(-0.01);
         }
 
-        //this.updateCamera();
         this.helicopter.update();
         this.terrain.update((time / 100) % (100 * Math.PI));
     }
 
     display() {
         // ---- BEGIN Background, camera and axis setup
-        // Clear image and depth buffer everytime we update the scene
+        // clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        // Initialize Model-View matrix as identity (no transformation
+
+        // initialize Model-View matrix as identity (no transformation)
         this.updateProjectionMatrix();
         this.loadIdentity();
-        // Apply transformations corresponding to the camera position relative to the origin
+
+        // apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
+        this.updateCamera();
 
         // ---- BEGIN Primitive drawing section
         if (this.displayAxis) {
@@ -279,7 +281,7 @@ export class MyScene extends CGFscene {
         this.helicopter.display();
 
         // display the forests
-        /*this.forests.front
+        this.forests.front
             .translate(
                 0,
                 0,
@@ -288,7 +290,7 @@ export class MyScene extends CGFscene {
             .display();
         this.forests.back
             .translate(0, 0, -200 + this.forests.back.depth / 2)
-            .display();*/
+            .display();
         // ---- END Primitive drawing section
     }
 }
