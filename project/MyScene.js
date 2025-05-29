@@ -7,6 +7,7 @@ import { MyPanorama } from './objects/MyPanorama.js';
 import { MyRectangle } from './objects/shapes/MyRectangle.js';
 import { MyForest } from './objects/forest/MyForest.js';
 import { MyTerrain } from './objects/MyTerrain.js';
+import { MyHeliController } from './controllers/MyHeliController.js';
 
 /**
  * MyScene
@@ -100,7 +101,7 @@ export class MyScene extends CGFscene {
             scene: this,
             scaleFactor: 200,
             position: this.camera.position,
-            texture: './assets/snow.jpg',
+            texture: './assets/background.jpg',
         });
 
         /** The surface */
@@ -137,8 +138,8 @@ export class MyScene extends CGFscene {
                 scene: this,
                 width: 370,
                 depth: 120,
-                rows: 8,
-                columns: 20,
+                rows: 6,
+                columns: 17,
                 maxRows: 12,
                 maxColumns: 37,
                 colors: {
@@ -154,8 +155,8 @@ export class MyScene extends CGFscene {
                 scene: this,
                 width: 400,
                 depth: 100,
-                rows: 8,
-                columns: 20,
+                rows: 5,
+                columns: 10,
                 maxRows: 10,
                 maxColumns: 40,
                 colors: {
@@ -184,6 +185,11 @@ export class MyScene extends CGFscene {
                 tail: './assets/tail.png',
                 frosted_glass: './assets/frosted_glass.jpg',
             },
+        });
+
+        this.heliController = new MyHeliController({
+            scene: this,
+            helicopter: this.helicopter,
         });
 
         this.objects = {
@@ -224,25 +230,7 @@ export class MyScene extends CGFscene {
     }
 
     update(time) {
-        if (this.pressedKeys.has('KeyA') || this.pressedKeys.has('ArrowLeft')) {
-            this.helicopter.turn(Math.PI / 80);
-        }
-
-        if (
-            this.pressedKeys.has('KeyD') ||
-            this.pressedKeys.has('ArrowRight')
-        ) {
-            this.helicopter.turn(-Math.PI / 80);
-        }
-
-        if (this.pressedKeys.has('KeyW') || this.pressedKeys.has('ArrowUp')) {
-            this.helicopter.accelerate(0.01);
-        }
-
-        if (this.pressedKeys.has('KeyS') || this.pressedKeys.has('ArrowDown')) {
-            this.helicopter.accelerate(-0.01);
-        }
-
+        this.heliController.control();
         this.helicopter.update();
         this.terrain.update((time / 100) % (100 * Math.PI));
     }
