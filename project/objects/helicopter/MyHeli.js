@@ -119,8 +119,10 @@ export class MyHeli extends MyObject {
      * @param {boolean} vertical - indicates if the velocity will change in the Y-axis
      */
     accelerate(value, vertical = false) {
-        this.angles.pitch = (-Math.PI / 18) * Math.sign(value);
-
+        if (!vertical) {
+            this.angles.pitch = (-Math.PI / 18) * Math.sign(value);
+        }
+        
         // update the velocity
         this.velocity[0] += value * Math.cos(this.angles.yaw) * !vertical;
         this.velocity[1] += value * vertical;
@@ -177,6 +179,22 @@ export class MyHeli extends MyObject {
         );
 
         if (this.blades.speed == MyHeli.MAX_BLADE_SPEED) {
+            this.action = 'rise';
+        }
+    }
+
+    rise() {
+        // verify if the helicopter has reached the cruise height
+        const cruiseHeight = this.scene.building.height + this.bucket.height;
+        const y = this.position[1];
+
+        console.log('cruise')
+
+        if (y < cruiseHeight) {
+            this.accelerate(0.05, true);
+        }
+        else {
+            this.velocity[1] = 0;
             this.action = 'fly';
         }
     }
