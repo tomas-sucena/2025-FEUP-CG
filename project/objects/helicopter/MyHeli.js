@@ -9,6 +9,8 @@ import { MyHeliBucket } from './MyHeliBucket.js';
  * A helicopter.
  */
 export class MyHeli extends MyObject {
+    static MAX_BLADE_SPEED = Math.PI / 5;
+
     constructor({
         scene,
         color,
@@ -18,12 +20,7 @@ export class MyHeli extends MyObject {
         textures,
     }) {
         super(scene);
-
-        const material = {
-            ambient: color,
-            diffuse: color,
-            specular: [1, 1, 1, 1],
-        };
+        this.initComponents(color, textures);
 
         /** The helicopter's position */
         this.position = position;
@@ -37,8 +34,14 @@ export class MyHeli extends MyObject {
             pitch: 0, // around the Z-axis
         };
 
+        /** The helicopter's blades */
+        this.blades = {
+            angle: 0,
+            speed: 0,
+        };
+
         /** The action the helicopter is performing */
-        this.action = 'fly';
+        this.action = 'stationary';
 
         /** The helicopter's initial parameters */
         this.initialParams = {
@@ -46,10 +49,21 @@ export class MyHeli extends MyObject {
             velocity: [...velocity],
             yaw,
         };
+    }
+
+    /**
+     * Initializes the helicopter's components.
+     */
+    initComponents(color, textures) {
+        const material = {
+            ambient: color,
+            diffuse: color,
+            specular: [1, 1, 1, 1],
+        };
 
         /** The helicopter's tail */
         this.tail = new MyHeliTail({
-            scene,
+            scene: this.scene,
             width: 4,
             radius: 1,
             material,
@@ -58,7 +72,7 @@ export class MyHeli extends MyObject {
 
         /** The helicopter's landing gear */
         this.landingGear = new MyHeliLandingGear({
-            scene,
+            scene: this.scene,
             width: 5,
             height: 2.3,
             depth: 5,
@@ -67,7 +81,7 @@ export class MyHeli extends MyObject {
         });
 
         this.rotor = new MyHeliRotor({
-            scene,
+            scene: this.scene,
             gearHeight: 0.4,
             gearRadius: 0.5,
             bladeLength: 4,
@@ -76,7 +90,7 @@ export class MyHeli extends MyObject {
         });
 
         this.cockpit = new MyHeliCockpit({
-            scene,
+            scene: this.scene,
             height: 2.5,
             width: 1.8,
             glassColor: [0.8, 0.85, 0.9, 0.4],
@@ -86,7 +100,7 @@ export class MyHeli extends MyObject {
 
         /** The helicopter's bucket */
         this.bucket = new MyHeliBucket({
-            scene,
+            scene: this.scene,
             radius: 0.5,
             height: 2,
             material: {
@@ -130,6 +144,8 @@ export class MyHeli extends MyObject {
      * Resets the helicopter, settings its values to its initial parameters.
      */
     reset() {
+        this.action = 'stationary';
+
         // fetch the initial parameters
         const { position, velocity, yaw } = this.initialParams;
 
@@ -137,6 +153,32 @@ export class MyHeli extends MyObject {
         vec3.copy(this.position, position);
         vec3.copy(this.velocity, velocity);
         this.angles.yaw = yaw;
+
+        // reset the blade speed
+        this.blades.speed = 0;
+    }
+
+    /**
+     * Remains stationary on top of the firefighter's building.
+     */
+    stationary() {
+        if (this.scene.pressedKeys.has('KeyP')) {
+            this.action = 'startEngine';
+        }
+    }
+
+    /**
+     * Starts the engine, increasing the blade rotation speed.
+     */
+    startEngine() {
+        this.blades.speed = Math.min(
+            this.blades.speed + 0.02,
+            MyHeli.MAX_BLADE_SPEED,
+        );
+
+        if (this.blades.speed == MyHeli.MAX_BLADE_SPEED) {
+            this.action = 'fly';
+        }
     }
 
     /**
@@ -176,9 +218,15 @@ export class MyHeli extends MyObject {
     /**
      * Updates the helicopter.
      */
-    update() {
+    update(elapsedTime) {
         // execute the current action
-        this[this.action]();
+        this[this.action](elapsedTime);
+
+        // update the position
+        vec3.add(this.position, this.position, this.velocity);
+
+        // update the blade velocity
+        this.blades.angle += this.blades.speed;
     }
 
     /**
@@ -186,7 +234,10 @@ export class MyHeli extends MyObject {
      */
     render() {
         this.landingGear.display();
-        this.rotor.translate(0, this.tail.height * 1.95, 0).display();
+        this.rotor
+            .rotate(this.blades.angle, 0, 1, 0)
+            .translate(0, this.tail.height * 1.95, 0)
+            .display();
         this.tail.translate(-2.7, this.tail.height, 0).display();
 
         this.cockpit
@@ -203,9 +254,6 @@ export class MyHeli extends MyObject {
      * Displays the helicopter.
      */
     display() {
-        // update the velocity
-        vec3.add(this.position, this.position, this.velocity);
-
         // rotate and position the helicopter
         this.rotate(this.angles.pitch, 0, 0, 1)
             .rotate(this.angles.yaw, 0, 1, 0)

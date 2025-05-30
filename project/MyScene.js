@@ -62,6 +62,8 @@ export class MyScene extends CGFscene {
         this.initLights();
         this.initObjects();
 
+        // set up the periodic updates
+        this.timeSinceAppStarted = Date.now();
         this.setUpdatePeriod(30); // ms
     }
 
@@ -223,7 +225,12 @@ export class MyScene extends CGFscene {
     }
 
     update(time) {
-        this.helicopter.update(time);
+        // compute the elapsed time
+        const elapsedTime = time - this.timeSinceAppStarted;
+
+        // update the scene
+        this.helicopter.update(elapsedTime);
+        this.updateCamera();
         this.terrain.update((time / 100) % (100 * Math.PI));
     }
 
@@ -239,7 +246,6 @@ export class MyScene extends CGFscene {
 
         // apply transformations corresponding to the camera position relative to the origin
         this.applyViewMatrix();
-        this.updateCamera();
 
         // ---- BEGIN Primitive drawing section
         if (this.displayAxis) {
