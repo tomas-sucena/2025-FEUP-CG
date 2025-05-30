@@ -197,8 +197,7 @@ export class MyHeli extends MyObject {
 
         if (y < cruiseHeight) {
             this.accelerate(0.05, true);
-        }
-        else {
+        } else {
             this.velocity[1] = 0;
             this.action = 'fly';
         }
@@ -209,8 +208,7 @@ export class MyHeli extends MyObject {
 
         if (y > 0) {
             this.accelerate(-0.05, true);
-        }
-        else {
+        } else {
             this.action = 'rise';
             this.velocity[1] = 0;
         }
@@ -218,26 +216,25 @@ export class MyHeli extends MyObject {
 
     rotateToHeliport() {
         // compute the direction to the building
-        const direction = [0, 2].map(
-            (index) => this.position[index] - this.initialParams.position[index]
-        );
+        const direction = [
+            this.initialParams.position[0] - this.position[0],
+            this.initialParams.position[2] - this.position[2],
+        ];
         vec2.normalize(direction, direction);
 
-        console.log('direction', direction);
-
         // compute the helicopter direction
-        const heliDirection = [Math.cos(this.angles.yaw), Math.sin(-this.angles.yaw)];
-        console.log('heliDirection', heliDirection);
+        const heliDirection = [
+            Math.cos(this.angles.yaw),
+            Math.sin(-this.angles.yaw),
+        ];
 
         // compute the angle the helicopter needs to rotate to face the building
         const angle = Math.acos(vec2.dot(direction, heliDirection));
-        console.log('angle', angle * 180 / Math.PI);
 
         // rotate the helicopter to face the building
-        if (Math.abs(this.angles.yaw % (2 * Math.PI) - angle) > 0.001) {
+        if (angle > 0.1) {
             this.turn(Math.PI / 80);
-        }
-        else {
+        } else {
             this.action = 'fly';
         }
     }
@@ -308,16 +305,14 @@ export class MyHeli extends MyObject {
      * Displays the helicopter's geometry.
      */
     render() {
-        this.landingGear
-            .rotate(this.angles.pitch, 0, 0, 1)
-            .display();
+        this.landingGear.rotate(this.angles.pitch, 0, 0, 1).display();
 
         this.rotor
             .rotate(this.blades.angle, 0, 1, 0)
             .translate(0, this.tail.height * 1.95, 0)
             .rotate(this.angles.pitch, 0, 0, 1)
             .display();
-        
+
         this.tail
             .translate(-2.7, this.tail.height, 0)
             .rotate(this.angles.pitch, 0, 0, 1)
@@ -339,8 +334,7 @@ export class MyHeli extends MyObject {
      */
     display() {
         // rotate and position the helicopter
-        this.rotate(this.angles.yaw, 0, 1, 0)
-            .translate(...this.position);
+        this.rotate(this.angles.yaw, 0, 1, 0).translate(...this.position);
 
         super.display();
     }
