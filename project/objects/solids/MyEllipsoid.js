@@ -26,7 +26,7 @@ export class MyEllipsoid extends MyObject {
         this.radiusX = radiusX;
         this.radiusY = radiusY;
         this.radiusZ = radiusZ;
-        
+
         /** The number of divisions around the Y-axis */
         this.slices = slices;
         /** The number of divisions along the Y-axis */
@@ -49,7 +49,7 @@ export class MyEllipsoid extends MyObject {
 
         for (let stack = 0; stack <= this.stacks; ++stack) {
             const stackAng = stack * deltaStackAng;
-            const stackRadius = Math.cos(Math.PI/2 - stackAng);
+            const stackRadius = Math.cos(Math.PI / 2 - stackAng);
             const Ny = Math.cos(stackAng);
 
             for (let slice = 0; slice <= this.slices; ++slice) {
@@ -65,7 +65,7 @@ export class MyEllipsoid extends MyObject {
                 this.vertices.push(
                     Nx * this.radiusX,
                     Ny * this.radiusY,
-                    Nz * this.radiusZ
+                    Nz * this.radiusZ,
                 );
 
                 // Correct normals calculation for ellipsoid
@@ -73,19 +73,16 @@ export class MyEllipsoid extends MyObject {
                 const normalY = Ny / this.radiusY;
                 const normalZ = Nz / this.radiusZ;
                 const normalLength = Math.sqrt(
-                    normalX**2 + normalY**2 + normalZ**2
+                    normalX ** 2 + normalY ** 2 + normalZ ** 2,
                 );
-                
+
                 this.normals.push(
                     normalX / normalLength,
                     normalY / normalLength,
-                    normalZ / normalLength
+                    normalZ / normalLength,
                 );
 
-                this.texCoords.push(
-                    slice / this.slices,
-                    stack / this.stacks
-                );
+                this.texCoords.push(slice / this.slices, stack / this.stacks);
             }
         }
     }

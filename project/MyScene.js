@@ -4,10 +4,8 @@ import { MyColor } from './utils/MyColor.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyHeli } from './objects/helicopter/MyHeli.js';
 import { MyPanorama } from './objects/MyPanorama.js';
-import { MyRectangle } from './objects/shapes/MyRectangle.js';
 import { MyForest } from './objects/forest/MyForest.js';
 import { MyTerrain } from './objects/MyTerrain.js';
-import { MyHeliController } from './controllers/MyHeliController.js';
 
 /**
  * MyScene
@@ -58,7 +56,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Terrain';
+        this.selectedObject = 'Helicopter';
 
         this.initCameras();
         this.initLights();
@@ -187,15 +185,10 @@ export class MyScene extends CGFscene {
             },
         });
 
-        this.heliController = new MyHeliController({
-            scene: this,
-            helicopter: this.helicopter,
-        });
-
         this.objects = {
-            'Terrain': this.terrain,
             'Building': this.building,
-            'Forest': this.forest,
+            'Forest': this.forests.front,
+            'Helicopter': this.helicopter,
         };
     }
 
@@ -230,7 +223,6 @@ export class MyScene extends CGFscene {
     }
 
     update(time) {
-        this.heliController.control();
         this.helicopter.update(time);
         this.terrain.update((time / 100) % (100 * Math.PI));
     }
