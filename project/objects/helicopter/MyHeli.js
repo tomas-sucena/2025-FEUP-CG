@@ -220,20 +220,20 @@ export class MyHeli extends MyObject {
             this.initialParams.position[0] - this.position[0],
             this.initialParams.position[2] - this.position[2],
         ];
-        vec2.normalize(direction, direction);
 
         // compute the helicopter direction
-        const heliDirection = [
-            Math.cos(this.angles.yaw),
-            Math.sin(-this.angles.yaw),
-        ];
+        const currDir = [Math.cos(this.angles.yaw), Math.sin(-this.angles.yaw)];
+
+        // compute the dot and cross products
+        const dot = vec2.dot(direction, currDir);
+        const cross = direction[0] * currDir[1] - direction[1] * currDir[0];
 
         // compute the angle the helicopter needs to rotate to face the building
-        const angle = Math.acos(vec2.dot(direction, heliDirection));
+        const angle = Math.atan2(cross, dot);
 
         // rotate the helicopter to face the building
-        if (angle > 0.1) {
-            this.turn(Math.PI / 80);
+        if (Math.abs(angle) > 0.1) {
+            this.turn(Math.sign(angle) * (Math.PI / 80));
         } else {
             this.action = 'fly';
         }
@@ -247,10 +247,11 @@ export class MyHeli extends MyObject {
         this.angles.pitch = 0;
 
         if (pressedKeys.has('KeyL')) {
+            this.stop();
+
             // fill bucket
             if (this.scene.terrain.isAboveLake(this)) {
                 this.action = 'fillBucket';
-                this.stop();
                 return;
             }
             // move to heliport
