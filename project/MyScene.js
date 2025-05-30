@@ -175,7 +175,7 @@ export class MyScene extends CGFscene {
             scene: this,
             color: MyColor.RGB(255, 255, 255),
             position: [
-                -this.terrain.lake.width - this.building.depth,
+                -this.terrain.lake.width / 2 - this.building.depth,
                 this.building.height,
                 0,
             ],
@@ -262,7 +262,7 @@ export class MyScene extends CGFscene {
         this.terrain.rotate(-Math.PI / 2, 1, 0, 0).display();
         this.building
             .rotate(Math.PI / 2, 0, 1, 0)
-            .translate(-this.terrain.lake.width - this.building.depth, 0, 0)
+            .translate(-this.terrain.lake.width / 2 - this.building.depth, 0, 0)
             .display();
         this.helicopter.display();
 
@@ -271,7 +271,7 @@ export class MyScene extends CGFscene {
             .translate(
                 0,
                 0,
-                this.forests.front.depth / 2 + 1.4 * this.terrain.lake.depth,
+                (this.forests.front.depth + 1.4 * this.terrain.lake.depth) / 2,
             )
             .display();
         this.forests.back

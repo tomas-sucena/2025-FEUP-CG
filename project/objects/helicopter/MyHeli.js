@@ -143,6 +143,13 @@ export class MyHeli extends MyObject {
     }
 
     /**
+     * Stops the helicopter by settings its velocity to zero.
+     */
+    stop() {
+        vec3.set(this.velocity, 0, 0, 0);
+    }
+
+    /**
      * Resets the helicopter, settings its values to its initial parameters.
      */
     reset() {
@@ -216,15 +223,10 @@ export class MyHeli extends MyObject {
         const { pressedKeys } = this.scene;
         this.angles.pitch = 0;
 
-        // reset the helicopter
-        if (pressedKeys.has('KeyR')) {
-            this.reset();
-            return;
-        }
-
         // fill bucket
-        if (pressedKeys.has('KeyP')) {
+        if (pressedKeys.has('KeyP') && this.scene.terrain.isAboveLake(this)) {
             this.action = 'fillBucket';
+            this.stop();
             return;
         }
 
@@ -253,6 +255,12 @@ export class MyHeli extends MyObject {
      * Updates the helicopter.
      */
     update(elapsedTime) {
+        // reset the helicopter
+        if (this.scene.pressedKeys.has('KeyR')) {
+            this.reset();
+            return;
+        }
+
         // execute the current action
         this[this.action](elapsedTime);
 
