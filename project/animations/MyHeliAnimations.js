@@ -68,10 +68,17 @@ export const MyHeliAnimations = {
                 return;
             }
             // move to heliport
-            else {
+            else if (!this.bucket.hasWater()) {
                 this.animation = 'rotateToHeliport';
                 return;
             }
+        }
+
+        // open the bucket
+        if (pressedKeys.has('KeyO') && this.bucket.hasWater()) {
+            this.animation = 'dropWater';
+            this.bucket.animation = 'openBottom';
+            return;
         }
 
         // fly forward
@@ -95,7 +102,7 @@ export const MyHeliAnimations = {
         }
     },
     /**
-     * Descends until the bucket is entirely submerged in the lake.
+     * Descends the helicopter until the bucket is entirely submerged in the lake.
      */
     dive: function () {
         const y = this.position[1] - this.rope.length / 2;
@@ -109,13 +116,16 @@ export const MyHeliAnimations = {
         }
     },
     /**
-     * Fills the bucket with water.
+     * Fills the helicopter's bucket with water.
      */
     fillBucket: function () {
         if (this.scene.pressedKeys.has('KeyP')) {
             this.animation = 'ascend';
         }
     },
+    /**
+     * Rotates until the helicopter is facing the heliport.
+     */
     rotateToHeliport: function () {
         // compute the direction to the building
         const targetDir = [
@@ -140,6 +150,9 @@ export const MyHeliAnimations = {
             this.turn(Math.sign(angle) * (Math.PI / 80));
         }
     },
+    /**
+     * Flies the helicopter to the heliport.
+     */
     flyToHeliport: function () {
         const targetPosition = [...this.initialParams.position];
         const position = [...this.position];
@@ -153,6 +166,15 @@ export const MyHeliAnimations = {
             this.animation = 'fly';
         } else {
             this.accelerate(0.05);
+        }
+    },
+    /**
+     * Drops water on top of a fire.
+     */
+    dropWater: function () {
+        // wait for the bucket to finish its animation
+        if (this.bucket.animation === 'idle') {
+            this.animation = 'fly';
         }
     },
 };

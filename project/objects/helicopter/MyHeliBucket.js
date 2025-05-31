@@ -1,10 +1,20 @@
 import { MyCylinder } from '../solids/MyCylinder.js';
 import { MyCircle } from '../shapes/MyCircle.js';
 import { MyObject } from '../MyObject.js';
+import { MyHeliBucketAnimations } from '../../animations/MyHeliBucketAnimations.js';
 
 export class MyHeliBucket extends MyObject {
     constructor({ scene, radius, height, color, textures }) {
         super(scene);
+
+        /** Indicates the amount (from 0 to 1) of water the bucket has */
+        this.waterAmount = 0;
+
+        /** The angle of the bottom of the bucket around the Z-axis */
+        this.bottomAngle = 0;
+
+        /** The animation the bucket is performing */
+        this.animation = 'idle';
 
         /** The bucket's body */
         this.body = new MyCylinder({
@@ -19,9 +29,6 @@ export class MyHeliBucket extends MyObject {
             },
             texture: textures.bucket,
         });
-
-        /** Indicates the amount (from 0 to 1) of water the bucket has */
-        this.waterAmount = 0;
 
         /** The bottom of the bucket */
         this.bottom = new MyCircle({
@@ -46,6 +53,13 @@ export class MyHeliBucket extends MyObject {
             },
             texture: textures?.water,
         });
+
+        /** The gush of water that will be dropped from the bucket */
+        this.waterGush = new MyCylinder({
+            scene,
+            topRadius: this.body.bottomRadius,
+            bottomRadius: 1.2 * this.body.bottomRadius,
+        });
     }
 
     /**
@@ -63,6 +77,18 @@ export class MyHeliBucket extends MyObject {
     }
 
     /**
+     * Indicates if the bucket has water.
+     * @returns 'true' if the bucket has water, 'false' otherwise
+     */
+    hasWater() {
+        return this.waterAmount > 0;
+    }
+
+    update() {
+        MyHeliBucketAnimations[this.animation].call(this);
+    }
+
+    /**
      * Displays the bucket's geometry.
      */
     render() {
@@ -72,16 +98,22 @@ export class MyHeliBucket extends MyObject {
         // display the bucket bottom
         this.bottom
             .rotate(Math.PI / 2, 1, 0, 0)
+            .rotate(this.bottomAngle, 0, 0, 1)
             .display()
             .rotate(-Math.PI / 2, 1, 0, 0)
+            .rotate(-this.bottomAngle, 0, 0, 1)
             .display();
 
         // display the water
-        if (this.waterAmount > 0) {
+        if (this.hasWater()) {
             this.water
                 .rotate(-Math.PI / 2, 1, 0, 0)
                 .translate(0, this.height * this.waterAmount, 0)
                 .display();
+        }
+
+        if (this.dropWater) {
+            this.waterGush.translate(0, -this.waterGush.height, 0).display();
         }
     }
 }

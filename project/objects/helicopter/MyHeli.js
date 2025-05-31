@@ -187,9 +187,11 @@ export class MyHeli extends MyObject {
         // fetch the initial parameters
         const { position, velocity, yaw } = this.initialParams;
 
-        // update the values
+        // reset the vectors
         vec3.copy(this.position, position);
         vec3.copy(this.velocity, velocity);
+
+        // reset the aerodynamic angles
         this.angles.yaw = yaw;
         this.angles.pitch = 0;
 
@@ -219,6 +221,9 @@ export class MyHeli extends MyObject {
 
         // update the blade velocity
         this.blades.angle += this.blades.speed;
+
+        // update the bucket
+        this.bucket.update();
     }
 
     /**
