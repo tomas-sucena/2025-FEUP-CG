@@ -17,6 +17,8 @@ export class MyScene extends CGFscene {
 
         /** A hash map to store the textures that have already been loaded */
         this.textures = new Map();
+        /** A hash map to store the shaders that have already been loaded */
+        this.shaders = new Map();
     }
 
     /**

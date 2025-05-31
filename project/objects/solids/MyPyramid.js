@@ -9,35 +9,36 @@ export class MyPyramid extends MyObject {
      * @param { Object } config - the pyramid configuration
      * @param { CGFscene } config.scene - the scene the pyramid will be displayed in
      * @param { number } config.radius - the radius of the circle that circumscribes the base of the pyramid
-     * @param { number } config.height -the height of the pyramid
+     * @param { number } config.height - the height of the pyramid
      * @param { number } config.slices - the number of divisions around the Y-axis
      * @param { number } config.stacks - the number of divisions along the Y-axis
      * @param { boolean } config.inverted - indicates if the pyramid should be rendered on the inside
      * @param { Object } config.material - the material to be applied to the pyramid
-     * @param { string | Object } config.texture - the texture to be applied to the pyramid
+     * @param { string } config.texture - the texture to be applied to the pyramid
      */
     constructor({
         scene,
-        radius,
-        height,
+        radius = 1,
+        height = 1,
         slices,
         stacks,
         inverted,
         material,
         texture,
+        shader,
     }) {
         super(scene);
 
         /** The radius of the circle that circumscribes the base of the pyramid */
-        this.radius = radius ?? 1;
+        this.radius = radius;
         /** The height of the pyramid */
-        this.height = height ?? 1;
+        this.height = height;
         /** The number of divisions around the Y-axis */
         this.slices = slices;
         /** The number of divisions along the Y-axis */
         this.stacks = stacks ?? Math.floor(this.height);
 
-        this.initGeometry({ inverted, material, texture });
+        this.initGeometry({ inverted, material, texture, shader });
     }
 
     /**
@@ -66,9 +67,7 @@ export class MyPyramid extends MyObject {
 
             // compute the normal
             const normal = [(Nx + Nxx) / 2, slope, (Nz + Nzz) / 2];
-            const Nsize = Math.hypot(...normal);
-
-            normal.forEach((_, index) => (normal[index] /= Nsize)); // normalization
+            vec3.normalize(normal, normal);
 
             // define the stacks
             for (let stack = 0; stack < this.stacks; ++stack) {
