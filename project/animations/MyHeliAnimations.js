@@ -104,8 +104,16 @@ export const MyHeliAnimations = {
             this.accelerate(-0.05, true);
         } else {
             this.bucket.waterAmount = 1;
-            this.animation = 'ascend';
+            this.animation = 'fillBucket';
             this.velocity[1] = 0;
+        }
+    },
+    /**
+     * Fills the bucket with water.
+     */
+    fillBucket: function () {
+        if (this.scene.pressedKeys.has('KeyP')) {
+            this.animation = 'ascend';
         }
     },
     rotateToHeliport: function () {
