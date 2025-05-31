@@ -103,7 +103,7 @@ export const MyHeliAnimations = {
         if (y > 0) {
             this.accelerate(-0.05, true);
         } else {
-            this.bucket.waterLevel = 1;
+            this.bucket.waterAmount = 1;
             this.animation = 'ascend';
             this.velocity[1] = 0;
         }
