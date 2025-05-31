@@ -42,10 +42,14 @@ export class MyTerrain extends MyRectangle {
         const halfLakeDepth = this.lake.depth / 2;
 
         const [x, _, z] = helicopter.position;
-        const halfBucketWidth = helicopter.bucket.width / 2;
+        const bucketRadius = helicopter.bucket.radius;
 
-        return x - halfBucketWidth > -halfLakeWidth && x + halfBucketWidth < halfLakeWidth // X in bounds
-            && z - halfBucketWidth > -halfLakeDepth && z + halfBucketWidth < halfLakeDepth;
+        return (
+            x - bucketRadius > -halfLakeWidth &&
+            x + bucketRadius < halfLakeWidth && // X in bounds
+            z - bucketRadius > -halfLakeDepth &&
+            z + bucketRadius < halfLakeDepth // Z in bounds
+        );
     }
 
     /**

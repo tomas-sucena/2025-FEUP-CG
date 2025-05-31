@@ -173,17 +173,21 @@ export class MyScene extends CGFscene {
         /** The fire department helicopter */
         this.helicopter = new MyHeli({
             scene: this,
-            color: MyColor.RGB(255, 255, 255),
             position: [
                 -this.terrain.lake.width / 2 - this.building.depth,
                 this.building.height,
                 0,
             ],
+            colors: {
+                coat: MyColor.RGB(255, 255, 255),
+                metal: MyColor.hex('#b6b6b6'),
+            },
             textures: {
                 metal: './assets/metallic.jpg',
                 cockpit: './assets/helicopter.png',
                 tail: './assets/tail.png',
-                frosted_glass: './assets/frosted_glass.jpg',
+                glass: './assets/glass.jpg',
+                water: './assets/lake.jpg',
             },
         });
 

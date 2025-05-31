@@ -2,23 +2,26 @@ import { MyObject } from '../MyObject.js';
 import { MyEllipsoid } from '../solids/MyEllipsoid.js';
 
 export class MyHeliRope extends MyObject {
-    constructor({ scene, radius = 0.1, length = 8, segments = 15, colors }) {
+    constructor({ scene, radius, length, knots, color }) {
         super(scene);
 
+        /** The length of the rope */
         this.length = length;
-        this.segments = Math.max(length, segments);
+
+        /** The number of knots that constitute the rope */
+        this.knots = knots ?? 2 * length;
 
         /** A knot of the rope */
         this.knot = new MyEllipsoid({
             scene,
             radiusX: radius,
-            radiusY: (0.6 * length) / segments,
+            radiusY: (0.6 * length) / this.knots,
             radiusZ: radius,
             slices: 16,
             stacks: 8,
             material: {
-                ambient: colors?.rope || [0.3, 0.25, 0.2, 1],
-                diffuse: colors?.rope || [0.3, 0.25, 0.2, 1],
+                ambient: color,
+                diffuse: color,
             },
         });
     }
@@ -27,11 +30,11 @@ export class MyHeliRope extends MyObject {
      * Displays the rope's geometry.
      */
     render() {
-        const deltaY = this.length / this.segments;
+        const deltaY = this.length / this.knots;
 
-        for (let segment = 0; segment < this.segments; ++segment) {
-            const y = segment * deltaY;
-            this.knot.translate(0, this.knot.radiusY + y, 0).display();
+        for (let knot = 0; knot < this.knots; ++knot) {
+            const y = this.knot.radiusY + knot * deltaY;
+            this.knot.translate(0, y, 0).display();
         }
     }
 }

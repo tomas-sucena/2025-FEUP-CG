@@ -28,7 +28,7 @@ export class MyHeliCockpit extends MyObject {
                 specular: [0.9, 0.9, 0.9, 1],
                 shininess: 100,
             },
-            texture: textures?.frosted_glass,
+            texture: textures.glass,
         });
 
         // Main cockpit dome (ellipsoid)
@@ -40,7 +40,7 @@ export class MyHeliCockpit extends MyObject {
             slices: 32,
             stacks: 16,
             material,
-            texture: textures?.cockpit,
+            texture: textures.cockpit,
         });
 
         // Store dimensions for positioning

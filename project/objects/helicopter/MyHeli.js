@@ -4,7 +4,7 @@ import { MyHeliRotor } from './MyHeliRotor.js';
 import { MyHeliTail } from './MyHeliTail.js';
 import { MyHeliCockpit } from './MyHeliCockpit.js';
 import { MyHeliBucket } from './MyHeliBucket.js';
-import { MyColor } from '../../utils/MyColor.js';
+import { MyHeliRope } from './MyHeliRope.js';
 
 /**
  * A helicopter.
@@ -14,14 +14,14 @@ export class MyHeli extends MyObject {
 
     constructor({
         scene,
-        color,
+        colors,
         position = [0, 0, 0],
         velocity = [0, 0, 0],
         yaw = 0,
         textures,
     }) {
         super(scene);
-        this.initComponents(color, textures);
+        this.initComponents(colors, textures);
 
         /** The helicopter's position */
         this.position = position;
@@ -55,16 +55,16 @@ export class MyHeli extends MyObject {
     /**
      * Initializes the helicopter's components.
      */
-    initComponents(color, textures) {
+    initComponents(colors, textures) {
         const coatMaterial = {
-            ambient: color,
-            diffuse: color,
+            ambient: colors.coat,
+            diffuse: colors.coat,
             specular: [0.7, 0.7, 0.7, 1],
         };
 
         const metalMaterial = {
-            ambient: MyColor.hex('#b6b6b6'),
-            diffuse: MyColor.hex('#b6b6b6'),
+            ambient: colors.metal,
+            diffuse: colors.metal,
             specular: [0.8, 0.8, 0.8, 1],
         };
 
@@ -115,8 +115,8 @@ export class MyHeli extends MyObject {
         /** The helicopter's bucket */
         this.bucket = new MyHeliBucket({
             scene: this.scene,
-            width: 3,
-            height: 2,
+            radius: 3,
+            height: 3,
             material: {
                 ambient: [0.2, 0.2, 0.2, 1],
                 diffuse: [0.2, 0.2, 0.2, 1],
@@ -124,6 +124,14 @@ export class MyHeli extends MyObject {
                 shininess: 50,
             },
             textures,
+        });
+
+        /** The rope that connects the bucket to the helicopter */
+        this.rope = new MyHeliRope({
+            scene: this.scene,
+            radius: 0.07,
+            length: 20,
+            color: [0.35, 0.3, 0.25, 1],
         });
     }
 
@@ -207,7 +215,7 @@ export class MyHeli extends MyObject {
 
     rise() {
         // verify if the helicopter has reached the cruise height
-        const cruiseHeight = this.scene.building.height + this.bucket.height;
+        const cruiseHeight = this.scene.building.height + this.rope.length;
         const y = this.position[1];
 
         if (y < cruiseHeight) {
@@ -219,11 +227,12 @@ export class MyHeli extends MyObject {
     }
 
     fillBucket() {
-        const y = this.position[1] - this.bucket.height / 2;
+        const y = this.position[1] - this.rope.length / 2;
 
         if (y > 0) {
             this.accelerate(-0.05, true);
         } else {
+            this.bucket.hasWater = true;
             this.action = 'rise';
             this.velocity[1] = 0;
         }
@@ -338,27 +347,37 @@ export class MyHeli extends MyObject {
      * Displays the helicopter's geometry.
      */
     render() {
+        // display the landing gear
         this.landingGear.rotate(this.angles.pitch, 0, 0, 1).display();
 
+        // display the main rotor
         this.rotor
             .rotate(this.blades.angle, 0, 1, 0)
             .translate(0, this.tail.height * 1.95, 0)
             .rotate(this.angles.pitch, 0, 0, 1)
             .display();
 
+        // display the tail
         this.tail
             .translate(-2.7, this.tail.height, 0)
             .rotate(this.angles.pitch, 0, 0, 1)
             .display();
 
+        // display the cockpit
         this.cockpit
             .translate(-2.3, this.tail.height, 0)
             .rotate(Math.PI, 0, 1, 0)
             .rotate(this.angles.pitch, 0, 0, 1)
             .display();
 
+        // display the bucket
         this.bucket
-            .translate(0, -this.bucket.height + this.landingGear.height, 0)
+            .translate(0, -this.rope.length + this.landingGear.height, 0)
+            .display();
+
+        // display the rope
+        this.rope
+            .translate(0, -this.rope.length + this.landingGear.height, 0)
             .display();
     }
 
