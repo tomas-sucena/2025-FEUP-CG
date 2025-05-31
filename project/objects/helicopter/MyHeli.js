@@ -5,6 +5,7 @@ import { MyHeliTail } from './MyHeliTail.js';
 import { MyHeliCockpit } from './MyHeliCockpit.js';
 import { MyHeliBucket } from './MyHeliBucket.js';
 import { MyHeliRope } from './MyHeliRope.js';
+import { MyHeliAnimations } from '../../animations/MyHeliAnimations.js';
 
 /**
  * A helicopter.
@@ -14,10 +15,10 @@ export class MyHeli extends MyObject {
 
     constructor({
         scene,
-        colors,
         position = [0, 0, 0],
         velocity = [0, 0, 0],
         yaw = 0,
+        colors,
         textures,
     }) {
         super(scene);
@@ -41,15 +42,21 @@ export class MyHeli extends MyObject {
             speed: 0,
         };
 
-        /** The action the helicopter is performing */
-        this.action = 'stationary';
-
         /** The helicopter's initial parameters */
         this.initialParams = {
             position: [...position],
             velocity: [...velocity],
             yaw,
         };
+
+        /** Indicates if the bucket should be displayed */
+        this.showBucket = false;
+
+        /** The scale with which the bucket is displayed */
+        this.bucketScale = 0;
+
+        /** The action the helicopter is performing */
+        this.animation = 'stationary';
     }
 
     /**
@@ -175,7 +182,7 @@ export class MyHeli extends MyObject {
      * Resets the helicopter, settings its values to its initial parameters.
      */
     reset() {
-        this.action = 'stationary';
+        this.animation = 'stationary';
 
         // fetch the initial parameters
         const { position, velocity, yaw } = this.initialParams;
@@ -188,139 +195,10 @@ export class MyHeli extends MyObject {
 
         // reset the blade speed
         this.blades.speed = 0;
-    }
 
-    /**
-     * Remains stationary on top of the firefighter's building.
-     */
-    stationary() {
-        if (this.scene.pressedKeys.has('KeyP')) {
-            this.action = 'startEngine';
-        }
-    }
-
-    /**
-     * Starts the engine, increasing the blade rotation speed.
-     */
-    startEngine() {
-        this.blades.speed = Math.min(
-            this.blades.speed + 0.02,
-            MyHeli.MAX_BLADE_SPEED,
-        );
-
-        if (this.blades.speed == MyHeli.MAX_BLADE_SPEED) {
-            this.action = 'rise';
-        }
-    }
-
-    rise() {
-        // verify if the helicopter has reached the cruise height
-        const cruiseHeight = this.scene.building.height + this.rope.length;
-        const y = this.position[1];
-
-        if (y < cruiseHeight) {
-            this.accelerate(0.05, true);
-        } else {
-            this.velocity[1] = 0;
-            this.action = 'fly';
-        }
-    }
-
-    fillBucket() {
-        const y = this.position[1] - this.rope.length / 2;
-
-        if (y > 0) {
-            this.accelerate(-0.05, true);
-        } else {
-            this.bucket.hasWater = true;
-            this.action = 'rise';
-            this.velocity[1] = 0;
-        }
-    }
-
-    rotateToHeliport() {
-        // compute the direction to the building
-        const targetDir = [
-            this.initialParams.position[0] - this.position[0],
-            this.initialParams.position[2] - this.position[2],
-        ];
-        vec2.normalize(targetDir, targetDir);
-
-        // compute the helicopter direction
-        const currDir = [Math.cos(this.angles.yaw), Math.sin(-this.angles.yaw)];
-
-        // compute the angle the helicopter needs to rotate to face the building
-        const dot = vec2.dot(targetDir, currDir);
-        const cross = targetDir[0] * currDir[1] - targetDir[1] * currDir[0];
-        const angle = Math.atan2(cross, dot);
-
-        // rotate the helicopter to face the building
-        if (Math.abs(angle) < Math.PI / 80) {
-            this.turn(angle);
-            this.action = 'flyToHeliport';
-        } else {
-            this.turn(Math.sign(angle) * (Math.PI / 80));
-        }
-    }
-
-    flyToHeliport() {
-        const targetPosition = [...this.initialParams.position];
-        const position = [...this.position];
-        targetPosition[1] = position[1]; // ignore the Y-axis
-
-        // compute the distance between the helicopter and the building
-        const distance = vec3.sqrDist(targetPosition, position);
-        console.log('distance', distance);
-
-        if (distance < 1) {
-            this.stop();
-            this.action = 'fly';
-        } else {
-            this.accelerate(0.05);
-        }
-    }
-
-    /**
-     * Flies horizontally controlled by user input.
-     */
-    fly() {
-        const { pressedKeys } = this.scene;
-        this.angles.pitch = 0;
-
-        if (pressedKeys.has('KeyL')) {
-            this.stop();
-
-            // fill bucket
-            if (this.scene.terrain.isAboveLake(this)) {
-                this.action = 'fillBucket';
-                return;
-            }
-            // move to heliport
-            else {
-                this.action = 'rotateToHeliport';
-                return;
-            }
-        }
-
-        // fly forward
-        if (pressedKeys.has('KeyW') || pressedKeys.has('ArrowUp')) {
-            this.accelerate(0.05);
-        }
-
-        // fly backward
-        if (pressedKeys.has('KeyS') || pressedKeys.has('ArrowDown')) {
-            this.accelerate(-0.05);
-        }
-
-        // rotate left
-        if (pressedKeys.has('KeyA') || pressedKeys.has('ArrowLeft')) {
-            this.turn(Math.PI / 80);
-        }
-
-        // rotate right
-        if (pressedKeys.has('KeyD') || pressedKeys.has('ArrowRight')) {
-            this.turn(-Math.PI / 80);
-        }
+        // reset the bucket
+        this.showBucket = false;
+        this.bucketScale = 0;
     }
 
     /**
@@ -334,7 +212,7 @@ export class MyHeli extends MyObject {
         }
 
         // execute the current action
-        this[this.action](elapsedTime);
+        MyHeliAnimations[this.animation].call(this, elapsedTime);
 
         // update the position
         vec3.add(this.position, this.position, this.velocity);
@@ -370,15 +248,22 @@ export class MyHeli extends MyObject {
             .rotate(this.angles.pitch, 0, 0, 1)
             .display();
 
-        // display the bucket
-        this.bucket
-            .translate(0, -this.rope.length + this.landingGear.height, 0)
-            .display();
+        if (this.showBucket) {
+            const ropeLenght = this.rope.length * this.bucketScale;
+            const bucketY = -ropeLenght + this.landingGear.height;
 
-        // display the rope
-        this.rope
-            .translate(0, -this.rope.length + this.landingGear.height, 0)
-            .display();
+            // display the bucket
+            this.bucket
+                .scale(this.bucketScale, this.bucketScale, this.bucketScale)
+                .translate(0, bucketY, 0)
+                .display();
+
+            // display the rope
+            this.rope
+                .scale(this.bucketScale, this.bucketScale, this.bucketScale)
+                .translate(0, bucketY, 0)
+                .display();
+        }
     }
 
     /**
