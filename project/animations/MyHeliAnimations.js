@@ -46,7 +46,7 @@ export const MyHeliAnimations = {
      */
     dropBucket: function () {
         if (this.bucketScale < 1) {
-            this.bucketScale += 0.2;
+            this.bucketScale += 0.1;
         } else {
             this.bucketScale = 1;
             this.animation = 'fly';
@@ -64,7 +64,7 @@ export const MyHeliAnimations = {
 
             // fill bucket
             if (this.scene.terrain.isAboveLake(this)) {
-                this.animation = 'fillBucket';
+                this.animation = 'dive';
                 return;
             }
             // move to heliport
@@ -92,6 +92,20 @@ export const MyHeliAnimations = {
         // rotate right
         if (pressedKeys.has('KeyD') || pressedKeys.has('ArrowRight')) {
             this.turn(-Math.PI / 80);
+        }
+    },
+    /**
+     * Descends until the bucket is entirely submerged in the lake.
+     */
+    dive: function () {
+        const y = this.position[1] - this.rope.length / 2;
+
+        if (y > 0) {
+            this.accelerate(-0.05, true);
+        } else {
+            this.bucket.waterLevel = 1;
+            this.animation = 'ascend';
+            this.velocity[1] = 0;
         }
     },
     rotateToHeliport: function () {
@@ -131,17 +145,6 @@ export const MyHeliAnimations = {
             this.animation = 'fly';
         } else {
             this.accelerate(0.05);
-        }
-    },
-    fillBucket: function () {
-        const y = this.position[1] - this.rope.length / 2;
-
-        if (y > 0) {
-            this.accelerate(-0.05, true);
-        } else {
-            this.bucket.hasWater = true;
-            this.animation = 'ascend';
-            this.velocity[1] = 0;
         }
     },
 };

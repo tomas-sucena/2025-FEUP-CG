@@ -20,14 +20,13 @@ export class MyHeliBucket extends MyObject {
             texture: textures.bucket,
         });
 
-        /** Indicates if the bucket has water */
-        this.hasWater = false;
+        /** Indicates the amount (from 0 to 1) of water the bucket has */
+        this.waterAmount = 0;
 
         /** The bottom of the bucket */
         this.bottom = new MyCircle({
             scene,
             radius: this.body.bottomRadius,
-            slices: 32,
             material: {
                 ambient: color,
                 diffuse: color,
@@ -39,14 +38,13 @@ export class MyHeliBucket extends MyObject {
         /** The water carried by the bucket */
         this.water = new MyCircle({
             scene,
-            radius: 0.8 * radius,
-            slices: 32,
+            radius,
             material: {
                 ambient: [0, 0, 1, 1],
                 diffuse: [0, 0, 1, 1],
                 specular: [0.5, 0.5, 0.5, 1],
             },
-            texture: textures.water,
+            texture: textures?.water,
         });
     }
 
@@ -55,6 +53,13 @@ export class MyHeliBucket extends MyObject {
      */
     get radius() {
         return this.body.topRadius;
+    }
+
+    /**
+     * Returns the bucket's height.
+     */
+    get height() {
+        return this.body.height;
     }
 
     /**
@@ -72,10 +77,10 @@ export class MyHeliBucket extends MyObject {
             .display();
 
         // display the water
-        if (this.hasWater) {
+        if (this.waterAmount > 0) {
             this.water
-                .translate(0, 0, -3)
-                .rotate(Math.PI / 2, 1, 0, 0)
+                .rotate(-Math.PI / 2, 1, 0, 0)
+                .translate(0, this.height * this.waterAmount, 0)
                 .display();
         }
     }
