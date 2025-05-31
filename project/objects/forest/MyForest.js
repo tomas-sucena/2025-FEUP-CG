@@ -1,13 +1,37 @@
 import { MyObject } from '../MyObject.js';
 import { MyTree } from './MyTree.js';
-import { MyPyramid } from '../solids/MyPyramid.js';
-import { CGFshader } from '../../../lib/CGF.js';
 
+/**
+ * Returns a pseudo-random number in an interval.
+ * @param { number } min a number
+ * @param { number } max a number
+ * @returns a pseudo-random number in an interval
+ */
 function randomBetween(min, max) {
     return min + (max - min) * Math.random();
 }
 
+/**
+ * A 2D grid of randomly generated trees.
+ */
 export class MyForest extends MyObject {
+    /**
+     * Initializes the forest.
+     * @param { Object } config - the forest configuration
+     * @param { CGFscene } config.scene - the scene the forest will be displayed in
+     * @param { number } config.width - the dimension of the forest along the X-axis
+     * @param { number } config.depth - the dimension of the forest along the Z-axis
+     * @param { number } config.rows - the number of rows of the forest
+     * @param { number } config.columns - the number of columns of the forest
+     * @param { number } config.maxRows - the maximum number of rows of the forest
+     * @param { number } config.maxColumns - the maximum number of columns of the forest
+     * @param { Object } config.colors - the base colors to be applied to the trees
+     * @param { number[4] } config.colors.crown - the base color of the trees' crown
+     * @param { number[4] } config.colors.trunk - the base color of the trees' trunk
+     * @param { Object } config.textures - the textures to be applied to the trees
+     * @param { string } config.textures.crown - the texture to be applied to the trees' crowns
+     * @param { string } config.textures.trunk - the texture to be applied to the trees' trunks
+     */
     constructor({
         scene,
         width,
@@ -18,31 +42,34 @@ export class MyForest extends MyObject {
         maxColumns,
         colors,
         textures,
-        fireCount = 5, // Number of fires to generate
     }) {
         super(scene);
 
+        /** The dimension of the forest along the X-axis */
         this.width = width;
+        /** The dimension of the forest along the Z-axis */
         this.depth = depth;
+        /** The number of rows of the forest */
         this.rows = rows;
+        /** The number of columns of the forest */
         this.columns = columns;
+        /** The maximum number of tree rows */
         this.maxRows = maxRows ?? rows;
+        /** The maximum number of tree columns */
         this.maxColumns = maxColumns ?? columns;
-        this.fireCount = fireCount;
 
         const numTrees = this.maxRows * this.maxColumns;
+        /** The trees */
         this.trees = Array(numTrees);
+        /** The offsets */
         this.treeOffsets = Array(numTrees);
-        
-        this.fires = [];
-        this.firePositions = []; 
-        this.fireShader = null;
-        this.fireTime = 0; 
 
         this.#initTrees(colors, textures);
-        this.#initFires();
     }
 
+    /**
+     * Initializes the trees.
+     */
     #initTrees(colors, textures) {
         const patchWidth = this.width / this.maxColumns;
         const patchDepth = this.depth / this.maxRows;
@@ -83,48 +110,20 @@ export class MyForest extends MyObject {
         }
     }
 
-    #initFires() {
-        this.fireShader = new CGFshader(
-            this.scene.gl,
-            './shaders/fire.vert',
-            './shaders/fire.frag',
-        );
-
-        this.fireShader.setUniformsValues({ uTime: this.fireTime });
-
-        for (let i = 0; i < this.fireCount; i++) {
-            const fire = new MyPyramid({
-                scene: this.scene,
-                radius: randomBetween(1, 3),
-                height: randomBetween(2, 5),
-                slices: Math.floor(randomBetween(4, 8)),
-            });
-            
-            const x = randomBetween(-this.width/2, this.width/2);
-            const z = randomBetween(-this.depth/2, this.depth/2);
-            this.firePositions.push([x, 0, z]);
-            
-            this.fires.push(fire);
-        }
-    }
-
     /**
-     * Updates the fire animations
-     * @param {number} elapsedTime - Time since last update in milliseconds
+     * Displays the trees.
      */
-    update(elapsedTime) {
-        this.fireTime += elapsedTime / 1000;
-    }
-
     render() {
-        // Render trees
         const deltaX = this.width / this.columns;
         const deltaZ = this.depth / this.rows;
+
         const widthRatio = this.maxColumns / this.columns;
         const depthRatio = this.maxRows / this.rows;
+
         const xCorner = (0.5 - this.columns / 2) * deltaX;
         const zCorner = (0.5 - this.rows / 2) * deltaZ;
 
+        // display the trees
         for (let row = 0; row < this.rows; ++row) {
             const zRow = zCorner + row * deltaZ;
             const rowIndex = row * this.columns;
@@ -139,16 +138,5 @@ export class MyForest extends MyObject {
                 this.trees[index].translate(x, 0, z).display();
             }
         }
-
-        this.scene.setActiveShader(this.fireShader);
-        
-        this.fireShader.setUniformsValues({ uTime: this.fireTime });
-
-        for (let i = 0; i < this.fires.length; i++) {
-            const [x, y, z] = this.firePositions[i];
-            this.fires[i].translate(x, y, z).display();
-        }
-        
-        this.scene.setActiveShader(this.scene.defaultShader);
     }
 }
