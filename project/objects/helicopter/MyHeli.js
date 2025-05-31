@@ -49,9 +49,6 @@ export class MyHeli extends MyObject {
             yaw,
         };
 
-        /** Indicates if the bucket should be displayed */
-        this.showBucket = false;
-
         /** The scale with which the bucket is displayed */
         this.bucketScale = 0;
 
@@ -176,6 +173,7 @@ export class MyHeli extends MyObject {
      */
     stop() {
         vec3.set(this.velocity, 0, 0, 0);
+        this.angles.pitch = 0;
     }
 
     /**
@@ -199,7 +197,6 @@ export class MyHeli extends MyObject {
         this.blades.speed = 0;
 
         // reset the bucket
-        this.showBucket = false;
         this.bucketScale = 0;
     }
 
@@ -253,7 +250,7 @@ export class MyHeli extends MyObject {
             .rotate(this.angles.pitch, 0, 0, 1)
             .display();
 
-        if (this.showBucket) {
+        if (this.bucketScale > 0) {
             const ropeLenght = this.rope.length * this.bucketScale;
             const bucketY = -ropeLenght + this.landingGear.height;
 

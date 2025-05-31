@@ -26,18 +26,17 @@ export const MyHeliAnimations = {
         }
     },
     /**
-     * Ascends from the heliport until it reaches the cruise height.
+     * Ascends from the heliport until it reaches the cruise altitude.
      */
     ascend: function () {
-        // verify if the helicopter has reached the cruise height
-        const cruiseHeight = this.scene.building.height + this.rope.length;
+        // verify if the helicopter has reached the cruise altitude
+        const cruiseAltitude = this.scene.building.height + this.rope.length;
         const y = this.position[1];
 
-        if (y < cruiseHeight) {
+        if (y < cruiseAltitude) {
             this.accelerate(0.05, true);
         } else {
-            this.velocity[1] = 0;
-            this.showBucket = true;
+            this.velocity[1] = 0; // reset the vertical velocity
             this.animation = 'dropBucket';
         }
     },
@@ -116,11 +115,20 @@ export const MyHeliAnimations = {
         }
     },
     /**
-     * Fills the helicopter's bucket with water.
+     * Fills the bucket with water.
      */
     fillBucket: function () {
         if (this.scene.pressedKeys.has('KeyP')) {
             this.animation = 'ascend';
+        }
+    },
+    /**
+     * Drops water on top of a fire.
+     */
+    dropWater: function () {
+        // wait for the bucket to finish its animation
+        if (this.bucket.animation === 'idle') {
+            this.animation = 'fly';
         }
     },
     /**
@@ -151,7 +159,7 @@ export const MyHeliAnimations = {
         }
     },
     /**
-     * Flies the helicopter to the heliport.
+     * Flies to the heliport.
      */
     flyToHeliport: function () {
         const targetPosition = [...this.initialParams.position];
@@ -163,18 +171,42 @@ export const MyHeliAnimations = {
 
         if (distance < 1) {
             this.stop();
-            this.animation = 'fly';
+            this.animation = 'retractBucket';
         } else {
             this.accelerate(0.05);
         }
     },
     /**
-     * Drops water on top of a fire.
+     * Retracts the bucket.
      */
-    dropWater: function () {
-        // wait for the bucket to finish its animation
-        if (this.bucket.animation === 'idle') {
-            this.animation = 'fly';
+    retractBucket: function () {
+        if (this.bucketScale > 0) {
+            this.bucketScale -= 0.1;
+        } else {
+            this.bucketScale = 0;
+            this.animation = 'land';
+        }
+    },
+    /**
+     * Lands on the helipad.
+     */
+    land: function () {
+        if (this.position[1] > this.initialParams.position[1]) {
+            this.accelerate(-0.05, true);
+        } else {
+            this.position[1] = this.initialParams.position[1];
+            this.velocity[1] = 0; // reset the vertical velocity
+            this.animation = 'stopEngine';
+        }
+    },
+    /**
+     * Stops the engine, decreasing the blade rotation speed.
+     */
+    stopEngine: function () {
+        this.blades.speed = Math.max(this.blades.speed - 0.02, 0);
+
+        if (this.blades.speed == 0) {
+            this.animation = 'stationary';
         }
     },
 };
