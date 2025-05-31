@@ -4,6 +4,7 @@ import { MyHeliRotor } from './MyHeliRotor.js';
 import { MyHeliTail } from './MyHeliTail.js';
 import { MyHeliCockpit } from './MyHeliCockpit.js';
 import { MyHeliBucket } from './MyHeliBucket.js';
+import { MyColor } from '../../utils/MyColor.js';
 
 /**
  * A helicopter.
@@ -55,10 +56,16 @@ export class MyHeli extends MyObject {
      * Initializes the helicopter's components.
      */
     initComponents(color, textures) {
-        const material = {
+        const coatMaterial = {
             ambient: color,
             diffuse: color,
-            specular: [1, 1, 1, 1],
+            specular: [0.7, 0.7, 0.7, 1],
+        };
+
+        const metalMaterial = {
+            ambient: MyColor.hex('#b6b6b6'),
+            diffuse: MyColor.hex('#b6b6b6'),
+            specular: [0.8, 0.8, 0.8, 1],
         };
 
         /** The helicopter's tail */
@@ -66,7 +73,10 @@ export class MyHeli extends MyObject {
             scene: this.scene,
             width: 4,
             radius: 1,
-            material,
+            materials: {
+                coat: coatMaterial,
+                metal: metalMaterial,
+            },
             textures,
         });
 
@@ -77,24 +87,28 @@ export class MyHeli extends MyObject {
             height: 2.3,
             depth: 5,
             angle: Math.PI / 6,
+            material: metalMaterial,
             textures,
         });
 
+        /** The helicopter's main rotor */
         this.rotor = new MyHeliRotor({
             scene: this.scene,
             gearHeight: 0.4,
             gearRadius: 0.5,
             bladeLength: 4,
             numBlades: 4,
+            material: metalMaterial,
             textures,
         });
 
+        /** The helicopter's cockpit */
         this.cockpit = new MyHeliCockpit({
             scene: this.scene,
             height: 2.5,
             width: 1.8,
             glassColor: [0.8, 0.85, 0.9, 0.4],
-            material,
+            material: coatMaterial,
             textures,
         });
 

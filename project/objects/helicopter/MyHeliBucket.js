@@ -6,14 +6,15 @@ import { MyHeliRope } from './MyHeliRope.js';
 export class MyHeliBucket extends MyObject {
     constructor({
         scene,
-        height = 2,
-        width = 1.5,
+        height,
+        width,
         color = [0.3, 0.2, 0.1, 1],
         textures,
     }) {
         super(scene);
 
-        this.bucketBody = new MyCylinder({
+        /** The bucket's body */
+        this.body = new MyCylinder({
             scene,
             bottomRadius: width * 0.8,
             topRadius: width,
@@ -26,9 +27,10 @@ export class MyHeliBucket extends MyObject {
             texture: textures?.bucket,
         });
 
-        this.bucketBottom = new MyCircle({
+        /** The bottom of the bucket */
+        this.bottom = new MyCircle({
             scene,
-            radius: this.bucketBody.bottomRadius,
+            radius: this.body.bottomRadius,
             slices: 32,
             material: {
                 ambient: color,
@@ -36,6 +38,18 @@ export class MyHeliBucket extends MyObject {
                 specular: [0.5, 0.5, 0.5, 1],
             },
             texture: textures?.bucketBottom,
+        });
+
+        /** The rope that connects the bucket to the helicopter */
+        this.rope = new MyHeliRope({
+            scene: this.scene,
+            radius: 0.07,
+            length: 20,
+            segments: 40,
+            colors: {
+                rope: [0.35, 0.3, 0.25, 1],
+                knot: [0.6, 0.5, 0.4, 1],
+            },
         });
 
         this.water = new MyCircle({
@@ -49,24 +63,13 @@ export class MyHeliBucket extends MyObject {
             },
             inverted: true,
         });
-
-        this.rope = new MyHeliRope({
-            scene: this.scene,
-            radius: 0.07,
-            length: 20,
-            segments: 40,
-            colors: {
-                rope: [0.35, 0.3, 0.25, 1],
-                knot: [0.6, 0.5, 0.4, 1],
-            },
-        });
     }
 
     /**
      * Returns the width of the bucket.
      */
     get width() {
-        return this.bucketBody.topRadius;
+        return this.body.topRadius;
     }
 
     /**
@@ -81,10 +84,10 @@ export class MyHeliBucket extends MyObject {
      */
     render() {
         // display the bucket body
-        this.bucketBody.display().scale(1, 1, -1).display();
+        this.body.display().scale(1, 1, -1).display();
 
         // display the bucket bottom
-        this.bucketBottom
+        this.bottom
             .rotate(Math.PI / 2, 1, 0, 0)
             .display()
             .rotate(-Math.PI / 2, 1, 0, 0)
