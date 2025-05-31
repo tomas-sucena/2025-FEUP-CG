@@ -4,7 +4,6 @@ import { MyColor } from './utils/MyColor.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
 import { MyHeli } from './objects/helicopter/MyHeli.js';
 import { MyPanorama } from './objects/MyPanorama.js';
-import { MyRectangle } from './objects/shapes/MyRectangle.js';
 import { MyForest } from './objects/forest/MyForest.js';
 import { MyTerrain } from './objects/MyTerrain.js';
 
@@ -57,13 +56,15 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Terrain';
+        this.selectedObject = 'Helicopter';
 
         this.initCameras();
         this.initLights();
         this.initObjects();
 
-        this.setUpdatePeriod(50); // ms
+        // set up the periodic updates
+        this.timeSinceAppStarted = Date.now();
+        this.setUpdatePeriod(30); // ms
     }
 
     /**
@@ -74,7 +75,7 @@ export class MyScene extends CGFscene {
             0.5,
             0.1,
             1000,
-            vec3.fromValues(20, 2, 20),
+            vec3.fromValues(0, 0, 0),
             vec3.fromValues(0, 2, 0),
         );
     }
@@ -100,11 +101,11 @@ export class MyScene extends CGFscene {
             scene: this,
             scaleFactor: 200,
             position: this.camera.position,
-            texture: './assets/snow.jpg',
+            texture: './assets/background.jpg',
         });
 
         /** The surface */
-        this.surface = new MyTerrain({
+        this.terrain = new MyTerrain({
             scene: this,
             size: 400,
             textures: [
@@ -137,8 +138,8 @@ export class MyScene extends CGFscene {
                 scene: this,
                 width: 370,
                 depth: 120,
-                rows: 8,
-                columns: 20,
+                rows: 6,
+                columns: 17,
                 maxRows: 12,
                 maxColumns: 37,
                 colors: {
@@ -154,8 +155,8 @@ export class MyScene extends CGFscene {
                 scene: this,
                 width: 400,
                 depth: 100,
-                rows: 8,
-                columns: 20,
+                rows: 5,
+                columns: 10,
                 maxRows: 10,
                 maxColumns: 40,
                 colors: {
@@ -172,20 +173,28 @@ export class MyScene extends CGFscene {
         /** The fire department helicopter */
         this.helicopter = new MyHeli({
             scene: this,
-            color: MyColor.RGB(255, 255, 255),
-            position: [0, this.building.height, 0],
+            position: [
+                -this.terrain.lake.width / 2 - this.building.depth,
+                this.building.height,
+                0,
+            ],
+            colors: {
+                coat: MyColor.RGB(255, 255, 255),
+                metal: MyColor.hex('#b6b6b6'),
+            },
             textures: {
                 metal: './assets/metallic.jpg',
                 cockpit: './assets/helicopter.png',
                 tail: './assets/tail.png',
-                frosted_glass: './assets/frosted_glass.jpg',
+                glass: './assets/glass.jpg',
+                water: './assets/lake.jpg',
             },
         });
 
         this.objects = {
-            'Terrain': this.surface,
             'Building': this.building,
-            'Forest': this.forest,
+            'Forest': this.forests.front,
+            'Helicopter': this.helicopter,
         };
     }
 
@@ -220,41 +229,27 @@ export class MyScene extends CGFscene {
     }
 
     update(time) {
-        if (this.pressedKeys.has('KeyA') || this.pressedKeys.has('ArrowLeft')) {
-            this.helicopter.turn(Math.PI / 80);
-        }
+        // compute the elapsed time
+        const elapsedTime = time - this.timeSinceAppStarted;
 
-        if (
-            this.pressedKeys.has('KeyD') ||
-            this.pressedKeys.has('ArrowRight')
-        ) {
-            this.helicopter.turn(-Math.PI / 80);
-        }
-
-        if (this.pressedKeys.has('KeyW') || this.pressedKeys.has('ArrowUp')) {
-            this.helicopter.accelerate(0.01);
-        }
-
-        if (this.pressedKeys.has('KeyS') || this.pressedKeys.has('ArrowDown')) {
-            this.helicopter.accelerate(-0.01);
-        }
-
+        // update the scene
+        this.helicopter.update(elapsedTime);
         this.updateCamera();
-        this.surface.update((time / 100) % (100 * Math.PI));
+        this.terrain.update((time / 100) % (100 * Math.PI));
     }
 
     display() {
         // ---- BEGIN Background, camera and axis setup
-        // Clear image and depth buffer everytime we update the scene
+        // clear image and depth buffer everytime we update the scene
         this.gl.viewport(0, 0, this.gl.canvas.width, this.gl.canvas.height);
         this.gl.clear(this.gl.COLOR_BUFFER_BIT | this.gl.DEPTH_BUFFER_BIT);
-        // Initialize Model-View matrix as identity (no transformation
+
+        // initialize Model-View matrix as identity (no transformation)
         this.updateProjectionMatrix();
         this.loadIdentity();
-        // Apply transformations corresponding to the camera position relative to the origin
-        this.applyViewMatrix();
 
-        this.update();
+        // apply transformations corresponding to the camera position relative to the origin
+        this.applyViewMatrix();
 
         // ---- BEGIN Primitive drawing section
         if (this.displayAxis) {
@@ -268,18 +263,19 @@ export class MyScene extends CGFscene {
         );
 
         this.skysphere.display();
-        this.surface.rotate(-Math.PI / 2, 1, 0, 0).display();
+        this.terrain.rotate(-Math.PI / 2, 1, 0, 0).display();
         this.building
             .rotate(Math.PI / 2, 0, 1, 0)
-            .translate(-this.surface.lake.width - this.building.depth, 0, 0)
+            .translate(-this.terrain.lake.width / 2 - this.building.depth, 0, 0)
             .display();
-        
+        this.helicopter.display();
+
         // display the forests
         this.forests.front
             .translate(
                 0,
                 0,
-                this.forests.front.depth / 2 + 1.4 * this.surface.lake.depth,
+                (this.forests.front.depth + 1.4 * this.terrain.lake.depth) / 2,
             )
             .display();
         this.forests.back

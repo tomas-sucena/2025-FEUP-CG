@@ -32,11 +32,30 @@ export class MyTerrain extends MyRectangle {
      */
     get lake() {
         return {
-            width: 0.22 * this.width,
-            depth: 0.13 * this.height,
+            width: 0.44 * this.width,
+            depth: 0.26 * this.height,
         };
     }
 
+    isAboveLake(helicopter) {
+        const halfLakeWidth = this.lake.width / 2;
+        const halfLakeDepth = this.lake.depth / 2;
+
+        const [x, _, z] = helicopter.position;
+        const bucketRadius = helicopter.bucket.radius;
+
+        return (
+            x - bucketRadius > -halfLakeWidth &&
+            x + bucketRadius < halfLakeWidth && // X in bounds
+            z - bucketRadius > -halfLakeDepth &&
+            z + bucketRadius < halfLakeDepth // Z in bounds
+        );
+    }
+
+    /**
+     * Updates the lake undulation.
+     * @param {number} time - the time elapsed
+     */
     update(time) {
         this.shader.setUniformsValues({ uTime: time });
     }

@@ -3,7 +3,15 @@ import { MyBox } from '../solids/MyBox.js';
 import { MyCylinder } from '../solids/MyCylinder.js';
 
 export class MyHeliRotor extends MyObject {
-    constructor({ scene, gearHeight, gearRadius, bladeLength, numBlades, textures }) {
+    constructor({
+        scene,
+        gearHeight,
+        gearRadius,
+        bladeLength,
+        numBlades,
+        material,
+        textures,
+    }) {
         super(scene);
 
         /** The number of blades of the rotor */
@@ -14,6 +22,7 @@ export class MyHeliRotor extends MyObject {
             scene,
             radius: gearRadius,
             height: gearHeight / 2,
+            material,
             texture: textures?.metal,
         });
 
@@ -23,6 +32,7 @@ export class MyHeliRotor extends MyObject {
             bottomRadius: gearRadius,
             topRadius: gearRadius / 4,
             height: gearHeight / 2,
+            material,
             texture: textures?.metal,
         });
 
@@ -32,6 +42,7 @@ export class MyHeliRotor extends MyObject {
             width: bladeLength,
             height: this.bottomGear.height,
             depth: gearHeight / 2,
+            material,
             texture: textures?.metal,
         });
     }

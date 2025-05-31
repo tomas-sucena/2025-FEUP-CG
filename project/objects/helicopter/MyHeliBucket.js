@@ -1,128 +1,119 @@
-import { MyObject } from '../MyObject.js';
 import { MyCylinder } from '../solids/MyCylinder.js';
-import { MyCircle } from '../shapes/MyCircle.js';  
-import { MyHeliRope } from './MyHeliRope.js';
+import { MyCircle } from '../shapes/MyCircle.js';
+import { MyObject } from '../MyObject.js';
+import { MyHeliBucketAnimations } from '../../animations/MyHeliBucketAnimations.js';
 
 export class MyHeliBucket extends MyObject {
-    constructor({
-        scene,
-        height = 2,
-        width = 1.5,
-        color = [0.3, 0.2, 0.1, 1],
-        textures
-    }) {
+    constructor({ scene, radius, height, color, textures }) {
         super(scene);
 
-        this.bucketBody = new MyCylinder({
+        /** Indicates the amount (from 0 to 1) of water the bucket has */
+        this.waterAmount = 0;
+
+        /** The angle of the bottom of the bucket around the Z-axis */
+        this.bottomAngle = 0;
+
+        /** The animation the bucket is performing */
+        this.animation = 'idle';
+
+        /** The bucket's body */
+        this.body = new MyCylinder({
             scene,
-            bottomRadius: width * 0.6,
-            topRadius: width * 0.8,
-            height: height,
+            topRadius: radius,
+            bottomRadius: 0.8 * radius,
+            height,
             material: {
                 ambient: color,
                 diffuse: color,
-                specular: [0.5, 0.5, 0.5, 1],
+                specular: [0.3, 0.3, 0.3, 1],
             },
-            texture: textures?.bucket,
-
+            texture: textures.bucket,
         });
 
-        this.bucketInside = new MyCylinder({
-            scene,
-            bottomRadius: width * 0.6,
-            topRadius: width * 0.8,
-            height: height,
-            material: {
-                ambient: color,
-                diffuse: color,
-                specular: [0.5, 0.5, 0.5, 1],
-            },
-            inverted: true,
-            texture: textures?.bucketInside,
-        });
-
+        /** The bottom of the bucket */
         this.bottom = new MyCircle({
             scene,
-            radius: width * 0.6,
-            slices: 32,
+            radius: this.body.bottomRadius,
             material: {
                 ambient: color,
                 diffuse: color,
-                specular: [0.5, 0.5, 0.5, 1]
+                specular: [0.5, 0.5, 0.5, 1],
             },
-            texture: textures?.bucketBottom,
+            texture: textures.bucket,
         });
 
-        this.bottomInside = new MyCircle({
-            scene,
-            radius: width * 0.6,
-            slices: 32,
-            material: {
-                ambient: color,
-                diffuse: color,
-                specular: [0.5, 0.5, 0.5, 1]
-            },
-            inverted: true,
-            texture: textures?.bucketBottomInside,
-        });
-
-
+        /** The water carried by the bucket */
         this.water = new MyCircle({
             scene,
-            radius: width * 0.7,
-            slices: 32,
+            radius,
             material: {
                 ambient: [0, 0, 1, 1],
                 diffuse: [0, 0, 1, 1],
-                specular: [0.5, 0.5, 0.5, 1]
+                specular: [0.5, 0.5, 0.5, 1],
             },
-            inverted: true,
+            texture: textures?.water,
         });
 
-        this.rope = new MyHeliRope({
-            scene: this.scene,
-            radius: 0.07,
-            length: 20,
-            segments: 40,
-            colors: {
-                rope: [0.35, 0.3, 0.25, 1],
-                knot: [0.6, 0.5, 0.4, 1]
-            }
+        /** The gush of water that will be dropped from the bucket */
+        this.waterGush = new MyCylinder({
+            scene,
+            topRadius: this.body.bottomRadius,
+            bottomRadius: 1.2 * this.body.bottomRadius,
         });
-
-
-        this.height = height;
-        this.width = width;
     }
 
+    /**
+     * Returns the bucket's biggest radius, which is its top radius.
+     */
+    get radius() {
+        return this.body.topRadius;
+    }
+
+    /**
+     * Returns the bucket's height.
+     */
+    get height() {
+        return this.body.height;
+    }
+
+    /**
+     * Indicates if the bucket has water.
+     * @returns 'true' if the bucket has water, 'false' otherwise
+     */
+    hasWater() {
+        return this.waterAmount > 0;
+    }
+
+    update() {
+        MyHeliBucketAnimations[this.animation].call(this);
+    }
+
+    /**
+     * Displays the bucket's geometry.
+     */
     render() {
+        // display the bucket body
+        this.body.display().scale(-1, 1, 1).display();
 
-        this.bucketBody
-            .translate(5, this.height/2, 0)
-            .display();
-
-
-        this.bucketInside
-            .translate(5, this.height/2, 0)
-            .display();
-
+        // display the bucket bottom
         this.bottom
-            .translate(5, 0, -1)
-            .rotate(Math.PI/2, 1, 0, 0) 
+            .rotate(Math.PI / 2, 1, 0, 0)
+            .rotate(this.bottomAngle, 0, 0, 1)
+            .display()
+            .rotate(-Math.PI / 2, 1, 0, 0)
+            .rotate(this.bottomAngle, 0, 0, 1)
             .display();
 
-        this.bottomInside
-            .translate(5, 0, -1)
-            .rotate(Math.PI/2, 1, 0, 0) 
-            .display();
+        // display the water
+        if (this.hasWater()) {
+            this.water
+                .rotate(-Math.PI / 2, 1, 0, 0)
+                .translate(0, this.height * this.waterAmount, 0)
+                .display();
+        }
 
-        this.water 
-            .translate(5, 0, -3)
-            .rotate(Math.PI/2, 1, 0, 0) 
-            .display();
-
-        this.rope
-            .translate(5, this.height, 0)
-            .display();
+        if (this.dropWater) {
+            this.waterGush.translate(0, -this.waterGush.height, 0).display();
+        }
     }
 }
