@@ -67,7 +67,7 @@ export class MyCircle extends MyObject {
         this.vertices.push(0, 0, 0);
         this.normals.push(0, 0, 1);
         this.texCoords.push(0.5, 0.5);
-        
+
         // generate the indices that connect to the center
         for (let slice = 0; slice < this.slices; ++slice) {
             this.indices.push(centerIndex, slice, (slice + 1) % this.slices);
