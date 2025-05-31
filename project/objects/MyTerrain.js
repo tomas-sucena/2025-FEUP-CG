@@ -1,5 +1,4 @@
 import { MyRectangle } from './shapes/MyRectangle.js';
-import { MyCone } from './solids/MyCone.js';
 
 export class MyTerrain extends MyRectangle {
     constructor({ scene, size, textures }) {
@@ -9,12 +8,10 @@ export class MyTerrain extends MyRectangle {
             height: size,
             rows: size / 2,
             columns: size / 2,
-            shader: {
-                vert: './shaders/terrain.vert',
-                frag: './shaders/terrain.frag',
-            },
+            shader: 'terrain',
         });
 
+        /** The textures to be applied to the terrain */
         this.textures = textures.map((textureURL) =>
             this.scene.getTexture(textureURL),
         );
@@ -37,6 +34,11 @@ export class MyTerrain extends MyRectangle {
         };
     }
 
+    /**
+     * Determines if the helicopter is above the lake.
+     * @param {MyHeli} helicopter - the helicopter
+     * @returns 'true' if the helicopter is above the lake, 'false' otherwise
+     */
     isAboveLake(helicopter) {
         const halfLakeWidth = this.lake.width / 2;
         const halfLakeDepth = this.lake.depth / 2;

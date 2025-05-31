@@ -1,4 +1,10 @@
-import { CGFscene, CGFcamera, CGFaxis, CGFtexture } from '../lib/CGF.js';
+import {
+    CGFscene,
+    CGFcamera,
+    CGFaxis,
+    CGFtexture,
+    CGFshader,
+} from '../lib/CGF.js';
 
 import { MyColor } from './utils/MyColor.js';
 import { MyBuilding } from './objects/building/MyBuilding.js';
@@ -22,7 +28,7 @@ export class MyScene extends CGFscene {
     }
 
     /**
-     * Fetches a texture and, loading it beforehand if it isn't already a part of the scene.
+     * Fetches a texture, loading it beforehand if it isn't already a part of the scene.
      * @param {string} textureURL - the URL that identifies the texture
      * @return {CGFtexture} the texture
      */
@@ -41,6 +47,31 @@ export class MyScene extends CGFscene {
         return texture;
     }
 
+    /**
+     * Fetches a shader, loading it beforehand if it isn't already a part of the scene.
+     * @param {string} shaderID - the name that uniquely identifies the vertex and fragment shaders
+     * @return {CGFshader} the shader
+     */
+    getShader(shaderID) {
+        // verify if the shader has already been loaded
+        let shader = this.shaders.get(shaderID);
+
+        if (shader) {
+            return shader;
+        }
+
+        // load the shader
+        const filename = `./shaders/${shaderID}`;
+        shader = new CGFshader(this.gl, `${filename}.vert`, `${filename}.frag`);
+        this.shaders.set(shaderID, shader);
+
+        return shader;
+    }
+
+    /**
+     * Initializes the scene.
+     * @param {CGFapplication} application - the application where the scene will be displayed
+     */
     init(application) {
         super.init(application);
 

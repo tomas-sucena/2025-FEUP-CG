@@ -7,8 +7,6 @@ import {
 } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
-    /** The material to be applied to the object */
-    #material;
     /** The child objects that constitute the object */
     #children;
 
@@ -113,7 +111,7 @@ export class MyObject extends CGFobject {
 
         // initialize the material
         if (material) {
-            this.#material = new CGFappearance(this.scene);
+            this.material = new CGFappearance(this.scene);
             this.setMaterial(material);
         }
 
@@ -227,35 +225,39 @@ export class MyObject extends CGFobject {
      * @param { boolean } recursive - indicates if the material should be recursively applied to the child objects
      */
     setMaterial(config, recursive = false) {
-        // verify if the material exists
-        if (this.#material) {
+        // ensure the material exists
+        if (this.material) {
+            // configure the material
             const { ambient, diffuse, specular, emission, shininess } =
                 config ?? {};
 
             // set the ambient component
             if (ambient) {
-                this.#material.setAmbient(...ambient);
+                this.material.setAmbient(...ambient);
             }
 
             // set the diffuse component
             if (diffuse) {
-                this.#material.setDiffuse(...diffuse);
+                this.material.setDiffuse(...diffuse);
             }
 
             // set the specular component
             if (specular) {
-                this.#material.setSpecular(...specular);
+                this.material.setSpecular(...specular);
             }
 
             // set the emissivity
             if (emission) {
-                this.#material.setEmission(...emission);
+                this.material.setEmission(...emission);
             }
 
             // set the shininess
             if (shininess) {
-                this.#material.setShininess(shininess);
+                this.material.setShininess(shininess);
             }
+
+            // set the texture wrapping mode
+            this.material.setTextureWrap('REPEAT', 'REPEAT');
         }
 
         // set the material of the child objects
@@ -273,12 +275,9 @@ export class MyObject extends CGFobject {
      */
     setTexture(textureURL, recursive = false) {
         // verify if the material exists
-        if (textureURL && this.#material) {
+        if (textureURL) {
             // bind the texture to the material
-            this.#material.setTexture(this.scene.getTexture(textureURL));
-
-            // set the texture wrapping mode
-            this.#material.setTextureWrap('REPEAT', 'REPEAT');
+            this.material.setTexture(this.scene.getTexture(textureURL));
         }
 
         // set the texture of the child objects
@@ -291,24 +290,18 @@ export class MyObject extends CGFobject {
 
     /**
      * Sets the object's vertex and fragment shaders
-     * @param { Object } config - the shader configuration
-     * @param { string } config.vert - the URL of the vertex shader
-     * @param { string } config.frag - the URL of the fragment shader
+     * @param { string } shaderID - the name that uniquely identifies the vertex and fragment shaders
      * @param { boolean } recursive - indicates if the child objects should inherit the shaders
      */
-    setShader(config, recursive = false) {
-        if (config) {
-            this.shader = new CGFshader(
-                this.scene.gl,
-                config.vert,
-                config.frag,
-            );
+    setShader(shaderID, recursive = false) {
+        if (shaderID) {
+            this.shader = this.scene.getShader(shaderID);
         }
 
         // set the shader of the child objects
         if (recursive) {
             this.#getChildren().forEach((child) =>
-                child.setShader(config, true),
+                child.setShader(shaderID, true),
             );
         }
     }
@@ -325,8 +318,8 @@ export class MyObject extends CGFobject {
         mat4.identity(this.transformations); // reset the transformations matrix
 
         // apply the material
-        if (this.#material) {
-            this.#material.apply();
+        if (this.material) {
+            this.material.apply();
         }
 
         // apply the shaders
