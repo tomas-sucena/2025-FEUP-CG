@@ -162,6 +162,7 @@ export class MyHeli extends MyObject {
         vec3.copy(this.position, position);
         vec3.copy(this.velocity, velocity);
         this.angles.yaw = yaw;
+        this.angles.pitch = 0;
 
         // reset the blade speed
         this.blades.speed = 0;
@@ -216,26 +217,43 @@ export class MyHeli extends MyObject {
 
     rotateToHeliport() {
         // compute the direction to the building
-        const direction = [
+        const targetDir = [
             this.initialParams.position[0] - this.position[0],
             this.initialParams.position[2] - this.position[2],
         ];
+        vec2.normalize(targetDir, targetDir);
 
         // compute the helicopter direction
         const currDir = [Math.cos(this.angles.yaw), Math.sin(-this.angles.yaw)];
 
-        // compute the dot and cross products
-        const dot = vec2.dot(direction, currDir);
-        const cross = direction[0] * currDir[1] - direction[1] * currDir[0];
-
         // compute the angle the helicopter needs to rotate to face the building
+        const dot = vec2.dot(targetDir, currDir);
+        const cross = targetDir[0] * currDir[1] - targetDir[1] * currDir[0];
         const angle = Math.atan2(cross, dot);
 
         // rotate the helicopter to face the building
-        if (Math.abs(angle) > 0.1) {
-            this.turn(Math.sign(angle) * (Math.PI / 80));
+        if (Math.abs(angle) < Math.PI / 80) {
+            this.turn(angle);
+            this.action = 'flyToHeliport';
         } else {
+            this.turn(Math.sign(angle) * (Math.PI / 80));
+        }
+    }
+
+    flyToHeliport() {
+        const targetPosition = [...this.initialParams.position];
+        const position = [...this.position];
+        targetPosition[1] = position[1]; // ignore the Y-axis
+
+        // compute the distance between the helicopter and the building
+        const distance = vec3.sqrDist(targetPosition, position);
+        console.log('distance', distance);
+
+        if (distance < 1) {
+            this.stop();
             this.action = 'fly';
+        } else {
+            this.accelerate(0.05);
         }
     }
 
