@@ -101,7 +101,7 @@ export class MyHeliBucket extends MyObject {
             .rotate(this.bottomAngle, 0, 0, 1)
             .display()
             .rotate(-Math.PI / 2, 1, 0, 0)
-            .rotate(-this.bottomAngle, 0, 0, 1)
+            .rotate(this.bottomAngle, 0, 0, 1)
             .display();
 
         // display the water
