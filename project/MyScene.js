@@ -318,14 +318,14 @@ export class MyScene extends CGFscene {
 
         this.skysphere.display();
         this.terrain.rotate(-Math.PI / 2, 1, 0, 0).display();
-        this.building
+        /*this.building
             .rotate(Math.PI / 2, 0, 1, 0)
             .translate(-this.terrain.lake.width / 2 - this.building.depth, 0, 0)
             .display();
-        this.helicopter.display();
+        this.helicopter.display();*/
 
         // display the forests
-        this.forests.forEach((forest) => forest.display());
+        //this.forests.forEach((forest) => forest.display());
         // ---- END Primitive drawing section
     }
 }

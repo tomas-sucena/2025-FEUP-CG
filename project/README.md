@@ -13,11 +13,7 @@
 
 | ![Figure 1](screenshots/project-t04g06-1.png) |
 | :-------------------------------------------: |
-|    **Figure 1:** A skysphere (front view)     |
-
-| ![Figure 2](screenshots/project-t04g06-1-1.png) |
-| :---------------------------------------------: |
-|      **Figure 2:** A skysphere (back view)      |
+|           **Figure 1:** A skysphere           |
 
 ## Observations
 
