@@ -64,13 +64,6 @@ export class MyHeliBucket extends MyObject {
             },
             texture: textures.water,
         });
-
-        /** The gush of water that will be dropped from the bucket */
-        this.waterGush = new MyCylinder({
-            scene,
-            topRadius: this.body.bottomRadius,
-            bottomRadius: 1.2 * this.body.bottomRadius,
-        });
     }
 
     /**
@@ -143,10 +136,6 @@ export class MyHeliBucket extends MyObject {
                 .scale(waterRadius, 1, waterRadius)
                 .translate(0, waterY, 0)
                 .display();
-        }
-
-        if (this.dropWater) {
-            this.waterGush.translate(0, -this.waterGush.height, 0).display();
         }
     }
 }

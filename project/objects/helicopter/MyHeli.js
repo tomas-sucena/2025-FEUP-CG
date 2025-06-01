@@ -6,6 +6,7 @@ import { MyHeliCockpit } from './MyHeliCockpit.js';
 import { MyHeliBucket } from './MyHeliBucket.js';
 import { MyHeliRope } from './MyHeliRope.js';
 import { MyHeliAnimations } from '../../animations/MyHeliAnimations.js';
+import { MyCylinder } from '../solids/MyCylinder.js';
 
 /**
  * A helicopter.
@@ -51,6 +52,10 @@ export class MyHeli extends MyObject {
 
         /** The scale with which the bucket is displayed */
         this.bucketScale = 0;
+
+        /** The scale with which the water gush is displayed */
+        this.gushScale = 0;
+        this.gushY = 0;
 
         /** The action the helicopter is performing */
         this.animation = 'stationary';
@@ -136,6 +141,18 @@ export class MyHeli extends MyObject {
             radius: 0.07,
             length: 20,
             color: [0.35, 0.3, 0.25, 1],
+        });
+
+        /** The water gush that will be dropped from the bucket */
+        this.waterGush = new MyCylinder({
+            scene: this.scene,
+            radius: this.bucket.bottomRadius,
+            material: {
+                ambient: [1, 1, 1, 1],
+                diffuse: [1, 1, 1, 1],
+                specular: [1, 1, 1, 1],
+            },
+            texture: textures.water,
         });
     }
 
@@ -250,10 +267,10 @@ export class MyHeli extends MyObject {
             .rotate(this.angles.pitch, 0, 0, 1)
             .display();
 
-        if (this.bucketScale > 0) {
-            const ropeLenght = this.rope.length * this.bucketScale;
-            const bucketY = -ropeLenght + this.landingGear.height;
+        const ropeLenght = this.rope.length * this.bucketScale;
+        const bucketY = -ropeLenght + this.landingGear.height;
 
+        if (this.bucketScale > 0) {
             // display the bucket
             this.bucket
                 .scale(this.bucketScale, this.bucketScale, this.bucketScale)
@@ -264,6 +281,14 @@ export class MyHeli extends MyObject {
             this.rope
                 .scale(this.bucketScale, this.bucketScale, this.bucketScale)
                 .translate(0, bucketY, 0)
+                .display();
+        }
+
+        if (this.gushScale > 0) {
+            // display the water gush
+            this.waterGush
+                .scale(1, this.gushScale, 1)
+                .translate(0, bucketY - this.gushScale - this.gushY, 0)
                 .display();
         }
     }

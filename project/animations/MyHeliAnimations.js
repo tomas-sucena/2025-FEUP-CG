@@ -126,9 +126,18 @@ export const MyHeliAnimations = {
      * Drops water on top of a fire.
      */
     dropWater: function () {
-        // wait for the bucket to finish its animation
-        if (this.bucket.animation === 'idle') {
+        // verify if all the water has left the bucket
+        if (this.bucket.animation !== 'idle') {
+            this.gushScale += 2;
+            return;
+        }
+
+        // drop the water
+        if (this.gushY > this.scene.building.height) {
+            this.gushScale = this.gushY = 0;
             this.animation = 'fly';
+        } else {
+            this.gushY += 2;
         }
     },
     /**
