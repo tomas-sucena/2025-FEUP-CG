@@ -62,7 +62,7 @@ export const MyHeliAnimations = {
             this.stop();
 
             // fill bucket
-            if (this.scene.terrain.isAboveLake(this)) {
+            if (this.scene.terrain.isLakeBelow(this)) {
                 this.animation = 'dive';
                 return;
             }
@@ -74,7 +74,8 @@ export const MyHeliAnimations = {
         }
 
         // open the bucket
-        if (pressedKeys.has('KeyO') && this.bucket.hasWater()) {
+        if (pressedKeys.has('KeyO') && this.canPutOutFires()) {
+            this.stop();
             this.animation = 'dropWater';
             this.bucket.animation = 'openBottom';
             return;
@@ -136,6 +137,10 @@ export const MyHeliAnimations = {
         if (this.gushY > this.scene.building.height) {
             this.gushScale = this.gushY = 0;
             this.animation = 'fly';
+
+            // put out the fires
+            this.burningTrees.forEach((tree) => tree.putOutFire());
+            delete this.burningTrees;
         } else {
             this.gushY += 2;
         }

@@ -39,7 +39,7 @@ export class MyTerrain extends MyRectangle {
      * @param {MyHeli} helicopter - the helicopter
      * @returns 'true' if the helicopter is above the lake, 'false' otherwise
      */
-    isAboveLake(helicopter) {
+    isLakeBelow(helicopter) {
         const halfLakeWidth = this.lake.width / 2;
         const halfLakeDepth = this.lake.depth / 2;
 

@@ -3,6 +3,9 @@ import { MyCone } from '../solids/MyCone.js';
 import { MyPyramid } from '../solids/MyPyramid.js';
 import { MyFire } from './MyFire.js';
 
+/**
+ * A tree.
+ */
 export class MyTree extends MyObject {
     /**
      * Initializes a tree.
@@ -13,7 +16,9 @@ export class MyTree extends MyObject {
      * @param { 'X' | 'Z' } config.tilt.axis - the axis around which the tree is tilted
      * @param { number } config.trunkRadius - the radius of the tree's trunk
      * @param { number } config.height - the tree's height
+     * @param { number[3] } config.position - the tree's position
      * @param { boolean } config.isBurning - indicates if the tree is surrounded by fire
+     * @param { MyForest } config.forest - the forest the tree is a part of
      * @param { number } config.stacks - the number of pyramids that constitute the tree's crown
      * @param { number } config.slices - the number of divisions around the Y-axis of the pyramids in the tree's crown
      * @param { Object } config.colors - the colors to be applied to the tree
@@ -25,7 +30,9 @@ export class MyTree extends MyObject {
         tilt,
         trunkRadius,
         height,
-        isBurning,
+        position = [0, 0, 0],
+        isBurning = false,
+        forest,
         stacks,
         slices,
         colors,
@@ -42,6 +49,12 @@ export class MyTree extends MyObject {
 
         /** The tree's height */
         this.height = height;
+
+        /** The tree's position */
+        this.position = position;
+
+        /** The forest the tree is a part of */
+        this.forest = forest;
 
         /** The number of stacks (pyramids) that constitute the tree's crown */
         this.stacks = Math.floor(stacks ?? crownHeight / 2);
@@ -74,6 +87,7 @@ export class MyTree extends MyObject {
         });
 
         if (isBurning) {
+            /** The fire that burns the tree */
             this.fire = new MyFire({
                 scene,
                 radius: 1.5 * this.crown.radius,
@@ -87,6 +101,36 @@ export class MyTree extends MyObject {
      */
     get radius() {
         return this.crown.radius;
+    }
+
+    /**
+     * Determines if the helicopter is above this tree.
+     * @param {MyHeli} helicopter - the helicopter
+     * @return 'true' if the helicopter is above this tree, 'false' otherwise
+     */
+    isBelow(helicopter) {
+        const treeCenter = [this.position[0], this.position[2]];
+        const heliCenter = [helicopter.position[0], helicopter.position[2]];
+        const bucketRadius = helicopter.bucket.topRadius;
+
+        // compute the distance between centers
+        const distance = vec2.dist(treeCenter, heliCenter);
+
+        // check for horizontal overlap
+        return Math.abs(distance) <= Math.max(this.fire.radius, bucketRadius);
+    }
+
+    /**
+     * Puts out the fire that was burning this tree.
+     */
+    putOutFire() {
+        if (this.fire) {
+            this.fire.animation = 'putOut';
+            /*delete this.fire;
+
+            // remove this tree from the set of burning trees
+            this.forest.burningTrees.delete(this);*/
+        }
     }
 
     /**
@@ -118,5 +162,15 @@ export class MyTree extends MyObject {
 
         // tilt the tree
         this.rotate(this.tilt.angle, ...this.tilt.axis);
+    }
+
+    /**
+     * Displays the tree.
+     */
+    display() {
+        // position the tree
+        this.translate(...this.position);
+
+        super.display();
     }
 }
