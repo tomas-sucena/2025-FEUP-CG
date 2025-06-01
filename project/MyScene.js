@@ -89,7 +89,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Building';
+        this.selectedObject = 'Helicopter';
 
         this.initCameras();
         this.initLights();
@@ -108,8 +108,8 @@ export class MyScene extends CGFscene {
             0.5,
             0.1,
             1000,
-            vec3.fromValues(10, 20, -5),
-            vec3.fromValues(0, 15, 40),
+            vec3.fromValues(-140, 56, -65),
+            vec3.fromValues(0, 30, 0),
         );
     }
 
