@@ -12,15 +12,20 @@ export const MyHeliBucketAnimations = {
         }
     },
     dropWater: function () {
-        this.animation = 'closeBottom';
+        if (this.waterAmount < 0) {
+            this.waterAmount = 0;
+            this.animation = 'closeBottom';
+        } else {
+            this.waterAmount -= 0.1;
+        }
     },
     /**
      * Closes the bottom of the bucket so the water can fall.
      */
     closeBottom: function () {
         if (this.bottomAngle < 0) {
-            this.animation = 'idle';
             this.bottomAngle = 0;
+            this.animation = 'idle';
         } else {
             this.bottomAngle -= Math.PI / 8;
         }
