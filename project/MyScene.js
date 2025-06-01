@@ -134,7 +134,7 @@ export class MyScene extends CGFscene {
         this.skysphere = new MyPanorama({
             scene: this,
             scaleFactor: 200,
-            position: this.camera.position,
+            //position: this.camera.position,
             texture: './assets/background.jpg',
         });
 

@@ -12,6 +12,7 @@ import { MyCylinder } from '../solids/MyCylinder.js';
  * A helicopter.
  */
 export class MyHeli extends MyObject {
+    static MAX_SPEED = 4;
     static MAX_BLADE_SPEED = Math.PI / 5;
 
     constructor({
@@ -159,25 +160,29 @@ export class MyHeli extends MyObject {
     /**
      * Changes the helicopter's velocity, updating its yaw as well.
      * @param {number} value - the value by which the velocity will be altered
-     * @param {boolean} vertical - indicates if the velocity will change in the Y-axis
      */
-    accelerate(value, vertical = false) {
-        if (!vertical) {
-            this.angles.pitch = (-Math.PI / 18) * Math.sign(value);
-        }
+    accelerate(value) {
+        this.angles.pitch = (-Math.PI / 18) * Math.sign(value);
 
         // update the velocity
-        this.velocity[0] += value * Math.cos(this.angles.yaw) * !vertical;
-        this.velocity[1] += value * vertical;
-        this.velocity[2] += value * Math.sin(-this.angles.yaw) * !vertical;
+        this.velocity[0] += value * Math.cos(this.angles.yaw);
+        this.velocity[2] += value * Math.sin(-this.angles.yaw);
+    }
+
+    /**
+     * Changes the helicopter's vertical velocity.
+     * @param {number} value - the value by which the velocity will be altered
+     */
+    rise(value) {
+        this.velocity[1] += value;
     }
 
     /**
      * Turns the helicopter, updating its yaw and velocity.
-     * @param {number} delta_yaw - the angle by which to update the yaw
+     * @param {number} angle - the angle by which to update the yaw
      */
-    turn(delta_yaw) {
-        this.angles.yaw += delta_yaw;
+    turn(angle) {
+        this.angles.yaw += angle;
 
         // update the velocity
         const horizontalSpeed = Math.hypot(this.velocity[0], this.velocity[2]);

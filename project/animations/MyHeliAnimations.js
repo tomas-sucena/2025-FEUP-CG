@@ -34,7 +34,7 @@ export const MyHeliAnimations = {
         const y = this.position[1];
 
         if (y < cruiseAltitude) {
-            this.accelerate(0.05, true);
+            this.rise(0.05);
         } else {
             this.velocity[1] = 0; // reset the vertical velocity
             this.animation = 'dropBucket';
@@ -108,7 +108,7 @@ export const MyHeliAnimations = {
         const y = this.position[1] - this.rope.length / 2;
 
         if (y > 0) {
-            this.accelerate(-0.05, true);
+            this.rise(-0.05);
         } else {
             this.bucket.fill();
             this.animation = 'fillBucket';
@@ -181,7 +181,7 @@ export const MyHeliAnimations = {
         targetPosition[1] = position[1]; // ignore the Y-axis
 
         // compute the distance between the helicopter and the building
-        const distance = vec3.sqrDist(targetPosition, position);
+        const distance = Math.abs(vec3.dist(targetPosition, position));
 
         if (distance < 1) {
             this.stop();
@@ -206,7 +206,7 @@ export const MyHeliAnimations = {
      */
     land: function () {
         if (this.position[1] > this.initialParams.position[1]) {
-            this.accelerate(-0.05, true);
+            this.rise(-0.05);
         } else {
             this.position[1] = this.initialParams.position[1];
             this.velocity[1] = 0; // reset the vertical velocity
