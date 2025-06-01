@@ -241,6 +241,29 @@ export class MyHeli extends MyObject {
     }
 
     /**
+     * Determines if the helicopter has water and is above any burning trees.
+     * @returns 'true' if the helicopter has water and is above any burning trees, 'false' otherwise
+     */
+    canPutOutFires() {
+        // ensure the helicopter has water
+        if (!this.bucket.hasWater()) {
+            return false;
+        }
+
+        // determine the burning trees the helicopter is above of
+        const burningTrees = this.scene.forests.flatMap((forest) =>
+            [...forest.burningTrees].filter((tree) => tree.isBelow(this)),
+        );
+
+        if (burningTrees.length === 0) {
+            return false;
+        }
+
+        this.burningTrees = burningTrees;
+        return true;
+    }
+
+    /**
      * Displays the helicopter's geometry.
      */
     render() {

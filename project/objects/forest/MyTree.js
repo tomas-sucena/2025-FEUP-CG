@@ -99,6 +99,33 @@ export class MyTree extends MyObject {
     }
 
     /**
+     * Determines if the helicopter is above this tree.
+     * @param {MyHeli} helicopter - the helicopter
+     * @return 'true' if the helicopter is above this tree, 'false' otherwise
+     */
+    isBelow(helicopter) {
+        const treeCenter = [this.position[0], this.position[2]];
+        const heliCenter = [helicopter.position[0], helicopter.position[2]];
+        const bucketRadius = helicopter.bucket.topRadius;
+
+        // compute the distance between centers
+        const distance = vec2.dist(treeCenter, heliCenter);
+
+        // check for horizontal overlap
+        return Math.abs(distance) <= Math.max(this.radius, bucketRadius);
+    }
+
+    /**
+     * Puts out the fire that was burning this tree.
+     */
+    putOutFire() {
+        if (this.fire) {
+            this.fire.animation = 'putOut';
+            delete this.fire;
+        }
+    }
+
+    /**
      * Displays the geometry of the tree.
      */
     render() {
