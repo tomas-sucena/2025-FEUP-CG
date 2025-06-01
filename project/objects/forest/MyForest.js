@@ -94,6 +94,7 @@ export class MyForest extends MyObject {
                 trunkRadius: patchMin / randomBetween(7, 8),
                 height: patchMax * randomBetween(2, 3),
                 isBurning: Math.random() < 0.2,
+                forest: this,
                 slices: randomBetween(4, 8),
                 stacks: randomBetween(3, 6),
                 colors: {

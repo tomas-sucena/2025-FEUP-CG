@@ -250,7 +250,7 @@ export class MyHeli extends MyObject {
             return false;
         }
 
-        // determine the burning trees the helicopter is above of
+        // determine the burning trees below the helicopter
         const burningTrees = this.scene.forests.flatMap((forest) =>
             [...forest.burningTrees].filter((tree) => tree.isBelow(this)),
         );
