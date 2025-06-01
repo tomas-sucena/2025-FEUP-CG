@@ -151,6 +151,9 @@ export class MyHeli extends MyObject {
             },
             texture: textures.gush,
         });
+
+        /** The rotors of the helicopter */
+        this.rotors = [this.rotor, this.tail.rotor];
     }
 
     /**
@@ -267,12 +270,16 @@ export class MyHeli extends MyObject {
      * Displays the helicopter's geometry.
      */
     render() {
+        // rotate the rotors
+        this.rotors.forEach((rotor) =>
+            rotor.rotate(this.blades.angle, 0, 1, 0),
+        );
+
         // display the landing gear
         this.landingGear.rotate(this.angles.pitch, 0, 0, 1).display();
 
         // display the main rotor
         this.rotor
-            .rotate(this.blades.angle, 0, 1, 0)
             .translate(0, this.tail.height * 1.95, 0)
             .rotate(this.angles.pitch, 0, 0, 1)
             .display();
