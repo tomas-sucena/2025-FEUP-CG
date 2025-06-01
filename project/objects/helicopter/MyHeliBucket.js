@@ -47,11 +47,11 @@ export class MyHeliBucket extends MyObject {
             scene,
             radius,
             material: {
-                ambient: [0, 0, 1, 1],
-                diffuse: [0, 0, 1, 1],
-                specular: [0.5, 0.5, 0.5, 1],
+                ambient: [1, 1, 1, 1],
+                diffuse: [1, 1, 1, 1],
+                specular: [1, 1, 1, 1],
             },
-            texture: textures?.water,
+            texture: textures.water,
         });
 
         /** The gush of water that will be dropped from the bucket */
