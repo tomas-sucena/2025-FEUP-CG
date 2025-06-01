@@ -1,6 +1,7 @@
 import { MyObject } from '../MyObject.js';
 import { MyCone } from '../solids/MyCone.js';
 import { MyPyramid } from '../solids/MyPyramid.js';
+import { MyFire } from './MyFire.js';
 
 export class MyTree extends MyObject {
     /**
@@ -12,6 +13,7 @@ export class MyTree extends MyObject {
      * @param { 'X' | 'Z' } config.tilt.axis - the axis around which the tree is tilted
      * @param { number } config.trunkRadius - the radius of the tree's trunk
      * @param { number } config.height - the tree's height
+     * @param { boolean } config.isBurning - indicates if the tree is surrounded by fire
      * @param { number } config.stacks - the number of pyramids that constitute the tree's crown
      * @param { number } config.slices - the number of divisions around the Y-axis of the pyramids in the tree's crown
      * @param { Object } config.colors - the colors to be applied to the tree
@@ -23,6 +25,7 @@ export class MyTree extends MyObject {
         tilt,
         trunkRadius,
         height,
+        isBurning,
         stacks,
         slices,
         colors,
@@ -56,12 +59,6 @@ export class MyTree extends MyObject {
             texture: textures?.log,
         });
 
-        this.ruler = new MyCone({
-            scene,
-            radius: trunkRadius,
-            height,
-        });
-
         /** The bottomost pyramid that constitutes the tree's crown */
         this.crown = new MyPyramid({
             scene,
@@ -75,6 +72,14 @@ export class MyTree extends MyObject {
             },
             texture: textures?.crown,
         });
+
+        if (isBurning) {
+            this.fire = new MyFire({
+                scene,
+                radius: this.crown.radius,
+                height,
+            });
+        }
     }
 
     /**
@@ -108,8 +113,8 @@ export class MyTree extends MyObject {
                 .display();
         }
 
-        // display the ruler
-        //this.ruler.translate(2, 0, 0).display();
+        // display the fire
+        this.fire?.display();
 
         // tilt the tree
         this.rotate(this.tilt.angle, ...this.tilt.axis);

@@ -31,10 +31,13 @@ export class MyPyramid extends MyObject {
 
         /** The radius of the circle that circumscribes the base of the pyramid */
         this.radius = radius;
+
         /** The height of the pyramid */
         this.height = height;
+
         /** The number of divisions around the Y-axis */
         this.slices = slices;
+
         /** The number of divisions along the Y-axis */
         this.stacks = stacks ?? Math.floor(this.height);
 

@@ -324,7 +324,7 @@ export class MyObject extends CGFobject {
 
         // apply the shaders
         if (this.shader) {
-            this.scene.setActiveShader(this.shader);
+            this.scene.setActiveShaderSimple(this.shader);
         }
 
         // display the geometry of the object
@@ -332,7 +332,7 @@ export class MyObject extends CGFobject {
 
         // reset the shaders
         if (this.shader) {
-            this.scene.setActiveShader(this.scene.defaultShader);
+            this.scene.setActiveShaderSimple(this.scene.defaultShader);
         }
 
         this.scene.popMatrix();

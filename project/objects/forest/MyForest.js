@@ -35,7 +35,6 @@ export class MyForest extends MyObject {
     constructor({
         scene,
         width,
-        height,
         depth,
         rows,
         columns,
@@ -64,14 +63,16 @@ export class MyForest extends MyObject {
         this.trees = Array(numTrees);
         /** The offsets */
         this.treeOffsets = Array(numTrees);
+        /** A set to store the burning trees */
+        this.burningTrees = new Set();
 
-        this.#initTrees(colors, textures);
+        this.initTrees(colors, textures);
     }
 
     /**
      * Initializes the trees.
      */
-    #initTrees(colors, textures) {
+    initTrees(colors, textures) {
         const patchWidth = this.width / this.maxColumns;
         const patchDepth = this.depth / this.maxRows;
 
@@ -88,6 +89,7 @@ export class MyForest extends MyObject {
                 },
                 trunkRadius: patchMin / randomBetween(7, 8),
                 height: patchMax * randomBetween(2, 3),
+                isBurning: Math.random() < 0.25, // 1 in 4
                 slices: randomBetween(4, 8),
                 stacks: randomBetween(3, 6),
                 colors: {
@@ -108,7 +110,20 @@ export class MyForest extends MyObject {
                 x: (patchWidth / 2 - tree.radius) * randomBetween(-1, 1),
                 z: (patchDepth / 2 - tree.radius) * randomBetween(-1, 1),
             };
+
+            // determine if the tree is on fire
+            if (tree.fire) {
+                this.burningTrees.add(tree);
+            }
         }
+    }
+
+    /**
+     * Updates the forest by updating the fires.
+     * @param {number} time - the elapsed time
+     */
+    update(time) {
+        this.burningTrees.forEach((tree) => tree.fire.update(time));
     }
 
     /**
