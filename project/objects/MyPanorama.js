@@ -10,7 +10,7 @@ export class MyPanorama extends MyObject {
      * @param { MyScene } scene the scene the object will be displayed in
      * @param { Object } config the object configuration
      */
-    constructor({ scene, scaleFactor, inverted, position, texture }) {
+    constructor({ scene, scaleFactor, position, texture }) {
         super(scene);
 
         /** The sphere that constitutes the panorama */
@@ -19,7 +19,7 @@ export class MyPanorama extends MyObject {
             radius: scaleFactor,
             slices: 50,
             stacks: 25,
-            inverted: !inverted,
+            inverted: true,
             material: {
                 ambient: [0, 0, 0, 1],
                 diffuse: [0, 0, 0, 1],

@@ -14,12 +14,12 @@ export class MyHeliCockpit extends MyObject {
     }) {
         super(scene);
 
-        // Main glass dome (ellipsoid)
+        /** The glass dome */
         this.glassDome = new MyEllipsoid({
             scene,
-            radiusX: width * 0.5,
-            radiusY: height * 0.5,
-            radiusZ: width * 0.9,
+            width,
+            height,
+            depth: 1.8 * width,
             slices: 32,
             stacks: 16,
             material: {
@@ -31,12 +31,12 @@ export class MyHeliCockpit extends MyObject {
             texture: textures.glass,
         });
 
-        // Main cockpit dome (ellipsoid)
+        /** The cockpit dome */
         this.cockpit = new MyEllipsoid({
             scene,
-            radiusX: width * 1.8,
-            radiusY: height * 0.9,
-            radiusZ: width * 1.2,
+            width: width * 3.6,
+            height: height * 1.8,
+            depth: width * 2.4,
             slices: 32,
             stacks: 16,
             material,
