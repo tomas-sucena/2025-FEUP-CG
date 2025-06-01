@@ -37,7 +37,7 @@ export class MyHeliBucket extends MyObject {
             material: {
                 ambient: color,
                 diffuse: color,
-                specular: [0.3, 0.3, 0.3, 1],
+                specular: [1, 1, 1, 1],
             },
             texture: textures.bucket,
         });

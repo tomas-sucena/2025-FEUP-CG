@@ -34,7 +34,7 @@ export class MyFire extends MyPyramid {
      */
     display() {
         if (this.flameScale > 0) {
-            this.scale(this.flameScale, this.flameScale, this.flameScale);
+            this.scale(1, this.flameScale, 1);
             super.display();
         }
     }

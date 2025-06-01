@@ -127,6 +127,7 @@ export class MyScene extends CGFscene {
      * Initializes the scene's objects.
      */
     initObjects() {
+        /** The axis */
         this.axis = new CGFaxis(this);
 
         /** The panorama that constitutes the skysphere */
@@ -165,7 +166,7 @@ export class MyScene extends CGFscene {
             },
         });
 
-        /** The forest */
+        /** The forests */
         this.forests = [
             // left
             new MyForest({
@@ -218,13 +219,17 @@ export class MyScene extends CGFscene {
             colors: {
                 coat: MyColor.RGB(255, 255, 255),
                 metal: MyColor.hex('#b6b6b6'),
+                rope: MyColor.hex('#3F220D'),
+                bucket: MyColor.RGB(255, 255, 255),
             },
             textures: {
                 metal: './assets/metallic.jpg',
                 cockpit: './assets/helicopter.png',
                 tail: './assets/tail.png',
                 glass: './assets/glass.jpg',
+                bucket: './assets/bucket.png',
                 water: './assets/lake.jpg',
+                gush: './assets/gush.jpg',
             },
         });
 

@@ -55,6 +55,8 @@ export class MyHeli extends MyObject {
 
         /** The scale with which the water gush is displayed */
         this.gushScale = 0;
+
+        /** The Y-coordinate of the water gush */
         this.gushY = 0;
 
         /** The action the helicopter is performing */
@@ -125,13 +127,8 @@ export class MyHeli extends MyObject {
         this.bucket = new MyHeliBucket({
             scene: this.scene,
             radius: 3,
-            height: 3,
-            material: {
-                ambient: [0.2, 0.2, 0.2, 1],
-                diffuse: [0.2, 0.2, 0.2, 1],
-                specular: [0.5, 0.5, 0.5, 1],
-                shininess: 50,
-            },
+            height: 5,
+            color: colors.bucket,
             textures,
         });
 
@@ -140,7 +137,7 @@ export class MyHeli extends MyObject {
             scene: this.scene,
             radius: 0.07,
             length: 20,
-            color: [0.35, 0.3, 0.25, 1],
+            color: colors.rope,
         });
 
         /** The water gush that will be dropped from the bucket */
@@ -152,7 +149,7 @@ export class MyHeli extends MyObject {
                 diffuse: [1, 1, 1, 1],
                 specular: [1, 1, 1, 1],
             },
-            texture: textures.water,
+            texture: textures.gush,
         });
     }
 
@@ -215,6 +212,9 @@ export class MyHeli extends MyObject {
 
         // reset the bucket
         this.bucketScale = 0;
+
+        // reset the water gush
+        this.gushScale = this.gushY = 0;
     }
 
     /**

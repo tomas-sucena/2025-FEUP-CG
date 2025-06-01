@@ -75,6 +75,7 @@ export const MyHeliAnimations = {
 
         // open the bucket
         if (pressedKeys.has('KeyO') && this.canPutOutFires()) {
+            this.stop();
             this.animation = 'dropWater';
             this.bucket.animation = 'openBottom';
             return;

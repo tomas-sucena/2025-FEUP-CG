@@ -16,7 +16,7 @@ export class MyTree extends MyObject {
      * @param { 'X' | 'Z' } config.tilt.axis - the axis around which the tree is tilted
      * @param { number } config.trunkRadius - the radius of the tree's trunk
      * @param { number } config.height - the tree's height
-     * @param { number[3] } config.position - the position of the tree
+     * @param { number[3] } config.position - the tree's position
      * @param { boolean } config.isBurning - indicates if the tree is surrounded by fire
      * @param { MyForest } config.forest - the forest the tree is a part of
      * @param { number } config.stacks - the number of pyramids that constitute the tree's crown
@@ -117,7 +117,7 @@ export class MyTree extends MyObject {
         const distance = vec2.dist(treeCenter, heliCenter);
 
         // check for horizontal overlap
-        return Math.abs(distance) <= Math.max(this.radius, bucketRadius);
+        return Math.abs(distance) <= Math.max(this.fire.radius, bucketRadius);
     }
 
     /**
@@ -126,10 +126,10 @@ export class MyTree extends MyObject {
     putOutFire() {
         if (this.fire) {
             this.fire.animation = 'putOut';
-            delete this.fire;
+            /*delete this.fire;
 
             // remove this tree from the set of burning trees
-            this.forest.burningTrees.delete(this);
+            this.forest.burningTrees.delete(this);*/
         }
     }
 
