@@ -86,6 +86,9 @@ export class MyTree extends MyObject {
             texture: textures?.crown,
         });
 
+        /** The child objects */
+        this.children = [this.trunk, this.crown];
+
         if (isBurning) {
             /** The fire that burns the tree */
             this.fire = new MyFire({
@@ -93,6 +96,8 @@ export class MyTree extends MyObject {
                 radius: 1.5 * this.crown.radius,
                 height,
             });
+
+            this.children.push(this.fire);
         }
     }
 

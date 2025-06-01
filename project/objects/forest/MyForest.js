@@ -64,7 +64,7 @@ export class MyForest extends MyObject {
 
         const numTrees = this.maxRows * this.maxColumns;
         /** The trees */
-        this.trees = Array(numTrees);
+        this.trees = this.children = Array(numTrees);
         /** The offsets */
         this.treeOffsets = Array(numTrees);
         /** A set to store the burning trees */

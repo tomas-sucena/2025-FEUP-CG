@@ -108,8 +108,8 @@ export class MyScene extends CGFscene {
             0.5,
             0.1,
             1000,
-            vec3.fromValues(10, 20, 0),
-            vec3.fromValues(-140, 30, 0),
+            vec3.fromValues(10, 20, -5),
+            vec3.fromValues(0, 15, 40),
         );
     }
 
@@ -233,9 +233,11 @@ export class MyScene extends CGFscene {
             },
         });
 
+        /** The scene objects */
         this.objects = {
             'Building': this.building,
-            'Forest': this.forests.front,
+            'Left Forest': this.forests[0],
+            'Right Forest': this.forests[1],
             'Helicopter': this.helicopter,
         };
     }

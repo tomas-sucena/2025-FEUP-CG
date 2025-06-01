@@ -21,6 +21,12 @@
 | :-------------------------------------------: |
 |   **Figure 2:** The firefighter's building    |
 
+### 3. Forest
+
+| ![Figure 3](screenshots/project-t04g06-3.png) |
+| :-------------------------------------------: |
+|            **Figure 3:** A forest             |
+
 ## Observations
 
-This submission is incomplete. For instance, the fire has already been implemented but is not yet a part of the scene. Likewise, the helicopter still does not drop water from the bucket. Nevertheless, the final project will be completed before the presentation on Tuesday.
+We did not implement point 6.2 - `Heliport in maneuvers`.
