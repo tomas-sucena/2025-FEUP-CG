@@ -12,6 +12,7 @@ import { MyHeli } from './objects/helicopter/MyHeli.js';
 import { MyPanorama } from './objects/MyPanorama.js';
 import { MyForest } from './objects/forest/MyForest.js';
 import { MyTerrain } from './objects/MyTerrain.js';
+import { MySphere } from './objects/solids/MySphere.js';
 
 /**
  * MyScene
@@ -89,7 +90,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Helicopter';
+        this.selectedObject = 'Sphere';
 
         this.initCameras();
         this.initLights();
@@ -108,8 +109,8 @@ export class MyScene extends CGFscene {
             0.5,
             0.1,
             1000,
-            vec3.fromValues(-140, 56, -65),
-            vec3.fromValues(0, 30, 0),
+            vec3.fromValues(10, 10, 10),
+            vec3.fromValues(0, 0, 0),
         );
     }
 
@@ -129,6 +130,16 @@ export class MyScene extends CGFscene {
     initObjects() {
         /** The axis */
         this.axis = new CGFaxis(this);
+
+        this.sphere = new MySphere({
+            scene: this,
+            material: {
+                ambient: MyColor.RGB(255, 255, 255),
+                diffuse: MyColor.RGB(255, 255, 255),
+                specular: [0.5, 0.5, 0.5, 1],
+            },
+            texture: './assets/earth.jpg',
+        });
 
         /** The panorama that constitutes the skysphere */
         this.skysphere = new MyPanorama({
@@ -234,9 +245,7 @@ export class MyScene extends CGFscene {
         });
 
         this.objects = {
-            'Building': this.building,
-            'Forest': this.forests.front,
-            'Helicopter': this.helicopter,
+            'Sphere': this.sphere,
         };
     }
 
@@ -267,7 +276,7 @@ export class MyScene extends CGFscene {
     }
 
     updateCamera() {
-        this.camera.setTarget(this.helicopter.position);
+        //this.camera.setTarget(this.helicopter.position);
     }
 
     /**
@@ -316,7 +325,9 @@ export class MyScene extends CGFscene {
             this.scaleFactor,
         );
 
-        this.skysphere.display();
+        this.sphere.display();
+
+        /*this.skysphere.display();
         this.terrain.rotate(-Math.PI / 2, 1, 0, 0).display();
         this.building
             .rotate(Math.PI / 2, 0, 1, 0)
@@ -325,7 +336,7 @@ export class MyScene extends CGFscene {
         this.helicopter.display();
 
         // display the forests
-        this.forests.forEach((forest) => forest.display());
+        this.forests.forEach((forest) => forest.display());*/
         // ---- END Primitive drawing section
     }
 }

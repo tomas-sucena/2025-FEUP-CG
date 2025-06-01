@@ -1,14 +1,7 @@
-import {
-    CGFappearance,
-    CGFobject,
-    CGFscene,
-    CGFshader,
-    CGFtexture,
-} from '../../lib/CGF.js';
+import { CGFappearance, CGFobject, CGFscene } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
     /** The child objects that constitute the object */
-    #children;
 
     /**
      * Initializes the object.
@@ -19,38 +12,6 @@ export class MyObject extends CGFobject {
 
         /** The geometric transformations matrix */
         this.transformations = mat4.create();
-        this.#children = null;
-    }
-
-    /**
-     * Returns all objects that constitute the object.
-     * @returns an array containing the objects that constitute the object
-     */
-    #getChildren() {
-        // verify if the children have already been computed
-        if (this.#children) {
-            return this.#children;
-        }
-
-        // a function for recursively finding child objects
-        const findChildren = (children, value) => {
-            if (value instanceof MyObject) {
-                children.push(value);
-            } else if (Array.isArray(value)) {
-                value.forEach((el) => findChildren(children, el));
-            } else if (typeof value === 'object') {
-                Object.values(value).forEach((el) =>
-                    findChildren(children, el),
-                );
-            }
-
-            return children;
-        };
-
-        const { scene, ...others } = this; // ignore the scene, as it causes circular references
-        this.#children = Object.values(others).reduce(findChildren, []);
-
-        return this.#children;
     }
 
     /**
@@ -134,7 +95,7 @@ export class MyObject extends CGFobject {
      */
     setFillMode() {
         this.primitiveType = this.scene.gl.TRIANGLES;
-        this.#getChildren().forEach((child) => child.setFillMode());
+        this.children?.forEach((child) => child.setFillMode());
     }
 
     /**
@@ -142,7 +103,7 @@ export class MyObject extends CGFobject {
      */
     setLineMode() {
         this.primitiveType = this.scene.gl.LINE_STRIP;
-        this.#getChildren().forEach((child) => child.setLineMode());
+        this.children?.forEach((child) => child.setLineMode());
     }
 
     /**
@@ -153,7 +114,7 @@ export class MyObject extends CGFobject {
             super.enableNormalViz();
         }
 
-        this.#getChildren().forEach((child) => child.enableNormalViz());
+        this.children?.forEach((child) => child.enableNormalViz());
     }
 
     /**
@@ -164,7 +125,7 @@ export class MyObject extends CGFobject {
             super.disableNormalViz();
         }
 
-        this.#getChildren().forEach((child) => child.disableNormalViz());
+        this.children?.forEach((child) => child.disableNormalViz());
     }
 
     /**
@@ -262,9 +223,7 @@ export class MyObject extends CGFobject {
 
         // set the material of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) =>
-                child.setMaterial(config, true),
-            );
+            this.children?.forEach((child) => child.setMaterial(config, true));
         }
     }
 
@@ -282,9 +241,7 @@ export class MyObject extends CGFobject {
 
         // set the texture of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) =>
-                child.setTexture(config, true),
-            );
+            this.children?.forEach((child) => child.setTexture(config, true));
         }
     }
 
@@ -300,9 +257,7 @@ export class MyObject extends CGFobject {
 
         // set the shader of the child objects
         if (recursive) {
-            this.#getChildren().forEach((child) =>
-                child.setShader(shaderID, true),
-            );
+            this.children?.forEach((child) => child.setShader(shaderID, true));
         }
     }
 
