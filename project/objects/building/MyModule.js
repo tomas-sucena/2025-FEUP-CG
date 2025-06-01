@@ -1,5 +1,4 @@
 import { MyBox } from '../solids/MyBox.js';
-import { MyCircle } from '../shapes/MyCircle.js';
 import { MyRectangle } from '../shapes/MyRectangle.js';
 
 /**
@@ -10,6 +9,14 @@ export class MyModule extends MyBox {
     /**
      * Initializes the module.
      * @param { Object } config - the module configuration
+     * @param { CGFscene } config.scene - the scene the module will be displayed in
+     * @param { number } config.width - the width of the module
+     * @param { number } config.height - the height of the module
+     * @param { number } config.depth - the depth of the module
+     * @param { number } config.floors - the number of floors of the module
+     * @param { number } config.windows - the number of windows per floor of the module
+     * @param { Object } config.material - the material to be applied to the module
+     * @param { Object } config.textures - the textures to be applied to the module
      */
     constructor({
         scene,
@@ -18,7 +25,6 @@ export class MyModule extends MyBox {
         depth,
         floors,
         windows,
-        isMainModule,
         material,
         textures,
     }) {
@@ -40,9 +46,6 @@ export class MyModule extends MyBox {
         /** The number of windows on each floor of the module */
         this.windows = windows;
 
-        /** Indicates if the module is the main module */
-        this.isMainModule = isMainModule ?? false;
-
         /** The module's window */
         this.window = new MyRectangle({
             scene,
@@ -57,47 +60,8 @@ export class MyModule extends MyBox {
             },
         });
 
-        if (this.isMainModule) {
-            /** The module's door */
-            this.door = new MyRectangle({
-                scene,
-                width: 0.8 * (this.width / this.windows),
-                height: 0.85 * (this.height / this.floors),
-                rows: 3,
-                columns: 3,
-                texture: textures.door,
-                material: {
-                    diffuse: [1, 1, 1, 1],
-                },
-            });
-
-            /** The module's helipad */
-            this.helipad = new MyCircle({
-                scene,
-                layers: 2,
-                radius: 0.4 * this.depth,
-                texture: textures.helipad,
-                material: {
-                    ambient: [1, 1, 1, 1],
-                    diffuse: [1, 1, 1, 1],
-                    specular: [0.5, 0.5, 0.5, 1],
-                },
-            });
-
-            /** The module's sign */
-            this.sign = new MyRectangle({
-                scene,
-                width: this.door.width,
-                height: 0.3 * this.door.height,
-                rows: 2,
-                columns: 2,
-                texture: textures.sign,
-                material: {
-                    ambient: [1, 1, 1, 1],
-                    diffuse: [1, 1, 1, 1],
-                },
-            });
-        }
+        /** The child objects */
+        this.children = [this.window];
     }
 
     /**
@@ -114,37 +78,21 @@ export class MyModule extends MyBox {
         const halfWidth = this.width / 2;
         const halfDepth = this.depth / 2 + 0.05; // NOTE: the small offset avoids overlapping
 
-        for (let floor = this.isMainModule; floor < this.floors; ++floor) {
+        for (let floor = 0; floor < this.floors; ++floor) {
             const y = (floor + 0.5) * yOffset;
 
             for (let window = 0; window < this.windows; ++window) {
                 const x = -halfWidth + (window + 0.5) * xOffset;
 
+                if (floor > 0 || !this.isMainModule) {
+                    this.window.translate(x, y, halfDepth).display();
+                }
+
                 this.window
-                    .translate(x, y, halfDepth)
-                    .display()
                     .translate(x, y, halfDepth)
                     .scale(-1, 1, -1)
                     .display();
             }
         }
-
-        // display the door
-        this.door?.translate(0, this.door.height / 2, halfDepth).display();
-
-        // display the sign
-        this.sign
-            ?.translate(
-                0,
-                this.door.height + this.sign.height / 2 + 0.05,
-                halfDepth,
-            )
-            .display();
-
-        // display the helipad
-        this.helipad
-            ?.rotate(-Math.PI / 2, 1, 0, 0)
-            .translate(0, this.height + 0.05, 0)
-            .display();
     }
 }

@@ -89,7 +89,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
-        this.selectedObject = 'Helicopter';
+        this.selectedObject = 'Building';
 
         this.initCameras();
         this.initLights();
@@ -108,8 +108,8 @@ export class MyScene extends CGFscene {
             0.5,
             0.1,
             1000,
-            vec3.fromValues(-140, 56, -65),
-            vec3.fromValues(0, 30, 0),
+            vec3.fromValues(10, 20, 0),
+            vec3.fromValues(-140, 30, 0),
         );
     }
 
@@ -267,7 +267,9 @@ export class MyScene extends CGFscene {
     }
 
     updateCamera() {
-        this.camera.setTarget(this.helicopter.position);
+        if (this.selectedObject === 'Helicopter') {
+            this.camera.setTarget(this.helicopter.position);
+        }
     }
 
     /**
@@ -316,16 +318,23 @@ export class MyScene extends CGFscene {
             this.scaleFactor,
         );
 
+        // display the skysphere
         this.skysphere.display();
+
+        // display the terrain
         this.terrain.rotate(-Math.PI / 2, 1, 0, 0).display();
-        /*this.building
+
+        // display the building
+        this.building
             .rotate(Math.PI / 2, 0, 1, 0)
             .translate(-this.terrain.lake.width / 2 - this.building.depth, 0, 0)
             .display();
-        this.helicopter.display();
 
         // display the forests
-        this.forests.forEach((forest) => forest.display());*/
+        this.forests.forEach((forest) => forest.display());
+
+        // display the helicopter
+        this.helicopter.display();
         // ---- END Primitive drawing section
     }
 }

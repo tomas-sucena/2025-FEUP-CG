@@ -1,4 +1,5 @@
 import { MyObject } from '../MyObject.js';
+import { MyMainModule } from './MyMainModule.js';
 import { MyModule } from './MyModule.js';
 
 export class MyBuilding extends MyObject {
@@ -22,14 +23,13 @@ export class MyBuilding extends MyObject {
         };
 
         /** The main module of the building **/
-        this.mainModule = new MyModule({
+        this.mainModule = new MyMainModule({
             scene,
             width: 0.4 * width,
             height,
             depth,
             floors: floors + 1,
             windows,
-            isMainModule: true,
             material,
             textures,
         });
@@ -44,6 +44,9 @@ export class MyBuilding extends MyObject {
             material,
             textures,
         });
+
+        /** The child objects */
+        this.children = [this.mainModule, this.sideModule];
     }
 
     /**
