@@ -25,6 +25,7 @@ export class MyForest extends MyObject {
      * @param { number } config.columns - the number of columns of the forest
      * @param { number } config.maxRows - the maximum number of rows of the forest
      * @param { number } config.maxColumns - the maximum number of columns of the forest
+     * @param { number[3] } config.center - the coordinates of the center of the forest
      * @param { Object } config.colors - the base colors to be applied to the trees
      * @param { number[4] } config.colors.crown - the base color of the trees' crown
      * @param { number[4] } config.colors.trunk - the base color of the trees' trunk
@@ -40,6 +41,7 @@ export class MyForest extends MyObject {
         columns,
         maxRows,
         maxColumns,
+        position,
         colors,
         textures,
     }) {
@@ -57,6 +59,8 @@ export class MyForest extends MyObject {
         this.maxRows = maxRows ?? rows;
         /** The maximum number of tree columns */
         this.maxColumns = maxColumns ?? columns;
+        /** The coordinates of the center of the forest */
+        this.position = position;
 
         const numTrees = this.maxRows * this.maxColumns;
         /** The trees */
@@ -89,7 +93,7 @@ export class MyForest extends MyObject {
                 },
                 trunkRadius: patchMin / randomBetween(7, 8),
                 height: patchMax * randomBetween(2, 3),
-                isBurning: Math.random() < 0.25, // 1 in 4
+                isBurning: Math.random() < 0.2,
                 slices: randomBetween(4, 8),
                 stacks: randomBetween(3, 6),
                 colors: {
@@ -136,10 +140,9 @@ export class MyForest extends MyObject {
         const widthRatio = this.maxColumns / this.columns;
         const depthRatio = this.maxRows / this.rows;
 
-        const xCorner = (0.5 - this.columns / 2) * deltaX;
-        const zCorner = (0.5 - this.rows / 2) * deltaZ;
+        const xCorner = this.position[0] + (0.5 - this.columns / 2) * deltaX;
+        const zCorner = this.position[2] + (0.5 - this.rows / 2) * deltaZ;
 
-        // display the trees
         for (let row = 0; row < this.rows; ++row) {
             const zRow = zCorner + row * deltaZ;
             const rowIndex = row * this.columns;
@@ -151,7 +154,11 @@ export class MyForest extends MyObject {
                 const x = xCorner + column * deltaX + xOffset * widthRatio;
                 const z = zRow + zOffset * depthRatio;
 
-                this.trees[index].translate(x, 0, z).display();
+                // set the position of the tree
+                vec3.set(this.trees[index].position, x, 0, z);
+
+                // display the tree
+                this.trees[index].display();
             }
         }
     }

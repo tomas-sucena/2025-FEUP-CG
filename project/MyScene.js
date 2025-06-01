@@ -166,8 +166,9 @@ export class MyScene extends CGFscene {
         });
 
         /** The forest */
-        this.forests = {
-            front: new MyForest({
+        this.forests = [
+            // left
+            new MyForest({
                 scene: this,
                 width: 370,
                 depth: 120,
@@ -175,6 +176,7 @@ export class MyScene extends CGFscene {
                 columns: 17,
                 maxRows: 12,
                 maxColumns: 37,
+                position: [0, 0, 60 + 0.7 * this.terrain.lake.depth],
                 colors: {
                     crown: MyColor.hex('#688f4e'),
                     trunk: MyColor.hex('#6e4300'),
@@ -184,7 +186,8 @@ export class MyScene extends CGFscene {
                     crown: './assets/leaves.jpg',
                 },
             }),
-            back: new MyForest({
+            // right
+            new MyForest({
                 scene: this,
                 width: 400,
                 depth: 100,
@@ -192,6 +195,7 @@ export class MyScene extends CGFscene {
                 columns: 10,
                 maxRows: 10,
                 maxColumns: 40,
+                position: [0, 0, -50 - 0.7 * this.terrain.lake.depth],
                 colors: {
                     crown: MyColor.hex('#688f4e'),
                     trunk: MyColor.hex('#6e4300'),
@@ -201,7 +205,7 @@ export class MyScene extends CGFscene {
                     crown: './assets/leaves.jpg',
                 },
             }),
-        };
+        ];
 
         /** The fire department helicopter */
         this.helicopter = new MyHeli({
@@ -261,6 +265,10 @@ export class MyScene extends CGFscene {
         this.camera.setTarget(this.helicopter.position);
     }
 
+    /**
+     * Updates the scene.
+     * @param {number} time - the time
+     */
     update(time) {
         // compute the elapsed time
         const elapsedTime = (time / 100) % (100 * Math.PI);
@@ -269,14 +277,16 @@ export class MyScene extends CGFscene {
         this.terrain.update(elapsedTime);
 
         // update the forests
-        this.forests.front.update(elapsedTime);
-        this.forests.back.update(elapsedTime);
+        this.forests.forEach((forest) => forest.update(elapsedTime));
 
         // update the helicopter
         this.helicopter.update();
         this.updateCamera();
     }
 
+    /**
+     * Displays the scene.
+     */
     display() {
         // ---- BEGIN Background, camera and axis setup
         // clear image and depth buffer everytime we update the scene
@@ -310,16 +320,7 @@ export class MyScene extends CGFscene {
         this.helicopter.display();
 
         // display the forests
-        this.forests.front
-            .translate(
-                0,
-                0,
-                (this.forests.front.depth + 1.4 * this.terrain.lake.depth) / 2,
-            )
-            .display();
-        this.forests.back
-            .translate(0, 0, -200 + this.forests.back.depth / 2)
-            .display();
+        this.forests.forEach((forest) => forest.display());
         // ---- END Primitive drawing section
     }
 }
