@@ -3,6 +3,18 @@ import { MyCircle } from '../shapes/MyCircle.js';
 import { MyObject } from '../MyObject.js';
 import { MyHeliBucketAnimations } from '../../animations/MyHeliBucketAnimations.js';
 
+/**
+ * Linearly interpolates between two values.
+ * @param {number} x - the start value
+ * @param {number} y - the end value
+ * @param {number} a - the interpolation factor (between 0 and 1)
+ * @returns {number} the interpolated value
+ */
+const lerp = (x, y, a) => x * (1 - a) + y * a;
+
+/**
+ * The helicopter's bucket.
+ */
 export class MyHeliBucket extends MyObject {
     constructor({ scene, radius, height, color, textures }) {
         super(scene);
@@ -45,7 +57,6 @@ export class MyHeliBucket extends MyObject {
         /** The water carried by the bucket */
         this.water = new MyCircle({
             scene,
-            radius,
             material: {
                 ambient: [1, 1, 1, 1],
                 diffuse: [1, 1, 1, 1],
@@ -63,10 +74,17 @@ export class MyHeliBucket extends MyObject {
     }
 
     /**
-     * Returns the bucket's biggest radius, which is its top radius.
+     * Returns the bucket's top radius.
      */
-    get radius() {
+    get topRadius() {
         return this.body.topRadius;
+    }
+
+    /**
+     * Returns the bucket's bottom radius.
+     */
+    get bottomRadius() {
+        return this.body.bottomRadius;
     }
 
     /**
@@ -89,6 +107,13 @@ export class MyHeliBucket extends MyObject {
     }
 
     /**
+     * Fills the bucket with water.
+     */
+    fill() {
+        this.waterAmount = 0.8;
+    }
+
+    /**
      * Displays the bucket's geometry.
      */
     render() {
@@ -106,9 +131,17 @@ export class MyHeliBucket extends MyObject {
 
         // display the water
         if (this.hasWater()) {
+            const waterY = this.height * this.waterAmount;
+            const waterRadius = lerp(
+                this.bottomRadius,
+                this.topRadius,
+                this.waterAmount,
+            );
+
             this.water
                 .rotate(-Math.PI / 2, 1, 0, 0)
-                .translate(0, this.height * this.waterAmount, 0)
+                .scale(waterRadius, 1, waterRadius)
+                .translate(0, waterY, 0)
                 .display();
         }
 

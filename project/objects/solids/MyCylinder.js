@@ -11,29 +11,28 @@ export class MyCylinder extends MyObject {
      */
     constructor({
         scene,
-        radius,
+        radius = 1,
         topRadius,
         bottomRadius,
-        height,
-        slices,
-        stacks,
+        height = 1,
+        slices = 32,
+        stacks = 1,
         inverted,
         material,
         texture,
     }) {
         super(scene);
-        radius ??= 1;
 
         /** The radius of the top cylinder */
         this.topRadius = topRadius ?? radius;
         /** The radius of the bottom cylinder */
         this.bottomRadius = bottomRadius ?? this.topRadius;
         /** The height of the cylinder */
-        this.height = height ?? 1;
+        this.height = height;
         /** The number of divisions around the Y-axis */
-        this.slices = slices ?? 16;
+        this.slices = slices;
         /** The number of divisions along the Y-axis*/
-        this.stacks = stacks ?? 1;
+        this.stacks = stacks;
 
         this.initGeometry({ inverted, material, texture });
     }
