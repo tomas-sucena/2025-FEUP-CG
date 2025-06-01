@@ -7,11 +7,10 @@ export class MyFire extends MyPyramid {
 
         /** The scale with which the flame will be displayed */
         this.flameScale = 1;
-
         /** The animation the fire is performing */
         this.animation = 'idle';
 
-        console.log(this.shader);
+        this.shader.setUniformsValues({ height });
     }
 
     /**

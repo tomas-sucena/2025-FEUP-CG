@@ -76,7 +76,7 @@ export class MyTree extends MyObject {
         if (isBurning) {
             this.fire = new MyFire({
                 scene,
-                radius: this.crown.radius,
+                radius: 1.5 * this.crown.radius,
                 height,
             });
         }

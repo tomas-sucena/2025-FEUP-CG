@@ -31,14 +31,12 @@ void main() {
     // Create wave motion based on time + random phase offset
     float wave = sin(uTime + r * 6.2831); // full 2π offset
 
-    // Apply sideways undulation (e.g., x-axis) modulated by height
+    // apply sideways undulation
     vVertexPosition.x += 0.3 * wave * smoothstep(0.0, 1.0, vVertexPosition.y); // taller = more motion
+    vVertexPosition.z += 0.4 * wave * (r - 0.5);
 
     // simulate the flame rising
-    vVertexPosition.y += (0.1 + 0.3 * vVertexPosition.y) * sin(uTime / 1.5);
-
-    // Optionally also slightly oscillate in Z for depth flicker
-    vVertexPosition.z += 0.2 * wave * (r - 0.5);
+    vVertexPosition.y += (0.1 + 0.3 * vVertexPosition.y) * wave;
 
     gl_Position = uPMatrix * uMVMatrix * vec4(vVertexPosition, 1.0);
 }
