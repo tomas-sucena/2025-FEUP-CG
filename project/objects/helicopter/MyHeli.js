@@ -12,8 +12,8 @@ import { MyCylinder } from '../solids/MyCylinder.js';
  * A helicopter.
  */
 export class MyHeli extends MyObject {
-    static MAX_SPEED = 4;
     static MAX_BLADE_SPEED = Math.PI / 5;
+    static MAX_PITCH = Math.PI / 18;
     static DEFAULT_ACCELERATION = 0.05;
     static DEFAULT_TURN_SPEED = Math.PI / 70;
 
@@ -194,11 +194,16 @@ export class MyHeli extends MyObject {
      * @param {number} value - the value by which the velocity will be altered
      */
     accelerate(value) {
-        this.angles.pitch = (-Math.PI / 18) * Math.sign(value);
+        // compute the new speed
+        const horizontalSpeed = Math.hypot(this.velocity[0], this.velocity[2]);
+        const newSpeed = Math.max(horizontalSpeed + value, 0);
 
         // update the velocity
-        this.velocity[0] += value * Math.cos(this.angles.yaw);
-        this.velocity[2] += value * Math.sin(-this.angles.yaw);
+        this.velocity[0] = newSpeed * Math.cos(this.angles.yaw);
+        this.velocity[2] = newSpeed * Math.sin(-this.angles.yaw);
+
+        // update the pitch
+        this.angles.pitch = -MyHeli.MAX_PITCH * Math.sign(value * newSpeed);
     }
 
     /**
