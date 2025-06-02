@@ -2,12 +2,21 @@ import { MyObject } from '../MyObject.js';
 
 /**
  * A rectangle.
+ * @extends MyObject
  */
 export class MyRectangle extends MyObject {
     /**
      * Initializes the rectangle.
-     * @param { MyScene } scene the scene the object will be displayed in
-     * @param { Object } config the object configuration
+     * @param { Object } config - the rectangle configuration
+     * @param { CGFscene } config.scene - the scene the rectangle will be displayed in
+     * @param { number } config.width - the dimension of the rectangle along the X-axis
+     * @param { number } config.height - the dimension of the rectangle along the Y-axis
+     * @param { number } config.rows - the number of divisions along the Y-axis
+     * @param { number } config.columns - the number of divisions along the X-axis
+     * @param { boolean } config.inverted - indicates if the rectangle should be inverted
+     * @param { Object } config.material - the material to be applied to the rectangle
+     * @param { string } config.texture - the texture to be applied to the rectangle
+     * @param { string } config.shader - the shader to be applied to the rectangle
      */
     constructor({
         scene,
@@ -34,6 +43,9 @@ export class MyRectangle extends MyObject {
         this.initGeometry({ inverted, material, texture, shader });
     }
 
+    /**
+     * Initializes the vertices, indices, normals, and texture coordinates.
+     */
     initBuffers() {
         this.vertices = [];
         this.indices = [];

@@ -2,18 +2,25 @@ import { MyObject } from '../MyObject.js';
 
 /**
  * A circle.
+ * @extends MyObject
  */
 export class MyCircle extends MyObject {
     /**
      * Initializes the circle.
-     * @param { MyScene } scene the scene the object will be displayed in
-     * @param { Object } config the object configuration
+     * @param { Object } config - the circle configuration
+     * @param { CGFscene } config.scene - the scene the circle will be displayed in
+     * @param { number } config.radius - the radius of the circle
+     * @param { number } config.slices - the number of divisions around the Z-axis
+     * @param { number } config.layers - the number of divisions along the X and Y-axis
+     * @param { boolean } config.inverted - indicates if the circle should be inverted
+     * @param { Object } config.material - the material to be applied to the circle
+     * @param { string } config.texture - the texture to be applied to the circle
      */
     constructor({
         scene,
-        radius,
-        slices,
-        layers,
+        radius = 1,
+        slices = 32,
+        layers = 1,
         inverted,
         material,
         texture,
@@ -21,15 +28,18 @@ export class MyCircle extends MyObject {
         super(scene);
 
         /** The radius of the circle */
-        this.radius = radius ?? 1;
+        this.radius = radius;
         /** The number of divisions of the circle around the Z-axis */
-        this.slices = slices ?? 32;
+        this.slices = slices;
         /** The number of divisions along the X and Y-axis */
-        this.layers = layers ?? 1;
+        this.layers = layers;
 
         this.initGeometry({ inverted, material, texture });
     }
 
+    /**
+     * Initializes the vertices, indices, normals, and texture coordinates.
+     */
     initBuffers() {
         this.vertices = [];
         this.indices = [];
