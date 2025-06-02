@@ -123,6 +123,13 @@ export class MyHeliBucket extends MyObject {
     }
 
     /**
+     * Empties the bucket.
+     */
+    empty() {
+        this.waterAmount = 0;
+    }
+
+    /**
      * Displays the bucket's geometry.
      */
     render() {

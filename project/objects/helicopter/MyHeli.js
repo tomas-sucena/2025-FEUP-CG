@@ -267,6 +267,7 @@ export class MyHeli extends MyObject {
         this.blades.speed = 0;
 
         // reset the bucket
+        this.bucket.empty();
         this.bucketScale = 0;
 
         // reset the water gush
