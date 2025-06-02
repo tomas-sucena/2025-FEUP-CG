@@ -1,8 +1,6 @@
 import { CGFappearance, CGFobject, CGFscene } from '../../lib/CGF.js';
 
 export class MyObject extends CGFobject {
-    /** The child objects that constitute the object */
-
     /**
      * Initializes the object.
      * @param { CGFscene } scene - to the scene the object will be a part of
@@ -17,7 +15,7 @@ export class MyObject extends CGFobject {
     /**
      * Inverts the object by reversing its normals and updating its indices.
      */
-    #invert() {
+    invert() {
         // reverse the normals
         for (let i = 0; i < this.normals.length; ++i) {
             this.normals[i] *= -1;
@@ -63,7 +61,7 @@ export class MyObject extends CGFobject {
 
         // invert the normals and indices if needed
         if (inverted) {
-            this.#invert();
+            this.invert();
         }
 
         // initialize the WebGL buffers
