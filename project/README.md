@@ -27,6 +27,32 @@
 | :-------------------------------------------: |
 |            **Figure 3:** A forest             |
 
+### 4. Helicopter
+
+| ![Figure 4](screenshots/project-t04g06-4.png) |
+| :-------------------------------------------: |
+|  **Figure 4:** The firefighter's helicopter   |
+
+| ![Figure 5](screenshots/project-t04g06-5.png) |
+| :-------------------------------------------: |
+|     **Figure 5:** Helicopter in movement      |
+
+### 5. Water and Fire
+
+| ![Figure 6](screenshots/project-t04g06-6.png) |
+| :-------------------------------------------: |
+|     **Figure 6:** The lake and a wildfire     |
+
+| ![Figure 7](screenshots/project-t04g06-7.png) |
+| :-------------------------------------------: |
+|           **Figure 7:** A wildfire            |
+
+### 6. Lake
+
+| ![Figure 8](screenshots/project-t04g06-8.png) |
+| :-------------------------------------------: |
+|            **Figure 8:** The lake             |
+
 ## Observations
 
 We did not implement point 6.2 - `Heliport in maneuvers`.
