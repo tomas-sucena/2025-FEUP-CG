@@ -2,12 +2,13 @@
 precision highp float;
 #endif
 
-// Varying passed from vertex shader
+// varying
 varying vec3 vVertexPosition;
 
+// uniforms
 uniform float height;
 
-// Random function
+// common GLSL pseudo-random number generator
 float rand(vec2 co) {
     return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }

@@ -280,13 +280,13 @@ export class MyScene extends CGFscene {
      */
     update(time) {
         // compute the elapsed time
-        const elapsedTime = (time / 100) % (100 * Math.PI);
+        const elapsedTime = time - this.timeSinceAppStarted;
 
         // update the lake
-        this.terrain.update(elapsedTime);
+        this.terrain.update(elapsedTime / 60);
 
         // update the forests
-        this.forests.forEach((forest) => forest.update(elapsedTime));
+        this.forests.forEach((forest) => forest.update(elapsedTime / 100));
 
         // update the helicopter
         this.helicopter.update();

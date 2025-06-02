@@ -2,16 +2,18 @@
 precision highp float;
 #endif
 
+// attributes
 attribute vec3 aVertexPosition;
 attribute vec3 aVertexNormal;
 attribute vec2 aTextureCoord;
 
+// uniforms
 uniform mat4 uMVMatrix;
 uniform mat4 uPMatrix;
 uniform sampler2D uMaskSampler;
 uniform float uTime;
 
-// output
+// varying
 varying vec3 vVertexPosition;
 varying vec2 vTextureCoord;
 
