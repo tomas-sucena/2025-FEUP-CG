@@ -18,7 +18,7 @@ export class MyCone extends MyCylinder {
      */
     constructor({
         scene,
-        radius,
+        radius = 1,
         height,
         slices,
         stacks,

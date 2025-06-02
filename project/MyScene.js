@@ -14,8 +14,8 @@ import { MyForest } from './objects/forest/MyForest.js';
 import { MyTerrain } from './objects/MyTerrain.js';
 
 /**
- * MyScene
- * @constructor
+ * A scene.
+ * @extends CGFscene
  */
 export class MyScene extends CGFscene {
     constructor() {
@@ -171,13 +171,13 @@ export class MyScene extends CGFscene {
             // left
             new MyForest({
                 scene: this,
-                width: 370,
-                depth: 120,
+                width: 280,
+                depth: 90,
                 rows: 6,
-                columns: 17,
-                maxRows: 12,
-                maxColumns: 37,
-                position: [0, 0, 60 + 0.7 * this.terrain.lake.depth],
+                columns: 14,
+                maxRows: 9,
+                maxColumns: 28,
+                position: [0, 0, 50 + 0.7 * this.terrain.lake.depth],
                 colors: {
                     crown: MyColor.hex('#688f4e'),
                     trunk: MyColor.hex('#6e4300'),
@@ -190,12 +190,12 @@ export class MyScene extends CGFscene {
             // right
             new MyForest({
                 scene: this,
-                width: 400,
-                depth: 100,
-                rows: 5,
-                columns: 10,
-                maxRows: 10,
-                maxColumns: 40,
+                width: 280,
+                depth: 90,
+                rows: 6,
+                columns: 14,
+                maxRows: 9,
+                maxColumns: 28,
                 position: [0, 0, -50 - 0.7 * this.terrain.lake.depth],
                 colors: {
                     crown: MyColor.hex('#688f4e'),

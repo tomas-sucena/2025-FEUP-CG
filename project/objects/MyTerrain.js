@@ -29,8 +29,8 @@ export class MyTerrain extends MyRectangle {
      */
     get lake() {
         return {
-            width: 0.44 * this.width,
-            depth: 0.26 * this.height,
+            width: 0.31 * this.width,
+            depth: 0.18 * this.height,
         };
     }
 

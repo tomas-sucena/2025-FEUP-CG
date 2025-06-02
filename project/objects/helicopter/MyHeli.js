@@ -30,13 +30,10 @@ export class MyHeli extends MyObject {
 
         /** The helicopter's position */
         this.position = position;
-
         /** The helicopter's velocity (vector) */
         this.velocity = velocity;
-
         /** The helicopter's acceleration */
         this.acceleration = MyHeli.DEFAULT_ACCELERATION;
-
         /** The helicopter's turn speed */
         this.turnSpeed = MyHeli.DEFAULT_TURN_SPEED;
 
@@ -64,7 +61,6 @@ export class MyHeli extends MyObject {
 
         /** The scale with which the water gush is displayed */
         this.gushScale = 0;
-
         /** The Y-coordinate of the water gush */
         this.gushY = 0;
 

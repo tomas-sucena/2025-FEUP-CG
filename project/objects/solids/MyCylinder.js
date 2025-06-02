@@ -1,13 +1,22 @@
 import { MyObject } from '../MyObject.js';
 
 /**
- * A cylinder.
+ * A cylinder of different sized bases.
  */
 export class MyCylinder extends MyObject {
     /**
      * Initializes the cylinder.
-     * @param { MyScene } scene the scene the object will be displayed in
-     * @param { Object } config the object configuration
+     * @param { Object } config - the cylinder configuration
+     * @param { CGFscene } config.scene - the scene the object will be displayed in
+     * @param { number } config.radius - the radius of the bases of the cylinder
+     * @param { number } config.topRadius - the radius of the top base of the cylinder
+     * @param { number } config.bottomRadius - the radius of the bottom base of the cylinder
+     * @param { number } config.height - the height of the cylinder
+     * @param { number } config.slices - the number of divisions around the Y-axis
+     * @param { number } config.stacks - the number of divisions along the Y-axis
+     * @param { boolean } config.inverted - indicates if the cylinder should be inverted
+     * @param { Object } config.material - the material to be applied to the cylinder
+     * @param { string } config.texture - the texture to be applied to the cylinder
      */
     constructor({
         scene,
