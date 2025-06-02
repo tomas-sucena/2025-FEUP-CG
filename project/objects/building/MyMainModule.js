@@ -83,8 +83,7 @@ export class MyMainModule extends MyModule {
             },
         });
 
-        /** The child objects */
-        this.children = [this.door, this.helipad, this.sign];
+        this.children.push(this.door, this.helipad, this.sign);
     }
 
     /**
