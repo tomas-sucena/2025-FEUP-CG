@@ -16,7 +16,7 @@ export class MyCylinder extends MyObject {
         bottomRadius,
         height = 1,
         slices = 32,
-        stacks = 1,
+        stacks,
         inverted,
         material,
         texture,
@@ -32,7 +32,7 @@ export class MyCylinder extends MyObject {
         /** The number of divisions around the Y-axis */
         this.slices = slices;
         /** The number of divisions along the Y-axis*/
-        this.stacks = stacks;
+        this.stacks = stacks ?? Math.floor(height);
 
         this.initGeometry({ inverted, material, texture });
     }

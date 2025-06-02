@@ -24,6 +24,9 @@ export class MyHeliRope extends MyObject {
                 diffuse: color,
             },
         });
+
+        /** The child objects */
+        this.children = [this.knot];
     }
 
     /**

@@ -165,6 +165,17 @@ export class MyHeli extends MyObject {
 
         /** The rotors of the helicopter */
         this.rotors = [this.rotor, this.tail.rotor];
+
+        /** The child objects */
+        this.children = [
+            this.tail,
+            this.landingGear,
+            this.rotor,
+            this.cockpit,
+            this.bucket,
+            this.rope,
+            this.waterGush,
+        ];
     }
 
     /**

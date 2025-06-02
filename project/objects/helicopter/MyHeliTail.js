@@ -22,6 +22,9 @@ export class MyHeliTail extends MyCylinder {
             material: materials.metal,
             textures,
         });
+
+        /** The child objects */
+        this.children = [this.rotor];
     }
 
     render() {

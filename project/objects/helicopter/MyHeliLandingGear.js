@@ -31,6 +31,9 @@ export class MyHeliLandingGear extends MyObject {
             depth: 0.03 * depth,
             height: (0.9 * height) / Math.cos(this.angle),
         });
+
+        /** The child objects */
+        this.children = [this.skid, this.crosstube];
     }
 
     /**

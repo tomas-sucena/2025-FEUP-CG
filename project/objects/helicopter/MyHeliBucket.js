@@ -64,6 +64,9 @@ export class MyHeliBucket extends MyObject {
             },
             texture: textures.water,
         });
+
+        /** The child objects */
+        this.children = [this.body, this.bottom, this.water];
     }
 
     /**

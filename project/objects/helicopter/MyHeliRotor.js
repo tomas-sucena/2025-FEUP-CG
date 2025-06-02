@@ -45,12 +45,21 @@ export class MyHeliRotor extends MyObject {
             material,
             texture: textures?.metal,
         });
+
+        /** The child objects */
+        this.children = [this.bottomGear, this.topGear, this.rotorBlade];
     }
 
+    /**
+     * Returns the height of the rotor.
+     */
     get height() {
         return this.rotorMast.height;
     }
 
+    /**
+     * Displays the geometry of the rotor.
+     */
     render() {
         // display the gears
         this.bottomGear.display();

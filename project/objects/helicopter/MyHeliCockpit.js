@@ -1,6 +1,4 @@
 import { MyObject } from '../MyObject.js';
-import { MyBox } from '../solids/MyBox.js';
-import { MyCylinder } from '../solids/MyCylinder.js';
 import { MyEllipsoid } from '../solids/MyEllipsoid.js';
 
 export class MyHeliCockpit extends MyObject {
@@ -32,7 +30,7 @@ export class MyHeliCockpit extends MyObject {
         });
 
         /** The cockpit dome */
-        this.cockpit = new MyEllipsoid({
+        this.cockpitDome = new MyEllipsoid({
             scene,
             width: width * 3.6,
             height: height * 1.8,
@@ -46,17 +44,23 @@ export class MyHeliCockpit extends MyObject {
         // Store dimensions for positioning
         this.height = height;
         this.width = width;
+
+        /** The child objects */
+        this.children = [this.glassDome, this.cockpitDome];
     }
 
+    /**
+     * Displays the geometry of the cockpit.
+     */
     render() {
-        // Glass dome positioning
+        // display the glass dome
         this.glassDome
             .translate(0, this.height * 0.3, 0)
             .rotate(Math.PI / 16, 0, 0, 0)
             .display();
 
-        // Cockpit positioning
-        this.cockpit
+        // display the cockpit dome
+        this.cockpitDome
             .translate(2.4, this.height * 0.3, 0)
             .rotate(Math.PI / 16, 0, 0, 0)
             .display();
