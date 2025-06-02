@@ -39,7 +39,7 @@ export class MyPyramid extends MyObject {
         this.slices = slices;
 
         /** The number of divisions along the Y-axis */
-        this.stacks = stacks ?? Math.floor(this.height);
+        this.stacks = stacks ?? Math.max(Math.floor(this.height), 1);
 
         this.initGeometry({ inverted, material, texture, shader });
     }

@@ -41,7 +41,7 @@ export class MyCylinder extends MyObject {
         /** The number of divisions around the Y-axis */
         this.slices = slices;
         /** The number of divisions along the Y-axis*/
-        this.stacks = stacks ?? Math.floor(height);
+        this.stacks = stacks ?? Math.max(Math.floor(height), 1);
 
         this.initGeometry({ inverted, material, texture });
     }
