@@ -34,7 +34,7 @@ export const MyHeliAnimations = {
         const y = this.position[1];
 
         if (y < cruiseAltitude) {
-            this.rise(0.05);
+            this.rise(this.acceleration);
         } else {
             this.velocity[1] = 0; // reset the vertical velocity
             this.animation = 'dropBucket';
@@ -83,22 +83,22 @@ export const MyHeliAnimations = {
 
         // fly forward
         if (pressedKeys.has('KeyW') || pressedKeys.has('ArrowUp')) {
-            this.accelerate(0.05);
+            this.accelerate(this.acceleration);
         }
 
         // fly backward
         if (pressedKeys.has('KeyS') || pressedKeys.has('ArrowDown')) {
-            this.accelerate(-0.05);
+            this.accelerate(-this.acceleration);
         }
 
         // rotate left
         if (pressedKeys.has('KeyA') || pressedKeys.has('ArrowLeft')) {
-            this.turn(Math.PI / 80);
+            this.turn(this.turnSpeed);
         }
 
         // rotate right
         if (pressedKeys.has('KeyD') || pressedKeys.has('ArrowRight')) {
-            this.turn(-Math.PI / 80);
+            this.turn(-this.turnSpeed);
         }
     },
     /**
@@ -108,7 +108,7 @@ export const MyHeliAnimations = {
         const y = this.position[1] - this.rope.length / 2;
 
         if (y > 0) {
-            this.rise(-0.05);
+            this.rise(-this.acceleration);
         } else {
             this.bucket.fill();
             this.animation = 'fillBucket';
@@ -165,11 +165,11 @@ export const MyHeliAnimations = {
         const angle = Math.atan2(cross, dot);
 
         // rotate the helicopter to face the building
-        if (Math.abs(angle) < Math.PI / 80) {
+        if (Math.abs(angle) < this.turnSpeed) {
             this.turn(angle);
             this.animation = 'flyToHeliport';
         } else {
-            this.turn(Math.sign(angle) * (Math.PI / 80));
+            this.turn(Math.sign(angle) * this.turnSpeed);
         }
     },
     /**
@@ -187,7 +187,7 @@ export const MyHeliAnimations = {
             this.stop();
             this.animation = 'retractBucket';
         } else {
-            this.accelerate(0.05);
+            this.accelerate(this.acceleration);
         }
     },
     /**
@@ -206,7 +206,7 @@ export const MyHeliAnimations = {
      */
     land: function () {
         if (this.position[1] > this.initialParams.position[1]) {
-            this.rise(-0.05);
+            this.rise(-this.acceleration);
         } else {
             this.position[1] = this.initialParams.position[1];
             this.velocity[1] = 0; // reset the vertical velocity

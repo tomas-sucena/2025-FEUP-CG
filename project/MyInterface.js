@@ -63,6 +63,12 @@ export class MyInterface extends CGFinterface {
             .add(rightForest, 'columns', 0, rightForest.maxColumns, 1)
             .name('Columns');
 
+        // helicopter settings
+        const helicopterFolder = this.gui.addFolder('Helicopter');
+        helicopterFolder
+            .add(this.scene.helicopter, 'speedFactor', 0.1, 3)
+            .name('Speed Factor');
+
         return true;
     }
 

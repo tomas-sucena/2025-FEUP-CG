@@ -14,6 +14,8 @@ import { MyCylinder } from '../solids/MyCylinder.js';
 export class MyHeli extends MyObject {
     static MAX_SPEED = 4;
     static MAX_BLADE_SPEED = Math.PI / 5;
+    static DEFAULT_ACCELERATION = 0.05;
+    static DEFAULT_TURN_SPEED = Math.PI / 70;
 
     constructor({
         scene,
@@ -29,8 +31,14 @@ export class MyHeli extends MyObject {
         /** The helicopter's position */
         this.position = position;
 
-        /** The helicopter's velocity */
+        /** The helicopter's velocity (vector) */
         this.velocity = velocity;
+
+        /** The helicopter's acceleration */
+        this.acceleration = MyHeli.DEFAULT_ACCELERATION;
+
+        /** The helicopter's turn speed */
+        this.turnSpeed = MyHeli.DEFAULT_TURN_SPEED;
 
         /** The helicopter's aerodynamic angles */
         this.angles = {
@@ -66,6 +74,8 @@ export class MyHeli extends MyObject {
 
     /**
      * Initializes the helicopter's components.
+     * @param { Object } colors - the colors of the helicopter
+     * @param { textures } textures - the textures to be applied to the helicopter
      */
     initComponents(colors, textures) {
         const coatMaterial = {
@@ -155,6 +165,21 @@ export class MyHeli extends MyObject {
 
         /** The rotors of the helicopter */
         this.rotors = [this.rotor, this.tail.rotor];
+    }
+
+    /**
+     * Returns an approximation of the helicopter's current speed factor.
+     */
+    get speedFactor() {
+        return this.acceleration / MyHeli.DEFAULT_ACCELERATION;
+    }
+
+    /**
+     * Updates the helicopter's speed factor, which in turn changes its acceleration and turn speed.
+     */
+    set speedFactor(speedFactor) {
+        this.acceleration = MyHeli.DEFAULT_ACCELERATION * speedFactor;
+        this.turnSpeed = MyHeli.DEFAULT_TURN_SPEED * speedFactor;
     }
 
     /**
