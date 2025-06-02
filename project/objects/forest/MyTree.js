@@ -5,6 +5,7 @@ import { MyFire } from './MyFire.js';
 
 /**
  * A tree.
+ * @extends MyObject
  */
 export class MyTree extends MyObject {
     /**
@@ -22,8 +23,8 @@ export class MyTree extends MyObject {
      * @param { number } config.stacks - the number of pyramids that constitute the tree's crown
      * @param { number } config.slices - the number of divisions around the Y-axis of the pyramids in the tree's crown
      * @param { Object } config.colors - the colors to be applied to the tree
-     * @param { number[] } config.colors.trunk - the color of the tree's trunk
-     * @param { number[] } config.colors.crown - the color of the tree's crown
+     * @param { number[4] } config.colors.trunk - the color of the tree's trunk
+     * @param { number[4] } config.colors.crown - the color of the tree's crown
      */
     constructor({
         scene,
@@ -49,13 +50,10 @@ export class MyTree extends MyObject {
 
         /** The tree's height */
         this.height = height;
-
         /** The tree's position */
         this.position = position;
-
         /** The forest the tree is a part of */
         this.forest = forest;
-
         /** The number of stacks (pyramids) that constitute the tree's crown */
         this.stacks = Math.floor(stacks ?? crownHeight / 2);
 

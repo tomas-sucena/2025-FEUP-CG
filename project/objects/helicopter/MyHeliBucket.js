@@ -14,8 +14,18 @@ const lerp = (x, y, a) => x * (1 - a) + y * a;
 
 /**
  * The helicopter's bucket.
+ * @extends MyObject
  */
 export class MyHeliBucket extends MyObject {
+    /**
+     * Initializes the helicopter's bucket.
+     * @param { Object } config - the bucket configuration
+     * @param { CGFscene } config.scene - the scene the bucket will be displayed in
+     * @param { number } config.radius - the radius of the top base of the bucket
+     * @param { number } config.height - the height of the bucket
+     * @param { number[4] } config.color - the color of the bucket
+     * @param { Object } config.textures - the textures to be applied to the bucket
+     */
     constructor({ scene, radius, height, color, textures }) {
         super(scene);
 
@@ -98,6 +108,9 @@ export class MyHeliBucket extends MyObject {
         return this.waterAmount > 0;
     }
 
+    /**
+     * Updates the bucket.
+     */
     update() {
         MyHeliBucketAnimations[this.animation].call(this);
     }

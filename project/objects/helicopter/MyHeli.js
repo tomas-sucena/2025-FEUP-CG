@@ -10,6 +10,7 @@ import { MyCylinder } from '../solids/MyCylinder.js';
 
 /**
  * A helicopter.
+ * @extends MyObject
  */
 export class MyHeli extends MyObject {
     static MAX_BLADE_SPEED = Math.PI / 5;
@@ -17,6 +18,16 @@ export class MyHeli extends MyObject {
     static DEFAULT_ACCELERATION = 0.05;
     static DEFAULT_TURN_SPEED = Math.PI / 70;
 
+    /**
+     * Initializes the helicopter.
+     * @param { Object } config - the helicopter configuration
+     * @param { CGFscene } config.scene - the scene the helicopter will be displayed in
+     * @param { number[3] } config.position - the initial position of the helicopter
+     * @param { number[3] } config.velocity - the initial velocity of the helicopter
+     * @param { number } config.yaw - the initial angle around the Y-axis
+     * @param { Object } config.colors - the colors of the helicopter
+     * @param { Object } config.textures - the textures to be applied to the helicopter
+     */
     constructor({
         scene,
         position = [0, 0, 0],
