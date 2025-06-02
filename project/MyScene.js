@@ -89,6 +89,7 @@ export class MyScene extends CGFscene {
         this.scaleFactor = 1;
         this.displayNormals = false;
         this.displayWireframe = false;
+        this.followHelicopter = true;
         this.selectedObject = 'Helicopter';
 
         this.initCameras();
@@ -268,8 +269,11 @@ export class MyScene extends CGFscene {
         this.toggleWireframe();
     }
 
+    /**
+     * Updates the camera
+     */
     updateCamera() {
-        if (this.selectedObject === 'Helicopter') {
+        if (this.followHelicopter) {
             this.camera.setTarget(this.helicopter.position);
         }
     }

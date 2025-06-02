@@ -31,7 +31,7 @@ export class MyInterface extends CGFinterface {
             .onChange(this.scene.changeObject.bind(this.scene))
             .name('Selected');
 
-        objectsFolder.add(this.scene, 'scaleFactor', 0.1, 10).name('Scale');
+        objectsFolder.add(this.scene, 'scaleFactor', 0.1, 3).name('Scale');
 
         objectsFolder
             .add(this.scene, 'displayNormals')
@@ -48,23 +48,29 @@ export class MyInterface extends CGFinterface {
         const forestsFolder = this.gui.addFolder('Forests');
 
         const leftForestFolder = forestsFolder.addFolder('Left');
+        const rightForestFolder = forestsFolder.addFolder('Right');
+
         leftForestFolder
             .add(leftForest, 'rows', 0, leftForest.maxRows, 1)
             .name('Rows');
+
         leftForestFolder
             .add(leftForest, 'columns', 0, leftForest.maxColumns, 1)
             .name('Columns');
 
-        const rightForestFolder = forestsFolder.addFolder('Right');
         rightForestFolder
             .add(rightForest, 'rows', 0, rightForest.maxRows, 1)
             .name('Rows');
+
         rightForestFolder
             .add(rightForest, 'columns', 0, rightForest.maxColumns, 1)
             .name('Columns');
 
         // helicopter settings
         const helicopterFolder = this.gui.addFolder('Helicopter');
+
+        helicopterFolder.add(this.scene, 'followHelicopter').name('Follow');
+
         helicopterFolder
             .add(this.scene.helicopter, 'speedFactor', 0.1, 3)
             .name('Speed Factor');
