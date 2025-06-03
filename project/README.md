@@ -56,3 +56,12 @@
 ## Observations
 
 We did not implement point 6.2 - `Heliport in maneuvers`.
+
+## Use of AI
+
+We only utilized artificial intelligence for two purposes:
+
+- To debug our code when the error messages were insufficient.
+- To get ideas for how to implement the [fire vertex shader](shaders/fire.vert). While it was certainly very helpful, it provided code that was far too overcomplicated, so we ended up changing it a lot to ensure we understood what was happening.
+
+Regarding the models, we relied on Chat-GPT and Gemini.
