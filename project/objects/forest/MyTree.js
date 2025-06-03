@@ -19,7 +19,6 @@ export class MyTree extends MyObject {
      * @param { number } config.height - the tree's height
      * @param { number[3] } config.position - the tree's position
      * @param { boolean } config.isBurning - indicates if the tree is surrounded by fire
-     * @param { MyForest } config.forest - the forest the tree is a part of
      * @param { number } config.stacks - the number of pyramids that constitute the tree's crown
      * @param { number } config.slices - the number of divisions around the Y-axis of the pyramids in the tree's crown
      * @param { Object } config.colors - the colors to be applied to the tree
@@ -33,7 +32,6 @@ export class MyTree extends MyObject {
         height,
         position = [0, 0, 0],
         isBurning = false,
-        forest,
         stacks,
         slices,
         colors,
@@ -50,10 +48,10 @@ export class MyTree extends MyObject {
 
         /** The tree's height */
         this.height = height;
+
         /** The tree's position */
         this.position = position;
-        /** The forest the tree is a part of */
-        this.forest = forest;
+
         /** The number of stacks (pyramids) that constitute the tree's crown */
         this.stacks = Math.floor(stacks ?? crownHeight / 2);
 
@@ -129,10 +127,6 @@ export class MyTree extends MyObject {
     putOutFire() {
         if (this.fire) {
             this.fire.animation = 'putOut';
-            /*delete this.fire;
-
-            // remove this tree from the set of burning trees
-            this.forest.burningTrees.delete(this);*/
         }
     }
 

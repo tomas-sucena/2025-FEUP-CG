@@ -12,8 +12,13 @@ export const MyFireAnimations = {
     putOut: function () {
         if (this.flameScale < 0) {
             this.flameScale = 0;
+            this.animation = 'extinguished';
         } else {
             this.flameScale -= 0.2;
         }
     },
+    /**
+     * Is no longer animated.
+     */
+    extinguished: function () {},
 };

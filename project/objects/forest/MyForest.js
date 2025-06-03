@@ -67,8 +67,8 @@ export class MyForest extends MyObject {
         this.trees = this.children = Array(numTrees);
         /** The offsets */
         this.treeOffsets = Array(numTrees);
-        /** A set to store the burning trees */
-        this.burningTrees = new Set();
+        /** The burning trees */
+        this.burningTrees = [];
 
         this.initTrees(colors, textures);
     }
@@ -94,7 +94,6 @@ export class MyForest extends MyObject {
                 trunkRadius: patchMin / randomBetween(7, 8),
                 height: patchMax * randomBetween(2, 3),
                 isBurning: Math.random() < 0.2,
-                forest: this,
                 slices: randomBetween(4, 8),
                 stacks: randomBetween(3, 6),
                 colors: {
@@ -118,7 +117,7 @@ export class MyForest extends MyObject {
 
             // determine if the tree is on fire
             if (tree.fire) {
-                this.burningTrees.add(tree);
+                this.burningTrees.push(tree);
             }
         }
     }
@@ -128,6 +127,12 @@ export class MyForest extends MyObject {
      * @param {number} time - the elapsed time
      */
     update(time) {
+        // filter out the trees that are no longer on fire
+        this.burningTrees = this.burningTrees.filter(
+            (tree) => tree.fire.animation !== 'extinguished',
+        );
+
+        // update the fires
         this.burningTrees.forEach((tree) => tree.fire.update(time));
     }
 
