@@ -213,7 +213,7 @@ export class MyScene extends CGFscene {
         this.helicopter = new MyHeli({
             scene: this,
             position: [
-                -this.terrain.lake.width / 2 - this.building.depth,
+                -0.7 * this.terrain.lake.width - this.building.depth,
                 this.building.height,
                 0,
             ],
@@ -348,7 +348,7 @@ export class MyScene extends CGFscene {
         // display the building
         this.building
             .rotate(Math.PI / 2, 0, 1, 0)
-            .translate(-this.terrain.lake.width / 2 - this.building.depth, 0, 0)
+            .translate(this.helicopter.initialParams.position[0], 0, 0)
             .display();
 
         // display the forests
