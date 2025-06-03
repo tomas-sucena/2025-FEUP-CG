@@ -27,11 +27,11 @@ export class MyTree extends MyObject {
      */
     constructor({
         scene,
+        position = [0, 0, 0],
+        isBurning = false,
         tilt,
         trunkRadius,
         height,
-        position = [0, 0, 0],
-        isBurning = false,
         stacks,
         slices,
         colors,
@@ -39,6 +39,9 @@ export class MyTree extends MyObject {
     }) {
         super(scene);
         const crownHeight = 0.8 * height;
+
+        /** The tree's position */
+        this.position = position;
 
         /** The tree's tilt */
         this.tilt = {
@@ -48,10 +51,6 @@ export class MyTree extends MyObject {
 
         /** The tree's height */
         this.height = height;
-
-        /** The tree's position */
-        this.position = position;
-
         /** The number of stacks (pyramids) that constitute the tree's crown */
         this.stacks = Math.floor(stacks ?? crownHeight / 2);
 

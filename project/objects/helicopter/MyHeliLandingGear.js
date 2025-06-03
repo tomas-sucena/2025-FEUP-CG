@@ -7,10 +7,8 @@ export class MyHeliLandingGear extends MyObject {
 
         /** The height of the landing gear */
         this.height = height;
-
         /** The depth of both landing skids plus the distance between them **/
         this.depth = depth;
-
         /** The angle between the crosstubes and the Y-axis */
         this.angle = angle;
 

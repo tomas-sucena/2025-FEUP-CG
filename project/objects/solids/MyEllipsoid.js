@@ -32,16 +32,12 @@ export class MyEllipsoid extends MyObject {
 
         /** The radius of the ellipsoid in the X-axis */
         this.radiusX = radiusX;
-
         /** The radius of the ellipsoid in the Y-axis */
         this.radiusY = radiusY;
-
         /** The radius of the ellipsoid in the Z-axis */
         this.radiusZ = radiusZ;
-
         /** The number of divisions around the Y-axis */
         this.slices = slices;
-
         /** The number of divisions along the Y-axis */
         this.stacks = 2 * stacks;
 

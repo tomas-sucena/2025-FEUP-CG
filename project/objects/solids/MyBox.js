@@ -34,19 +34,14 @@ export class MyBox extends MyObject {
 
         /** The dimension of the box along the X-axis */
         this.width = width;
-
         /** The dimension of the box along the Y-axis */
         this.height = height;
-
         /** The dimension of the box along the Z-axis */
         this.depth = depth;
-
         /** The number of divisions along the X-axis */
         this.xDivisions = Math.ceil(xDivisions ?? this.width);
-
         /** The number of divisions along the Y-axis */
         this.yDivisions = Math.ceil(yDivisions ?? this.height);
-
         /** The number of divisions along the Z-axis */
         this.zDivisions = Math.ceil(zDivisions ?? this.depth);
 

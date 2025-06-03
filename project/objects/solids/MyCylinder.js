@@ -34,16 +34,12 @@ export class MyCylinder extends MyObject {
 
         /** The radius of the top cylinder */
         this.topRadius = topRadius ?? radius;
-
         /** The radius of the bottom cylinder */
         this.bottomRadius = bottomRadius ?? this.topRadius;
-
         /** The height of the cylinder */
         this.height = height;
-
         /** The number of divisions around the Y-axis */
         this.slices = slices;
-
         /** The number of divisions along the Y-axis*/
         this.stacks = stacks ?? Math.max(Math.floor(height), 1);
 

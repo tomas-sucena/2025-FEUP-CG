@@ -98,7 +98,7 @@ export class MyForest extends MyObject {
                 stacks: randomBetween(3, 6),
                 colors: {
                     crown: colors.crown.map(
-                        (value) => value + randomBetween(-0.08, 0.08),
+                        (value) => value + randomBetween(-0.15, 0.15),
                     ),
                     trunk: colors.trunk.map(
                         (value) => value + randomBetween(-0.05, 0.05),

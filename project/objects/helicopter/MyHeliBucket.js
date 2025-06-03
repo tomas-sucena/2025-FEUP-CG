@@ -31,10 +31,8 @@ export class MyHeliBucket extends MyObject {
 
         /** Indicates the amount (from 0 to 1) of water the bucket has */
         this.waterAmount = 0;
-
         /** The angle of the bottom of the bucket around the Z-axis */
         this.bottomAngle = 0;
-
         /** The animation the bucket is performing */
         this.animation = 'idle';
 

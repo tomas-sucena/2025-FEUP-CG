@@ -20,7 +20,6 @@ export class MyHeliRope extends MyObject {
 
         /** The length of the rope */
         this.length = length;
-
         /** The number of knots that constitute the rope */
         this.knots = knots ?? 2 * length;
 
