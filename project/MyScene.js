@@ -109,7 +109,7 @@ export class MyScene extends CGFscene {
             0.5,
             0.1,
             1000,
-            vec3.fromValues(-140, 56, -65),
+            vec3.fromValues(-50, 45, 40),
             vec3.fromValues(0, 30, 0),
         );
     }
@@ -178,7 +178,7 @@ export class MyScene extends CGFscene {
                 columns: 14,
                 maxRows: 9,
                 maxColumns: 28,
-                position: [0, 0, 50 + 0.7 * this.terrain.lake.depth],
+                position: [0, 0, -50 - 0.7 * this.terrain.lake.depth],
                 colors: {
                     crown: MyColor.hex('#688f4e'),
                     trunk: MyColor.hex('#6e4300'),
@@ -197,7 +197,7 @@ export class MyScene extends CGFscene {
                 columns: 14,
                 maxRows: 9,
                 maxColumns: 28,
-                position: [0, 0, -50 - 0.7 * this.terrain.lake.depth],
+                position: [0, 0, 50 + 0.7 * this.terrain.lake.depth],
                 colors: {
                     crown: MyColor.hex('#688f4e'),
                     trunk: MyColor.hex('#6e4300'),
@@ -273,9 +273,24 @@ export class MyScene extends CGFscene {
      * Updates the camera
      */
     updateCamera() {
-        if (this.followHelicopter) {
-            this.camera.setTarget(this.helicopter.position);
+        if (!this.followHelicopter) {
+            return;
         }
+
+        // point at the helicopter
+        const target = this.helicopter.position;
+        this.camera.setTarget(target);
+
+        // follow the helicopter
+        const direction = this.helicopter.angles.yaw + Math.PI;
+        const offset = 40 + 30 * this.helicopter.bucketScale;
+
+        vec3.set(
+            this.camera.position,
+            target[0] + offset * Math.cos(direction),
+            target[1] + 20,
+            target[2] + offset * Math.sin(-direction),
+        );
     }
 
     /**
