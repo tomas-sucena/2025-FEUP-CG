@@ -3,7 +3,7 @@ import { MyRectangle } from '../shapes/MyRectangle.js';
 
 /**
  * A building module.
- * @extends MyObject
+ * @extends MyBox
  */
 export class MyModule extends MyBox {
     /**
