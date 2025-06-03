@@ -177,14 +177,17 @@ export const MyHeliAnimations = {
      */
     flyToHeliport: function () {
         const targetPosition = [...this.initialParams.position];
-        const position = [...this.position];
-        targetPosition[1] = position[1]; // ignore the Y-axis
+        targetPosition[1] = this.position[1]; // ignore the Y-axis
 
-        // compute the distance between the helicopter and the building
-        const distance = Math.abs(vec3.dist(targetPosition, position));
+        // compute the horizontal distance between the helicopter and the building
+        const distance = Math.abs(vec3.dist(targetPosition, this.position));
 
-        if (distance < 1) {
+        // compute the current speed
+        const horizontalSpeed = Math.hypot(this.velocity[0], this.velocity[2]);
+
+        if (distance < horizontalSpeed) {
             this.stop();
+            vec3.copy(this.position, targetPosition);
             this.animation = 'retractBucket';
         } else {
             this.accelerate(this.acceleration);
