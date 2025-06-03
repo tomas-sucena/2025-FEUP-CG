@@ -15,9 +15,9 @@ export class MyHeliCockpit extends MyObject {
         /** The glass dome */
         this.glassDome = new MyEllipsoid({
             scene,
-            width,
-            height,
-            depth: 1.8 * width,
+            radiusX: width / 2,
+            radiusY: height / 2,
+            radiusZ: 0.9 * width,
             slices: 32,
             stacks: 16,
             material: {
@@ -32,9 +32,9 @@ export class MyHeliCockpit extends MyObject {
         /** The cockpit dome */
         this.cockpitDome = new MyEllipsoid({
             scene,
-            width: width * 3.6,
-            height: height * 1.8,
-            depth: width * 2.4,
+            radiusX: 1.8 * width,
+            radiusY: 0.9 * height,
+            radiusZ: 1.2 * width,
             slices: 32,
             stacks: 16,
             material,

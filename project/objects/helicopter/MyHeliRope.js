@@ -27,9 +27,9 @@ export class MyHeliRope extends MyObject {
         /** A knot of the rope */
         this.knot = new MyEllipsoid({
             scene,
-            width: 2 * radius,
-            height: 1.2 * (length / this.knots),
-            depth: 2 * radius,
+            radiusX: radius,
+            radiusY: 0.6 * (length / this.knots),
+            radiusZ: radius,
             slices: 16,
             stacks: 8,
             material: {

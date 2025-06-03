@@ -6,33 +6,59 @@ import { MyObject } from '../MyObject.js';
 export class MyBox extends MyObject {
     /**
      * Initializes the box.
-     * @param { CGFscene } scene - the scene the box will be displayed in
      * @param { Object } config - the box configuration
+     * @param { CGFscene } config.scene - the scene the box will be displayed in
+     * @param { number } config.width - the dimension of the box along the X-axis
+     * @param { number } config.height - the dimension of the box along the Y-axis
+     * @param { number } config.depth - the dimension of the box along the Z-axis
+     * @param { number } config.xDivisions - the number of divisions along the X-axis
+     * @param { number } config.yDivisions - the number of divisions along the Y-axis
+     * @param { number } config.zDivisions - the number of divisions along the Z-axis
+     * @param { boolean } config.inverted - indicates if the box should be inverted
+     * @param { Object } config.material - the material to be applied to the box
+     * @param { string } config.texture - the texture to be applied to the box
      */
     constructor({
         scene,
-        width,
-        height,
-        depth,
+        width = 1,
+        height = 1,
+        depth = 1,
         xDivisions,
         yDivisions,
         zDivisions,
-        inverted,
+        inverted = false,
         material,
         texture,
     }) {
         super(scene);
 
-        this.width = width ?? 1;
-        this.height = height ?? 1;
-        this.depth = depth ?? 1;
+        /** The dimension of the box along the X-axis */
+        this.width = width;
+
+        /** The dimension of the box along the Y-axis */
+        this.height = height;
+
+        /** The dimension of the box along the Z-axis */
+        this.depth = depth;
+
+        /** The number of divisions along the X-axis */
         this.xDivisions = Math.ceil(xDivisions ?? this.width);
+
+        /** The number of divisions along the Y-axis */
         this.yDivisions = Math.ceil(yDivisions ?? this.height);
+
+        /** The number of divisions along the Z-axis */
         this.zDivisions = Math.ceil(zDivisions ?? this.depth);
 
         this.initGeometry({ inverted, material, texture });
     }
 
+    /**
+     * Initializes a face of the box.
+     * @param { Object } config - the face configuration
+     * @param { number[3] } config.upperLeftCorner - the coordinates of the upper left corner of the face
+     * @param { number[3] } config.normal - the normal vector of the face
+     */
     #addFace({ upperLeftCorner, normal }) {
         const [xCorner, yCorner, zCorner] = upperLeftCorner;
         const [Nx, Ny, Nz] = normal;

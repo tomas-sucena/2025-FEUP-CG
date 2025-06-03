@@ -8,9 +8,9 @@ export class MyEllipsoid extends MyObject {
      * Initializes the ellipsoid.
      * @param { Object } config - the ellipsoid configuration
      * @param { CGFscene } config.scene - the scene the ellipsoid will be displayed in
-     * @param { number } config.width - the dimension of the ellipsoid in the X-axis
-     * @param { number } config.height - the dimension of the ellipsoid in the Y-axis
-     * @param { number } config.depth - the dimension of the ellipsoid in the Z-axis
+     * @param { number } config.radiusX - the radius of the ellipsoid in the X-axis
+     * @param { number } config.radiusY - the radius of the ellipsoid in the Y-axis
+     * @param { number } config.radiusZ - the radius of the ellipsoid in the Z-axis
      * @param { number } config.slices - the number of divisions around the Y-axis
      * @param { number } config.stacks - the number of divisions along the Y-axis
      * @param { boolean } config.inverted - indicates if the ellipsoid should be inverted
@@ -19,9 +19,9 @@ export class MyEllipsoid extends MyObject {
      */
     constructor({
         scene,
-        width = 1,
-        height = 1,
-        depth = 1,
+        radiusX = 1,
+        radiusY = 1,
+        radiusZ = 1,
         slices = 32,
         stacks = 16,
         inverted = false,
@@ -30,18 +30,43 @@ export class MyEllipsoid extends MyObject {
     }) {
         super(scene);
 
-        /** The dimension of the ellipsoid in the X-axis */
-        this.width = width;
-        /** The dimension of the ellipsoid in the Y-axis */
-        this.height = height;
-        /** The dimension of the ellipsoid in the Z-axis */
-        this.depth = depth;
+        /** The radius of the ellipsoid in the X-axis */
+        this.radiusX = radiusX;
+
+        /** The radius of the ellipsoid in the Y-axis */
+        this.radiusY = radiusY;
+
+        /** The radius of the ellipsoid in the Z-axis */
+        this.radiusZ = radiusZ;
+
         /** The number of divisions around the Y-axis */
         this.slices = slices;
+
         /** The number of divisions along the Y-axis */
         this.stacks = 2 * stacks;
 
         this.initGeometry({ inverted, material, texture });
+    }
+
+    /**
+     * Returns the width of the ellipsoid.
+     */
+    get width() {
+        return 2 * this.radiusX;
+    }
+
+    /**
+     * Returns the height of the ellipsoid.
+     */
+    get height() {
+        return 2 * this.radiusY;
+    }
+
+    /**
+     * Returns the depth of the ellipsoid.
+     */
+    get depth() {
+        return 2 * this.radiusZ;
     }
 
     /**
@@ -52,11 +77,6 @@ export class MyEllipsoid extends MyObject {
         this.indices = [];
         this.normals = [];
         this.texCoords = [];
-
-        // the radii of the ellipsoid
-        const radiusX = this.width / 2;
-        const radiusY = this.height / 2;
-        const radiusZ = this.depth / 2;
 
         const deltaStackAng = Math.PI / this.stacks;
         const deltaSliceAng = (2 * Math.PI) / this.slices;
@@ -74,14 +94,22 @@ export class MyEllipsoid extends MyObject {
                 const Nz = stackRadius * Math.cos(sliceAng);
 
                 // compute the normal
-                const normal = [Nx / radiusX, Ny / radiusY, Nz / radiusZ];
+                const normal = [
+                    Nx / this.radiusX,
+                    Ny / this.radiusY,
+                    Nz / this.radiusZ,
+                ];
                 vec3.normalize(normal, normal);
 
                 if (stack < this.stacks && slice < this.slices) {
                     this.addPairOfIndices(this.slices);
                 }
 
-                this.vertices.push(Nx * radiusX, Ny * radiusY, Nz * radiusZ);
+                this.vertices.push(
+                    Nx * this.radiusX,
+                    Ny * this.radiusY,
+                    Nz * this.radiusZ,
+                );
                 this.normals.push(...normal);
                 this.texCoords.push(slice / this.slices, stack / this.stacks);
             }

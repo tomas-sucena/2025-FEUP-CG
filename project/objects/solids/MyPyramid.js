@@ -15,6 +15,7 @@ export class MyPyramid extends MyObject {
      * @param { boolean } config.inverted - indicates if the pyramid should be rendered on the inside
      * @param { Object } config.material - the material to be applied to the pyramid
      * @param { string } config.texture - the texture to be applied to the pyramid
+     * @param { string } config.shader - the shader to be applied to the pyramid
      */
     constructor({
         scene,
@@ -22,7 +23,7 @@ export class MyPyramid extends MyObject {
         height = 1,
         slices,
         stacks,
-        inverted,
+        inverted = false,
         material,
         texture,
         shader,
