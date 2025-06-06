@@ -20,7 +20,7 @@ export class MyCircle extends MyObject {
         scene,
         radius = 1,
         slices = 32,
-        layers = 1,
+        layers,
         inverted,
         material,
         texture,
@@ -32,7 +32,7 @@ export class MyCircle extends MyObject {
         /** The number of divisions of the circle around the Z-axis */
         this.slices = slices;
         /** The number of divisions along the X and Y-axis */
-        this.layers = layers;
+        this.layers = layers ?? Math.ceil(radius);
 
         this.initGeometry({ inverted, material, texture });
     }
@@ -73,7 +73,7 @@ export class MyCircle extends MyObject {
         }
 
         // define the center
-        const centerIndex = this.layers * this.slices;
+        const centerIndex = this.layers * (this.slices + 1);
         this.vertices.push(0, 0, 0);
         this.normals.push(0, 0, 1);
         this.texCoords.push(0.5, 0.5);

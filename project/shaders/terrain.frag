@@ -16,5 +16,5 @@ void main() {
     
     gl_FragColor = (mask.r == 1.0)
         ? texture2D(uGrassSampler, vTextureCoord * 2.0)  // grass
-        : texture2D(uLakeSampler, vTextureCoord * 16.0) + 0.005 * length(vVertexPosition); // lake
+        : texture2D(uLakeSampler, vTextureCoord * 16.0) + 0.004 * length(vVertexPosition); // lake
 }
