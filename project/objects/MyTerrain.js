@@ -6,8 +6,8 @@ export class MyTerrain extends MyRectangle {
             scene,
             width: size,
             height: size,
-            rows: size / 2,
-            columns: size / 2,
+            rows: size * 0.6,
+            columns: size * 0.6,
             shader: 'terrain',
         });
 
